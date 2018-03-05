@@ -7,7 +7,7 @@
 import React, { Component } from 'react';
 import {
   Platform,
-  StyleSheet,
+  
   Text,
   View,
   TouchableOpacity,
@@ -35,6 +35,13 @@ import I18n from './app/i18n/i18n';
 import { getLanguages } from 'react-native-i18n';
 import RNRestart from 'react-native-restart'; // Import package from node modules
 
+
+import AppIntroPage from './app/components/AppIntroPage';
+
+import MainComponent from './app/components/MainComponent';
+import {Provider} from 'react-redux';
+import store from './app/store/store';
+
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' +
     'Cmd+D or shake for dev menu',
@@ -50,7 +57,8 @@ export default class App extends Component<Props> {
       this.state={
         name:"Vuong",
         notifications:10,
-        BadgeCount:5
+        BadgeCount:5,
+        IsShowAppIntro:true
       }
       console.log("constructor");
       this.InitialLang();
@@ -86,124 +94,9 @@ export default class App extends Component<Props> {
  
   render() {
     return (
-      <View style={styles.container}>
-        <TouchableOpacity onPress={()=>{
-              // Add a Toast on screen.
-              let toast = Toast.show('This is a message', {
-                duration: Toast.durations.LONG,
-                position: Toast.positions.BOTTOM,
-                shadow: true,
-                animation: true,
-                hideOnPress: true,
-                delay: 0,
-                onShow: () => {
-                    // calls on toast\`s appear animation start
-                },
-                onShown: () => {
-                    // calls on toast\`s appear animation end.
-                },
-                onHide: () => {
-                    // calls on toast\`s hide animation start.
-                },
-                onHidden: () => {
-                    // calls on toast\`s hide animation end.
-                }
-              });
-
-              // You can manually hide the Toast, or it will automatically disappear after a `duration` ms timeout.
-              setTimeout(function () {
-                Toast.hide(toast);
-              }, 1000);
-        }}>
-
-      
-
-       <View style={{flexDirection: 'row',alignItems: 'center',justifyContent: 'center',}}>
-        <IconBadge
-          MainElement={
-            <Image source={require('./assets/images/icons/cart32.png')} style={{marginRight:15}}/>
-          }
-          BadgeElement={
-            <Text style={{color:'#FFFFFF'}}>{this.state.BadgeCount}</Text>
-          }
-          IconBadgeStyle={
-            {width:15,
-            height:15,
-           
-            backgroundColor: '#FF00EE'}
-          }
-          Hidden={this.state.BadgeCount==0}
-          />
-      </View>
-
-          <Text>{I18n.t('greeting')}</Text>
-
-          <Text>Show toast: {this.state.name}</Text>
-
-             <FontAwesome.Button onPress={()=>{ 
-                    this.setState({
-                      name:"Coi"
-                    });
-              }} name="th" style={styles.VButton} backgroundColor="white" color="red">Change state</FontAwesome.Button>
-               <FontAwesome.Button onPress={()=>{ 
-                   let user='John Doe';
-                   AsyncStorage.setItem("user",user);
-
-                   getLanguages().then(languages => {
-                    console.log(languages); // ['en-US', 'en']
-                  AsyncStorage.setItem("lang",JSON.stringify(languages));
-                    
-                  });
-              }} name="th" style={styles.VButton} backgroundColor="white" color="red">Save data</FontAwesome.Button>
-                 <FontAwesome.Button onPress={async()=>{ 
-                  try{
-                    let user=await AsyncStorage.getItem("lang");
-                    console.log("--------exists: "+JSON.parse(user)[0]);
-                  
-                    this.setState({
-                      name:JSON.parse(user)[0]
-                    });
-                  }catch(error){
-                    console.log("--------error: "+error);
-                  }
-              }} name="th" style={styles.VButton} backgroundColor="white" color="red">Display Data</FontAwesome.Button>
-
-
-               <FontAwesome.Button onPress={()=>{ 
-              
-                  AsyncStorage.setItem("lang","vi");
-                  I18n.locale='vi';
-                  // Immediately reload the React Native Bundle
-                  RNRestart.Restart();
-              }} name="th" style={styles.VButton} backgroundColor="white" color="red">Set VI</FontAwesome.Button>
-
-                <FontAwesome.Button onPress={()=>{ 
-                    AsyncStorage.setItem("lang","en");
-                    I18n.locale='en';
-                   // Immediately reload the React Native Bundle
-                   RNRestart.Restart();
-                  }} name="th" style={styles.VButton} backgroundColor="white" color="red">Set EN</FontAwesome.Button>
-        </TouchableOpacity>
-      </View>
+       <Provider store={store}>
+          <MainComponent/>
+      </Provider>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
-});
