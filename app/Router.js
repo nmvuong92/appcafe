@@ -14,7 +14,7 @@ export const HomeStack=StackNavigator({
         screen:Home,
         navigationOptions:{
             tabBarLabel: 'Home',
-            tabBarIcon: ({ tintColor, focused }) => <Icon name="facebook" size={30}/>
+            tabBarIcon: <Image source={require("./assets/images/icons/cart32.png")}/>
         }
     },
     DetailScreen:{
@@ -65,6 +65,7 @@ export const Tabbar = TabNavigator({
         },
         activeTintColor:"yellow",
         inactiveTintColor:"blue",
-        showIcon:true
+        showIcon:true,
+        showLabel:false,
     }
 });
