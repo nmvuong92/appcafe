@@ -7,6 +7,7 @@ import {
 import CalcComponent from './CalcComponent';
 import {connect} from 'react-redux';
 import LayoutComponent from './LayoutComponent';
+import {Tabbar} from '../Router';
 
 class MainComponent extends Component{
     constructor(props){
@@ -16,7 +17,8 @@ class MainComponent extends Component{
         const {calcReducer} = this.props;
         let myValue = calcReducer.value;
         return (
-            <LayoutComponent/>
+            <Tabbar/>
+           // <LayoutComponent/>
             // <View style={styles.container}>
             //     <Text>{myValue}</Text>
             //     <CalcComponent/>

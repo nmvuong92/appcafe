@@ -31,10 +31,10 @@ export default class LayoutComponent extends Component {
 }
 const styles = StyleSheet.create({
     container:{
-        flex:1,
+        flex:1, 
         flexDirection: 'row',
         flexWrap: 'wrap',
-       
+        justifyContent: 'center',
     },
     box1:{
         borderWidth: 2,
