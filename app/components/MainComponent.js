@@ -17,7 +17,9 @@ class MainComponent extends Component{
         const {calcReducer} = this.props;
         let myValue = calcReducer.value;
         return (
-            <Tabbar/>
+            <View style={{flex:1}}>
+                <Tabbar/>
+            </View>
            // <LayoutComponent/>
             // <View style={styles.container}>
             //     <Text>{myValue}</Text>

@@ -6,29 +6,22 @@ import User from './screens/User';
 import Detail from './screens/Detail';
 
 
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import EvilIcons from 'react-native-vector-icons/EvilIcons';
-import Entypo from 'react-native-vector-icons/Entypo';
-import Foundation from 'react-native-vector-icons/Foundation';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import Zocial from 'react-native-vector-icons/Zocial';
-import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
-import Octicons from 'react-native-vector-icons/Octicons';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import Feather from 'react-native-vector-icons/Feather';
-import IconBadge from 'react-native-icon-badge';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
+import {Image} from 'react-native';
 export const HomeStack=StackNavigator({
     HomeScreen:{
         screen:Home,
         navigationOptions:{
-            title:'Home'
+            tabBarLabel: 'Home',
+            tabBarIcon: ({ tintColor, focused }) => <Icon name="facebook" size={30}/>
         }
     },
     DetailScreen:{
         screen:Detail,
         navigationOptions:{
-            title:'Detail'
+            tabBarLabel: 'Detail',
+            tabBarIcon: ({ tintColor, focused }) => <Icon name="facebook" size={30} />
         }
     }
 });
@@ -36,25 +29,34 @@ export const UserStack = StackNavigator({
     UserScreen:{
         screen:User,
         navigationOptions:{
-            title:'User'
+            tabBarLabel: 'User',
+            tabBarIcon: ({ tintColor, focused }) =><Icon name="facebook" size={30}/>
         }
     }
 });
 
 
-const tintColor = "red";
+
 
 export const Tabbar = TabNavigator({
     Home:{
         screen:HomeStack,
         navigationOptions: {
+            showLabel: false,
+            showIcon:true,
             tabBarLabel:'HOME *'
         }
     },
     User:{
-        screen:UserStack
+        screen:UserStack,
+            navigationOptions: {
+            showLabel: false,
+            showIcon:true,
+            tabBarLabel:'USER *'
+        }
     }
 },{
+    
     tabBarPosition:'bottom',
     swipeEnabled:true,
     tabBarOptions:{
@@ -62,6 +64,7 @@ export const Tabbar = TabNavigator({
             backgroundColor:"green"
         },
         activeTintColor:"yellow",
-        inactiveTintColor:"blue"
+        inactiveTintColor:"blue",
+        showIcon:true
     }
 });
