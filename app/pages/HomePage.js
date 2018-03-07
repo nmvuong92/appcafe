@@ -29,7 +29,11 @@ export default class HomePage extends Component{
     constructor(props){
         super(props);
         this.state={
-            searchClearIcon: false
+            searchClearIcon: false,
+            newProductList:[{
+                name:"Product 1",
+                image:""
+            }],
         }
     }
 

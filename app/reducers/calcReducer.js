@@ -4,7 +4,8 @@ const initialState = {
     num:1,
     list:[],
     isLoading:false,
-    notifications:5
+    notifications:5,
+    authIsLogin:false,
 }
 
 let calcReducer  = (state=initialState,action)=>{
@@ -34,6 +35,12 @@ let calcReducer  = (state=initialState,action)=>{
             return{
                 ...state,
                 ...{isLoading:false,list:[]}
+            }
+        case "K_SET_LOGIN_TRUE":
+            console.log("K_SET_LOGIN_TRUE");
+            return{
+                ...state,
+                ...{authIsLogin:true}
             }
        default:
             return state;
