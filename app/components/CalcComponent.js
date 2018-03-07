@@ -11,13 +11,14 @@ class CalcComponent extends Component{
     render(){
         const {calcReducer} = this.props;
         let myValue=calcReducer.value;
-
+        let list = calcReducer.list;
         const {dispatch} = this.props;
         return (
             <View>
                 <Text>CalcComponent</Text>
 
                 <Text>{myValue}</Text>
+                <Text>{list.length}</Text>
                 <View>
 
                     <TouchableOpacity onPress={()=>{

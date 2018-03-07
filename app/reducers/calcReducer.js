@@ -1,7 +1,9 @@
 import * as types from './../actions/actionTypes';
 const initialState = {
     value:0,
-    num:1
+    num:1,
+    list:[],
+    isLoading:false
 }
 
 let calcReducer  = (state=initialState,action)=>{
@@ -17,6 +19,21 @@ let calcReducer  = (state=initialState,action)=>{
                 ...state,
                 ...{value:state.value-action.num}
             };
+       case "K_LOAD_LOADING":
+            return{
+                ...state,
+                ...{isLoading:true}
+            };
+        case "K_LOAD_SUCCESS":
+            return{
+                ...state,
+                ...{isLoading:false,list:action.newList}
+            }
+        case "K_LOAD_FAILED":
+            return{
+                ...state,
+                ...{isLoading:false,list:[]}
+            }
        default:
             return state;
     }
