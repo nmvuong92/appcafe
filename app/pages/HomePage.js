@@ -20,7 +20,7 @@ import { SearchBar } from 'react-native-elements';
 import {connect} from 'react-redux';
 import { fetchFoodInfo,fetchFood } from './../actions/ProductAction';
 import {CalcUP,CalcDOWN} from './../actions/CalcAction';
-
+import LoadMoreFooter from './../common/components/LoadMoreFooter';
 
 let deviceWidth= Dimensions.get('window').width;
 
@@ -228,7 +228,10 @@ export default class HomePage extends Component{
                                         }}> 
                                                 <Text style={{fontSize:12,color:'white'}}>Xem thêm >></Text>
                                         </TouchableOpacity>
-                                              
+                                        
+                                        <View>
+                                            <LoadMoreFooter/>
+                                        </View> 
                                     </View>      
                             </View>
 
