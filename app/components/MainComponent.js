@@ -17,14 +17,14 @@ class MainComponent extends Component{
         const {calcReducer} = this.props;
         let myValue = calcReducer.value;
         return (
-            <View style={{flex:1}}>
-                <Tabbar/>
-            </View>
-           // <LayoutComponent/>
-            // <View style={styles.container}>
-            //     <Text>{myValue}</Text>
-            //     <CalcComponent/>
+            // <View style={{flex:1}}>
+            //     <Tabbar/>
             // </View>
+        //    <LayoutComponent/>
+            <View style={styles.container}>
+                <Text>{myValue}</Text>
+                <CalcComponent/>
+            </View>
         );
     }
 }

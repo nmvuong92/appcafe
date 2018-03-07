@@ -1,17 +1,19 @@
 import React,{Component} from 'react';
-import {View,Text,TouchableOpacity} from 'react-native';
+import HomePage from './../pages/HomePage';
 export default class Home extends Component{
     render(){
         return (
-            <View>
-                <Text>HOME</Text>
+            <HomePage {...this.props}/>
+            // <View>
+            //     <Text>HOME</Text>
 
-                <TouchableOpacity onPress={()=>{
-                        this.props.navigation.navigate("DetailScreen");
-                }}>
-                    <Text>Go to detail</Text>
-                </TouchableOpacity>
-            </View>
+            //     <TouchableOpacity onPress={()=>{
+            //             this.props.navigation.navigate("DetailScreen");
+            //     }}>
+            //         <Text>Go to detail</Text>
+            //     </TouchableOpacity>
+            // </View>
         );
     };
 }
+

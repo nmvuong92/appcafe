@@ -41,40 +41,46 @@ import AppIntroPage from './app/components/AppIntroPage';
 import MainComponent from './app/components/MainComponent';
 import {Provider} from 'react-redux';
 import store from './app/store/store';
+import MainTab from './app/MainTab';
+import AppFirst from './app/AppFirst';
 
-const instructions = Platform.select({
-  ios: 'Press Cmd+R to reload,\n' +
-    'Cmd+D or shake for dev menu',
-  android: 'Double tap R on your keyboard to reload,\n' +
-    'Shake or press menu button for dev menu',
-});
+import { StackNavigator, addNavigationHelpers } from "react-navigation";
 
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 type Props = {};
+import AppNavigator from './AppNavigator';
+
 export default class App extends Component<Props> {
-  constructor(props){
+  render() {
+    return (
+      <AppNavigator/>
+      //  <Provider store={store}>
+      //     <MainTab/>
+      // </Provider>
+    );
+  }
+  
+  /*LANGconstructor(props){
       super(props);
       //
+     
       this.state={
         name:"Vuong",
         notifications:10,
         BadgeCount:5,
         IsShowAppIntro:true
       }
-      console.log("constructor");
+     
       this.InitialLang();
   }
-  componentWillMount(){
-    console.log("componentWillMount");
-    
+ componentWillMount(){
     getLanguages().then(languages => {
       this.setState({ languages });
     });
-
-
     this.InitialLang();
-
-    
   }
+
   async InitialLang(){
     try{
       let lang = await AsyncStorage.getItem("lang");
@@ -90,13 +96,8 @@ export default class App extends Component<Props> {
   componentDidMount(){
     console.log("componentDidMount");
     this.InitialLang();
-  }
+  }*/
  
-  render() {
-    return (
-       <Provider store={store}>
-          <MainComponent/>
-      </Provider>
-    );
-  }
+ 
 }
+
