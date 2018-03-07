@@ -3,7 +3,8 @@ const initialState = {
     value:0,
     num:1,
     list:[],
-    isLoading:false
+    isLoading:false,
+    notifications:5
 }
 
 let calcReducer  = (state=initialState,action)=>{
@@ -22,7 +23,7 @@ let calcReducer  = (state=initialState,action)=>{
        case "K_LOAD_LOADING":
             return{
                 ...state,
-                ...{isLoading:true}
+                ...{isLoading:true,notifications:state.notifications+1}
             };
         case "K_LOAD_SUCCESS":
             return{

@@ -14,13 +14,16 @@ import SanPham from './tabs/SanPham';
 import KhuyenMai from './tabs/KhuyenMai';
 import TaiKhoan from './tabs/TaiKhoan';
 import TichDiem from './tabs/TichDiem';
+
+import NotificationIcon from './common/components/NotificationIcon';
 export const HomeStack=StackNavigator({
     HomeScreen:{
         screen:Home,
         navigationOptions:{
             header:null,
             tabBarLabel: 'Home',
-            tabBarIcon: <Image style={{width: 32, height: 32}} source={require("./assets/images/icons/home_32.png")}/>
+            tabBarIcon: <NotificationIcon/>,
+           // tabBarIcon: <Image style={{width: 32, height: 32}} source={require("./assets/images/icons/home_32.png")}/>
         }
     },
     DetailScreen:{
