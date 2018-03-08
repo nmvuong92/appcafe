@@ -3,7 +3,8 @@ import {View,Text,TouchableOpacity} from 'react-native';
 import {Avatar,Card,Button,Divider} from 'react-native-elements';
 import Separator from './../common/components/Separator';
 import Loading from './../common/components/Loading';
-export default class TaiKhoan extends Component{
+import {connect} from 'react-redux';
+class TaiKhoan extends Component{
     constructor(props){
         super(props);
         this.state={
@@ -15,8 +16,11 @@ export default class TaiKhoan extends Component{
    
    
     render(){
+
+        const {authReducer,navReducer} = this.props;
+        let isLoggedIn=authReducer.isLoggedIn;
         return (
-            this.state.isloading?<Loading/>:
+            this.state.isloading?<Loading/>:!isLoggedIn?<Text>Vui long Dang Nhap</Text>:
             <View style={{alignContent:'center',justifyContent:'center',alignItems: 'center',}}>
            
                 <Avatar
@@ -50,4 +54,8 @@ export default class TaiKhoan extends Component{
     };
 }
 
-
+//khong can chia se nen connect rong
+//khi ma exprt connect ==> co 1 bien dispatch
+export default connect((state)=>{
+    return {authReducer,navReducer} = state;
+})(TaiKhoan);

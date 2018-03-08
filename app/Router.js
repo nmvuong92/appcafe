@@ -1,5 +1,6 @@
 import React,{Component} from 'react';
-import {StackNavigator,TabNavigator,addNavigationHelpers} from 'react-navigation';
+import {StackNavigator,TabNavigator,addNavigationHelpers,NavigationActions} from 'react-navigation';
+
 import {connect} from 'react-redux';
 import Home from './screens/Home';
 import User from './screens/User';
@@ -9,32 +10,71 @@ import Main from './screens/Main';
 
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-import {Image,Platform} from 'react-native';
+import {Image,Platform,Button,BackHandler} from 'react-native';
 import SanPham from './tabs/SanPham';
 import KhuyenMai from './tabs/KhuyenMai';
 import TaiKhoan from './tabs/TaiKhoan';
 import TichDiem from './tabs/TichDiem';
+import NganhHang from './tabs/NganhHang';
+import GioHang from './tabs/GioHang';
+import Register from './screens/Register';
 
 import NotificationIcon from './common/components/NotificationIcon';
-import {StatusBar} from 'react-native';
+import {StatusBar,AppState} from 'react-native';
 
 import PropTypes from 'prop-types';
 import {addListener} from './redux';
 import Login from './screens/Login';
 import Logout from './screens/Logout';
+
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import EvilIcons from 'react-native-vector-icons/EvilIcons';
+import Entypo from 'react-native-vector-icons/Entypo';
+import Foundation from 'react-native-vector-icons/Foundation';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import Zocial from 'react-native-vector-icons/Zocial';
+import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
+import Octicons from 'react-native-vector-icons/Octicons';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import Feather from 'react-native-vector-icons/Feather';
+import IconBadge from 'react-native-icon-badge';
+
+
 export const TabbarStack = TabNavigator({
     Home:{
         screen:Home,
         navigationOptions: {
             showLabel:true,
             showIcon:true,
-            tabBarLabel:'HOME',
+            tabBarLabel:'Trang chủ',
+            
+            header:null,
+            tabBarIcon:  <FontAwesome color="black" size={32} name="home"/>
+        }
+    },
+    NganhHang:{
+        screen:NganhHang,
+        navigationOptions: {
+            showLabel:true,
+            showIcon:true,
+            tabBarLabel:'Ngành hàng',
+            
+            header:null,
+            tabBarIcon:  <MaterialIcons color="black" size={32} name="view-comfy"/>
+        }
+    },
+    GioHang:{
+        screen:GioHang,
+        navigationOptions: {
+            showLabel:true,
+            showIcon:true,
+            tabBarLabel:'Giỏ hàng',
             
             header:null,
             tabBarIcon: <NotificationIcon/>,
         }
     },
-    SanPham:{
+    /*SanPham:{
         screen:SanPham,
         navigationOptions: {
             showLabel:true,
@@ -70,7 +110,7 @@ export const TabbarStack = TabNavigator({
             tabBarLabel: 'Tích điểm',
             tabBarIcon: <Image style={{width: 32, height: 32}} source={require("./assets/images/icons/icon5_32.png")}/>
         }
-    },
+    },*/
     TaiKhoan:{
         screen:TaiKhoan,
         navigationOptions: {
@@ -81,19 +121,19 @@ export const TabbarStack = TabNavigator({
             //
             header:null,
             tabBarLabel: 'Tài khoản',
-            tabBarIcon: <Image style={{width: 32, height: 32}} source={require("./assets/images/icons/icon4_32.png")}/>
+            tabBarIcon:  <FontAwesome color="black" size={32} name="user"/>
         }
     },
 },{
    
-    initialRouteName: 'TaiKhoan',
+    initialRouteName: 'Home',
     tabBarPosition:'bottom',
     swipeEnabled:true,
     showIcon:true,
     showLabel:true,
     tabBarOptions:{
         style:{
-            backgroundColor:"gray",
+            backgroundColor:"white",
             
         },
         activeTintColor: '#222',
@@ -110,7 +150,7 @@ export const TabbarStack = TabNavigator({
            
         },
         labelStyle:{
-            fontSize:10
+            fontSize:12
         },
     },
 });
@@ -127,28 +167,47 @@ export class TabbarCom extends Component{
     }
 }
 export const MainScreenNavigator = StackNavigator({
-    ScreenNotOnTabbar:{
-        screen:SanPham,
-    },
-    ScreenNotOnTabbar2:{
-        screen:TichDiem,
-    },
-    LoginScreen:{
-        screen:Login
-    },
-    LogoutScreen:{
-        screen:Logout
-    },
     Tabxxx:{
         screen:TabbarCom,
         navigationOptions:{
             header:null,
         }
     },
+    RegisterScreen:{
+        screen:Register,
+    },
+    LoginScreen:{
+        screen:Login,
+    },
+    ScreenNotOnTabbar:{
+        screen:SanPham,
+    },
+    ScreenNotOnTabbar2:{
+        screen:TichDiem,
+    },
+    KhuyenMaiScreen:{
+        screen:KhuyenMai,
+        navigationOptions:{
+            header:null,
+        }
+       /* navigationOptions: {
+            showLabel:true,
+            showIcon:true,
+            // tabBarLabel:'Khuyến mãi',
+
+            header:null,
+            tabBarLabel: 'Khuyến mãi',
+            tabBarIcon: <Image style={{width: 32, height: 32}} source={require("./assets/images/icons/icon2_32.png")}/>
+        }*/
+    },
+    LogoutScreen:{
+        screen:Logout
+    },
+   
 },{
     initialRouteName:"Tabxxx",
     cardStyle: {
-        paddingTop: Platform.OS === 'ios' ? 20 : StatusBar.currentHeight
+        paddingTop: Platform.OS === 'ios' ? 20 : 0//StatusBar.currentHeight
     }
 })
 
@@ -157,6 +216,52 @@ class MainScreenNavigatorState extends Component{
         dispatch: PropTypes.func.isRequired,
         navReducer: PropTypes.object.isRequired,
       };
+
+       constructor(props){
+           super(props);
+           //
+           this.state={
+                appState: AppState.currentState
+           }
+       }
+
+        //Handling the Hardware Back Button in Android
+        componentDidMount() {
+            console.log("---------componentDidMount");
+            //setup first setting
+            
+
+
+            BackHandler.addEventListener("hardwareBackPress", this.onBackPress);
+
+            //
+            AppState.addEventListener('change', this._handleAppStateChange);
+        }
+        componentWillUnmount() {
+            console.log("---------componentWillUnmount");
+            BackHandler.removeEventListener("hardwareBackPress", this.onBackPress);
+            //
+            AppState.removeEventListener('change', this._handleAppStateChange);
+        }
+
+         _handleAppStateChange = (nextAppState) => {
+                if (this.state.appState.match(/inactive|background/) && nextAppState === 'active') {
+                    console.log('--------------------App has come to the foreground!')
+                }
+                console.log("-----------------"+nextAppState);
+                this.setState({appState: nextAppState});
+        }
+
+          
+
+        onBackPress = () => {
+            const { dispatch, navReducer } = this.props;
+            if (navReducer.index === 0) {
+                return false;
+            }
+            dispatch(NavigationActions.back());
+            return true;
+        };
 
         render(){
             const {dispatch,navReducer} = this.props;

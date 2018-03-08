@@ -21,10 +21,11 @@ import {connect} from 'react-redux';
 import { fetchFoodInfo,fetchFood } from './../actions/ProductAction';
 import {CalcUP,CalcDOWN} from './../actions/CalcAction';
 import LoadMoreFooter from './../common/components/LoadMoreFooter';
+import {NavigationActions} from 'react-navigation';
 
 let deviceWidth= Dimensions.get('window').width;
 
-export default class HomePage extends Component{
+class HomePage extends Component{
 
     constructor(props){
         super(props);
@@ -47,7 +48,7 @@ export default class HomePage extends Component{
     }
 
     render(){
-       
+        const {authReducer,navReducer,dispatch} = this.props;
         return (
             
             <View style={styles.container}>
@@ -103,7 +104,7 @@ export default class HomePage extends Component{
                                 <View style={{flex:3,flexDirection:'row',justifyContent:'space-around'}}>
                                         <TouchableOpacity style={styles.head_btn} onPress={()=>{
                                                 //this.props.screenProps.rootNavigation.navigate("SanPham");
-                                              this.props.navigation.navigate('ScreenNotOnTabbar');
+                                              this.props.navigation.navigate('ScreenNotOnTabbar2');
                                               //this.props.rootNavigation.navigation.navigate("KhuyenMai");
                                             }}> 
                                             <Image style={{width:32,height:32}} source={require('./../assets/images/icons/icon1_32.png')}/>
@@ -112,14 +113,15 @@ export default class HomePage extends Component{
 
 
                                         <TouchableOpacity style={styles.head_btn} onPress={()=>{
-                                                this.props.navigation.navigate('KhuyenMai');
+                                               // this.props.navigation.navigate('KhuyenMaiScreen');
+                                                dispatch({type:'KhuyenMaiScreen'});
                                             }}> 
                                             <Image style={{width:32,height:32}} source={require('./../assets/images/icons/icon2_32.png')}/>
                                             <Text style={{fontSize:12}}>Khuyến mãi</Text>
                                         </TouchableOpacity>
 
                                         <TouchableOpacity style={styles.head_btn} onPress={()=>{
-
+                                                dispatch({type:'RegisterScreen'});
                                             }}> 
                                             <Image style={{width:32,height:32}} source={require('./../assets/images/icons/icon3_32.png')}/>
                                             <Text style={{fontSize:12}}>Đăng ký</Text>
@@ -127,7 +129,8 @@ export default class HomePage extends Component{
 
 
                                         <TouchableOpacity style={styles.head_btn} onPress={()=>{
-
+                                                dispatch({type:'LoginScreen'});
+                                              
                                             }}> 
                                             <Image style={{width:32,height:32}} source={require('./../assets/images/icons/icon4_32.png')}/>
                                             <Text style={{fontSize:12}}>Đăng nhập</Text>
@@ -236,7 +239,7 @@ export default class HomePage extends Component{
                                         </TouchableOpacity>
                                         
                                         <View>
-                                            <LoadMoreFooter/>
+                                           
                                         </View> 
                                     </View>      
                             </View>
@@ -286,7 +289,12 @@ export default class HomePage extends Component{
         );
     };
 }
+const mapStateToProps = state => ({
+    navReducer:state.navReducer,
+    authReducer:state.authReducer,
+});
 
+export default connect(mapStateToProps)(HomePage);
 
 const styles = StyleSheet.create({
     container:{
