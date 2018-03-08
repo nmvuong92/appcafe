@@ -1,6 +1,6 @@
-import React from 'react';
-import {StackNavigator,TabNavigator} from 'react-navigation';
-
+import React,{Component} from 'react';
+import {StackNavigator,TabNavigator,addNavigationHelpers} from 'react-navigation';
+import {connect} from 'react-redux';
 import Home from './screens/Home';
 import User from './screens/User';
 import Detail from './screens/Detail';
@@ -9,147 +9,84 @@ import Main from './screens/Main';
 
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-import {Image} from 'react-native';
+import {Image,Platform} from 'react-native';
 import SanPham from './tabs/SanPham';
 import KhuyenMai from './tabs/KhuyenMai';
 import TaiKhoan from './tabs/TaiKhoan';
 import TichDiem from './tabs/TichDiem';
 
 import NotificationIcon from './common/components/NotificationIcon';
-export const HomeStack=StackNavigator({
-    HomeScreen:{
-        screen:Home,
-        navigationOptions:{
-            header:null,
-            tabBarLabel: 'Home',
-            tabBarIcon: <NotificationIcon/>,
-           // tabBarIcon: <Image style={{width: 32, height: 32}} source={require("./assets/images/icons/home_32.png")}/>
-        }
-    },
-    DetailScreen:{
-        screen:Detail,
-        navigationOptions:{
-            header:null,
-            tabBarLabel: 'Detail',
-        }
-    }
-});
+import {StatusBar} from 'react-native';
 
-export const UserStack = StackNavigator({
-    UserScreen:{
-        screen:User,
-        navigationOptions:{
-            header:null,
-            tabBarLabel: 'User',
-            tabBarIcon: <Image style={{width: 32, height: 32}} source={require("./assets/images/icons/icon2_32.png")}/>
-        }
-    }
-});
-
-export const SanPhamStack = StackNavigator({
-    SanphamScreen:{
-        screen:SanPham,
-        navigationOptions:{
-            header:null,
-            tabBarLabel: 'Sản phẩm',
-            tabBarIcon: <Image style={{width: 32, height: 32}} source={require("./assets/images/icons/icon1_32.png")}/>
-        }
-    }
-});
-
-export const KhuyenMaiStack = StackNavigator({
-    KhuyenMaiScreen:{
-        screen:KhuyenMai,
-        navigationOptions:{
-            header:null,
-            tabBarLabel: 'Khuyến mãi',
-            tabBarIcon: <Image style={{width: 32, height: 32}} source={require("./assets/images/icons/icon2_32.png")}/>
-        }
-    }
-});
-
-export const TaiKhoanStack = StackNavigator({
-    TaiKhoanScreen:{
-        screen: TaiKhoan,
-        navigationOptions:{
-            header:null,
-            tabBarLabel: 'Tài khoản',
-            tabBarIcon: <Image style={{width: 32, height: 32}} source={require("./assets/images/icons/icon4_32.png")}/>
-        }
-    }
-});
-export const TichDiemStack = StackNavigator({
-    TichDiemScreen:{
-        screen:TichDiem,
-        navigationOptions:{
-            header:null,
-            tabBarLabel: 'Tích điểm',
-            tabBarIcon: <Image style={{width: 32, height: 32}} source={require("./assets/images/icons/icon5_32.png")}/>
-        }
-    }
-});
-
-export const MainStack = StackNavigator({
-    MainScreen:{
-        screen:Main,
-        
-        navigationOptions:{
-            header:null,
-            tabBarLabel: 'Main',
-            tabBarIcon: <Image style={{width: 32, height: 32}} source={require("./assets/images/icons/icon3_32.png")}/>
-        }
-    }
-},{
-    navigationOptions: ({ navigation, screenProps }) => {
-    
-    }
-});
-
-
-
-export const Tabbar = TabNavigator({
+import PropTypes from 'prop-types';
+import {addListener} from './redux';
+import Login from './screens/Login';
+import Logout from './screens/Logout';
+export const TabbarStack = TabNavigator({
     Home:{
-        screen:HomeStack,
+        screen:Home,
         navigationOptions: {
             showLabel:true,
             showIcon:true,
             tabBarLabel:'HOME',
+            
+            header:null,
+            tabBarIcon: <NotificationIcon/>,
         }
     },
     SanPham:{
-        screen:SanPhamStack,
+        screen:SanPham,
         navigationOptions: {
             showLabel:true,
             showIcon:true,
-            tabBarLabel:'Sản phẩm',
+            //tabBarLabel:'Sản phẩm',
+
+            header:null,
+            tabBarLabel: 'Sản phẩm',
+            tabBarIcon: <Image style={{width: 32, height: 32}} source={require("./assets/images/icons/icon1_32.png")}/>
         }
     },
     KhuyenMai:{
-        screen:KhuyenMaiStack,
+        screen:KhuyenMai,
         navigationOptions: {
             showLabel:true,
             showIcon:true,
-            tabBarLabel:'Khuyến mãi',
+            // tabBarLabel:'Khuyến mãi',
+
+            header:null,
+            tabBarLabel: 'Khuyến mãi',
+            tabBarIcon: <Image style={{width: 32, height: 32}} source={require("./assets/images/icons/icon2_32.png")}/>
         }
     },
     TichDiem:{
-        screen:TichDiemStack,
+        screen:TichDiem,
         navigationOptions: {
             showLabel:true,
             showIcon:true,
-            tabBarLabel:'Tích điểm',
+            //tabBarLabel:'Tích điểm',
+
+            //
+            header:null,
+            tabBarLabel: 'Tích điểm',
+            tabBarIcon: <Image style={{width: 32, height: 32}} source={require("./assets/images/icons/icon5_32.png")}/>
         }
     },
     TaiKhoan:{
-        screen:TaiKhoanStack,
+        screen:TaiKhoan,
         navigationOptions: {
             showLabel:true,
             showIcon:true,
-            tabBarLabel:'Tài khoản',
+            //tabBarLabel:'Tài khoản',
+
+            //
+            header:null,
+            tabBarLabel: 'Tài khoản',
+            tabBarIcon: <Image style={{width: 32, height: 32}} source={require("./assets/images/icons/icon4_32.png")}/>
         }
     },
 },{
-    initialRouteName: 'Home',
+   
+    initialRouteName: 'TaiKhoan',
     tabBarPosition:'bottom',
     swipeEnabled:true,
     showIcon:true,
@@ -174,7 +111,69 @@ export const Tabbar = TabNavigator({
         },
         labelStyle:{
             fontSize:10
-        }
+        },
     },
 });
 
+export class TabbarCom extends Component{
+    constructor(props){
+        super(props);
+
+    }
+    render(){
+        return (
+            <TabbarStack />
+        );
+    }
+}
+export const MainScreenNavigator = StackNavigator({
+    ScreenNotOnTabbar:{
+        screen:SanPham,
+    },
+    ScreenNotOnTabbar2:{
+        screen:TichDiem,
+    },
+    LoginScreen:{
+        screen:Login
+    },
+    LogoutScreen:{
+        screen:Logout
+    },
+    Tabxxx:{
+        screen:TabbarCom,
+        navigationOptions:{
+            header:null,
+        }
+    },
+},{
+    initialRouteName:"Tabxxx",
+    cardStyle: {
+        paddingTop: Platform.OS === 'ios' ? 20 : StatusBar.currentHeight
+    }
+})
+
+class MainScreenNavigatorState extends Component{
+        static propTypes = {
+        dispatch: PropTypes.func.isRequired,
+        navReducer: PropTypes.object.isRequired,
+      };
+
+        render(){
+            const {dispatch,navReducer} = this.props;
+            return(
+                <MainScreenNavigator
+                    navigation={addNavigationHelpers({
+                        dispatch,
+                        state:navReducer,
+                        addListener
+                    })}
+                />
+            );
+        }
+}
+
+const mapStateToProps = state => ({
+    navReducer:state.navReducer,
+});
+
+export default connect(mapStateToProps)(MainScreenNavigatorState);

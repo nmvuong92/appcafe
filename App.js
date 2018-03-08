@@ -50,14 +50,15 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 type Props = {};
 import AppNavigator from './AppNavigator';
+import MainScreenNavigatorState from './app/Router';
+
 
 export default class App extends Component<Props> {
   render() {
     return (
-      <AppNavigator/>
-      //  <Provider store={store}>
-      //     <MainTab/>
-      // </Provider>
+        <Provider store={store}>
+            <MainScreenNavigatorState/>
+        </Provider>
     );
   }
   

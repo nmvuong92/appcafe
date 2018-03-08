@@ -5,25 +5,21 @@ import { bindActionCreators } from 'redux';
 import { connect,Provider } from 'react-redux';
 
 import store from './app/store/store';
-import {Tabbar} from './app/Router';
+import {Tabbar,MainScreenNavigator} from './app/Router';
 
 import{View,Text,TouchableOpacity} from 'react-native';
 
 export default class AppNavigator extends Component {
+    constructor(props){
+        super(props);
+
+    }
     render() {
         let Cstate = store.getState().calcReducer.authIsLogin;
       
         return (
-            !Cstate?
-            <View>
-                <TouchableOpacity onPress={()=>{
-                    store.dispatch({type:"K_SET_LOGIN_TRUE"});
-                    console.log(Cstate);
-                }}><Text>Login</Text></TouchableOpacity>
-            </View>
-            :
             <Provider store={store}>
-                  <Tabbar/>
+                   <MainScreenNavigator />
             </Provider>
         );
     }

@@ -102,7 +102,9 @@ export default class HomePage extends Component{
                                 </View>
                                 <View style={{flex:3,flexDirection:'row',justifyContent:'space-around'}}>
                                         <TouchableOpacity style={styles.head_btn} onPress={()=>{
-                                                this.props.navigation.navigate('SanPham');
+                                                //this.props.screenProps.rootNavigation.navigate("SanPham");
+                                              this.props.navigation.navigate('ScreenNotOnTabbar');
+                                              //this.props.rootNavigation.navigation.navigate("KhuyenMai");
                                             }}> 
                                             <Image style={{width:32,height:32}} source={require('./../assets/images/icons/icon1_32.png')}/>
                                             <Text style={{fontSize:12}}>Sản phẩm</Text>
@@ -289,7 +291,8 @@ export default class HomePage extends Component{
 const styles = StyleSheet.create({
     container:{
         flex:1,
-        backgroundColor:'#ffffff'
+        backgroundColor:'#ffffff',
+       
     },
     searchBar:{
        
@@ -356,6 +359,6 @@ const styles = StyleSheet.create({
 
     },
     scroll_container:{
-        paddingVertical: 20
+       
     },
 });

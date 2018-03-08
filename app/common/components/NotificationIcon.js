@@ -21,9 +21,9 @@ class NotificationIcon extends Component {
             <View style={{
             position: "absolute",
             top: 0,
-            right: 0,
-            borderRadius: 0,
-            backgroundColor: 'yellow',
+            right: -20,
+            borderRadius: 20,
+            backgroundColor: 'pink',
             paddingRight:2,
             paddingLeft:2,
           

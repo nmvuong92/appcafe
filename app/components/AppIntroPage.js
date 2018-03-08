@@ -1,14 +1,16 @@
 import React, { Component } from 'react';
 import { AppRegistry, Alert } from 'react-native';
 import AppIntro from 'react-native-app-intro';
-
 export default class AppIntroPage extends Component {
+
   onSkipBtnHandle = (index) => {
     Alert.alert('Skip');
     console.log(index);
   }
   doneBtnHandle = () => {
-    Alert.alert('Done');
+    //Alert.alert('Done');
+    this.props.navigation.navigate('AppNavigatorScreen');
+   // import AppIntroPage from './app/components/AppIntroPage';
   }
   nextBtnHandle = (index) => {
     Alert.alert('Next');

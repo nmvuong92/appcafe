@@ -1,5 +1,5 @@
 import React,{Component} from 'react';
-import {View,Text,TouchableOpacity} from 'react-native';
+import {View,Text,TouchableOpacity,StatusBar,StyleSheet,Platform} from 'react-native';
 import {Tabbar}  from './Router';
 import {connect} from 'react-redux';
 import {
@@ -8,14 +8,15 @@ import {
   } from 'react-navigation';
 export default class MainTab extends Component{
     render(){
-       
         return (
-           <Tabbar/>
+        
+           
+                    <Tabbar/>
+      
         );
     };
 
 }
-
 /*const mapStateToProps = state => {
     return {
       //navigationState: state.NavigationReducer
