@@ -229,7 +229,9 @@ class MainScreenNavigatorState extends Component{
         componentDidMount() {
             console.log("---------componentDidMount");
             //setup first setting
-            
+
+            /*const {dispatch,navReducer} = this.props;
+            dispatch({type:'KhuyenMaiScreen'});*/
 
 
             BackHandler.addEventListener("hardwareBackPress", this.onBackPress);
@@ -247,6 +249,9 @@ class MainScreenNavigatorState extends Component{
          _handleAppStateChange = (nextAppState) => {
                 if (this.state.appState.match(/inactive|background/) && nextAppState === 'active') {
                     console.log('--------------------App has come to the foreground!')
+
+                  
+
                 }
                 console.log("-----------------"+nextAppState);
                 this.setState({appState: nextAppState});
