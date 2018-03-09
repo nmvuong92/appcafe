@@ -4,23 +4,26 @@ import {Avatar,Card,Button,Divider} from 'react-native-elements';
 import Separator from './../common/components/Separator';
 import Loading from './../common/components/Loading';
 import {connect} from 'react-redux';
+import DSSP from './pages/TaiKhoanPage';
 class TaiKhoan extends Component{
     constructor(props){
         super(props);
         this.state={
-            isloading:true,
+            isloading:false,
+            dssp:true
         }
 
-        setTimeout(() => {this.setState({isloading: false})}, 1000)
+        //setTimeout(() => {this.setState({isloading: false})}, 1000)
     }
    
    
     render(){
 
         const {authReducer,navReducer} = this.props;
-        let isLoggedIn=authReducer.isLoggedIn;
+        //let isLoggedIn=authReducer.isLoggedIn;
+        let isLoggedIn=true;
         return (
-            this.state.isloading?<Loading/>:!isLoggedIn?<Text>Vui long Dang Nhap</Text>:
+            this.state.isloading?<Loading/>:!isLoggedIn?<Text>Vui long Dang Nhap</Text>:this.state.dssp?<DSSP/>:
             <View style={{alignContent:'center',justifyContent:'center',alignItems: 'center',}}>
            
                 <Avatar

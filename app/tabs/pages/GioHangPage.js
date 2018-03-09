@@ -6,11 +6,12 @@ import {
   Dimensions,
   FlatList,
 
-  Platform
+  Platform,
+  TouchableOpacity
 } from 'react-native';
 
 import Image from 'react-native-image-progress';
-import ProgressBar from 'react-native-progress/Bar';
+import ProgressBar from 'react-native-progress/CircleSnail';
 
 
 // screen sizing
@@ -21,7 +22,7 @@ const SCREEN_WIDTH = width < height ? width : height;
 const isSmallDevice = SCREEN_WIDTH <= 414;
 const numColumns = isSmallDevice ? 2 : 3;
 // item size
-const PRODUCT_ITEM_HEIGHT = 255;
+const PRODUCT_ITEM_HEIGHT = 200;
 const PRODUCT_ITEM_OFFSET = 5;
 const PRODUCT_ITEM_MARGIN = PRODUCT_ITEM_OFFSET * 2;
 
@@ -35,31 +36,19 @@ export default class GioHangPage extends React.Component {
   _renderItem = data => {
     const item = data.item;
     return (
-      <View style={styles.item}>
-        {!item.thumbnailUrl
-          ? <View style={styles.itemImage}>
-              <Text>No image</Text>
-            </View>
-          : 
-            <Image 
-                    source={{ uri: item.thumbnailUrl }} 
-                    indicator={ProgressBar} 
-                    style={styles.itemImage}/>
-            }
-        <Text numberOfLines={3} style={styles.itemTitle}>
-          {item.title}
-        </Text>
+      <TouchableOpacity onPress={()=>{
+
+      }} style={styles.item}>
+        
+        <Image 
+                source={{ uri: item.thumbnailUrl }} 
+                indicator={ProgressBar} 
+                style={styles.itemImage}/>
         <View style={styles.itemFooter}>
-          <Text>Mínimo: {item.title}</Text>
-          <Text>UxB: {item.title}</Text>
-          <Text
-            style={
-              !item.id>3 ? styles.itemPrice : styles.itemPriceClearance
-            }>
-            {item.id}
-          </Text>
+          <Text style={{fontSize: 10,}}>{item.title}</Text>
+        
         </View>
-      </View>
+      </TouchableOpacity>
     );
   };
 
@@ -97,7 +86,7 @@ const colors = {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex:1,
     backgroundColor: 'rgba(0,0,0,0.15)',
   },
   listContainer: {
@@ -108,8 +97,8 @@ const styles = StyleSheet.create({
     margin: PRODUCT_ITEM_OFFSET,
     overflow: 'hidden',
     borderRadius: 3,
-    width: (SCREEN_WIDTH - PRODUCT_ITEM_MARGIN) / numColumns -
-      PRODUCT_ITEM_MARGIN,
+    width: '48%',/*(SCREEN_WIDTH - PRODUCT_ITEM_MARGIN) / numColumns -
+      PRODUCT_ITEM_MARGIN,*/
     height: PRODUCT_ITEM_HEIGHT,
     flexDirection: 'column',
     backgroundColor: colors.snow,

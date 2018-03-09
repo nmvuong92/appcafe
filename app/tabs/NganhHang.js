@@ -7,9 +7,11 @@ import {
     Image,
     ListView,
     InteractionManager,
-    Animated} from 'react-native';
+    Animated,
+    Platform} from 'react-native';
 import {window} from './../common/constants';
-
+import GioHangPage from './pages/GioHangPage';
+import Loading from './../common/components/Loading';
 export default class NganhHang extends Component{
     constructor(props){
         
@@ -20,11 +22,48 @@ export default class NganhHang extends Component{
           selectedCat1ID:-1,
           selectedCat2ID:-1,
           dataSource: ds.cloneWithRows(this._getList()),
+          appIsReady: false,
         };
 
-     
 
     }
+
+     
+    fetchData = async small => {
+        const start_time = Date.now();
+        try {
+          // ~7700 records
+          let uri = 'https://jsonplaceholder.typicode.com/photos';
+          if (small === true) {
+            // 5 records
+            uri =
+              'https://jsonplaceholder.typicode.com/photos';
+          }
+          let response = await fetch(uri);
+          console.log(
+            'Download remote data took: ' + (Date.now() - start_time) + 'ms.'
+          );
+          // const data = await response.json();
+          let data = await response.text();
+          // https://github.com/facebook/react-native/issues/10377
+          if (Platform.OS === 'android') {
+            data = data.replace(/\r?\n/g, '').replace(/[\u0080-\uFFFF]/g, '');
+          }
+          data = JSON.parse(data);
+          console.log('Items in catalog: ' + data.length);
+          this.setState({
+            appIsReady: true,
+            data: data,
+          });
+        } catch (error) {
+          console.error(error);
+        }
+      };
+    
+      componentWillMount = () => {
+        this.fetchData();
+      };
+      
 
 
     _getList = ()=>{
@@ -239,10 +278,15 @@ export default class NganhHang extends Component{
                 </View>
                 <View style={styles.cot2}>
                         <Text>{this.state.selectedCat2ID}</Text>
-                        <ListView 
+                        {/* <ListView 
                             dataSource={this.state.dataSource}
                             renderRow={this.renderRowDanhMucCap2.bind(this)}
-                        /> 
+                        />  */}
+
+                        {
+                            this.state.appIsReady? <GioHangPage screenProps={{ data: this.state.data }} />:<Loading/>
+                        }
+                       
                 </View>
             </View>
         );
@@ -320,7 +364,7 @@ export default class NganhHang extends Component{
                 <View style={{width:'100%',flexDirection: 'column',justifyContent:'space-around',alignItems:'center'}}>
                         <Image style={styles.foodIcon} source={{uri: food.thumbnailUrl}}/>
                    
-                        <Text style={styles.foodName} numberOfLines={1}>{"Danh muc cap 1"}</Text>
+                        <Text style={{fontSize:10}} numberOfLines={1}>{"Danh muc cap 1"}</Text>
              
                 </View>
               
