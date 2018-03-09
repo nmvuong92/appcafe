@@ -22,7 +22,7 @@ import { fetchFoodInfo,fetchFood } from './../actions/ProductAction';
 import {CalcUP,CalcDOWN} from './../actions/CalcAction';
 import LoadMoreFooter from './../common/components/LoadMoreFooter';
 import {NavigationActions} from 'react-navigation';
-
+import HeadPadding from './../common/components/HeadPadding';
 let deviceWidth= Dimensions.get('window').width;
 
 class HomePage extends Component{
@@ -52,7 +52,7 @@ class HomePage extends Component{
         return (
             
             <View style={styles.container}>
-                
+                <HeadPadding/>    
                 <View style={styles.searchBar}>
                     <View style={{flex:9}}>
                         {/* <TextInput style={{height: 40, borderColor: 'gray', borderWidth: 1,backgroundColor:'white'}} /> */}

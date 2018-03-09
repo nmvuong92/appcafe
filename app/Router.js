@@ -20,7 +20,7 @@ import GioHang from './tabs/GioHang';
 import Register from './screens/Register';
 
 import NotificationIcon from './common/components/NotificationIcon';
-import {StatusBar,AppState} from 'react-native';
+import {StatusBar,AppState,View,StyleSheet} from 'react-native';
 
 import PropTypes from 'prop-types';
 import {addListener} from './redux';
@@ -39,8 +39,18 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import Feather from 'react-native-vector-icons/Feather';
 import IconBadge from 'react-native-icon-badge';
 
+const opt_hide_tabbar={
+        tabBarVisible:false,
+        //header:null,
+   
+}
 
-export const TabbarStack = TabNavigator({
+const opt_hide_tabbar2={
+    tabBarVisible:false,
+    //header:null,
+
+}
+const HomeStack  = StackNavigator({
     Home:{
         screen:Home,
         navigationOptions: {
@@ -49,9 +59,61 @@ export const TabbarStack = TabNavigator({
             tabBarLabel:'Trang chủ',
             
             header:null,
-            tabBarIcon:  <FontAwesome color="black" size={32} name="home"/>
+            tabBarIcon:  <FontAwesome color="black" size={32} name="home"/>,
+           
         }
     },
+    Detail:{
+        screen:Detail,
+        navigationOptions:opt_hide_tabbar
+    },
+    RegisterScreen:{
+        screen:Register,
+        navigationOptions:opt_hide_tabbar
+    },
+    LoginScreen:{
+        screen:Login,
+        navigationOptions:{
+            tabBarVisible:false,
+            header:null,
+        
+        }
+    },
+    ScreenNotOnTabbar:{
+        screen:SanPham,
+        navigationOptions:opt_hide_tabbar
+    },
+    ScreenNotOnTabbar2:{
+        screen:TichDiem,
+        navigationOptions:opt_hide_tabbar
+    },
+    KhuyenMaiScreen:{
+        screen:KhuyenMai,
+        navigationOptions:opt_hide_tabbar
+       /* navigationOptions: {
+            showLabel:true,
+            showIcon:true,
+            // tabBarLabel:'Khuyến mãi',
+
+            header:null,
+            tabBarLabel: 'Khuyến mãi',
+            tabBarIcon: <Image style={{width: 32, height: 32}} source={require("./assets/images/icons/icon2_32.png")}/>
+        }*/
+    },
+    LogoutScreen:{
+        screen:Logout
+    },
+},{
+    navigationOptions:{
+        headerStyle:{
+            marginTop:24
+        }
+    }
+});
+
+
+export const MainScreenNavigator = TabNavigator({
+    Home:HomeStack,
     NganhHang:{
         screen:NganhHang,
         navigationOptions: {
@@ -126,7 +188,7 @@ export const TabbarStack = TabNavigator({
     },
 },{
    
-    initialRouteName: 'Home',
+   // initialRouteName: 'Home',
     tabBarPosition:'bottom',
     swipeEnabled:true,
     showIcon:true,
@@ -134,7 +196,6 @@ export const TabbarStack = TabNavigator({
     tabBarOptions:{
         style:{
             backgroundColor:"white",
-            
         },
         activeTintColor: '#222',
         activeBackgroundColor :'yellow',  //Doesn't work
@@ -145,71 +206,21 @@ export const TabbarStack = TabNavigator({
             padding: 0, margin:0,  //Padding 0 here
         },
         iconStyle: {
-            
             padding:0,
            
         },
         labelStyle:{
             fontSize:12
         },
-    },
-});
+      
 
-export class TabbarCom extends Component{
-    constructor(props){
-        super(props);
-
-    }
-    render(){
-        return (
-            <TabbarStack />
-        );
-    }
-}
-export const MainScreenNavigator = StackNavigator({
-    Tabxxx:{
-        screen:TabbarCom,
-        navigationOptions:{
-            header:null,
-        }
-    },
-    RegisterScreen:{
-        screen:Register,
-    },
-    LoginScreen:{
-        screen:Login,
-    },
-    ScreenNotOnTabbar:{
-        screen:SanPham,
-    },
-    ScreenNotOnTabbar2:{
-        screen:TichDiem,
-    },
-    KhuyenMaiScreen:{
-        screen:KhuyenMai,
-        navigationOptions:{
-            header:null,
-        }
-       /* navigationOptions: {
-            showLabel:true,
-            showIcon:true,
-            // tabBarLabel:'Khuyến mãi',
-
-            header:null,
-            tabBarLabel: 'Khuyến mãi',
-            tabBarIcon: <Image style={{width: 32, height: 32}} source={require("./assets/images/icons/icon2_32.png")}/>
-        }*/
-    },
-    LogoutScreen:{
-        screen:Logout
     },
    
-},{
-    initialRouteName:"Tabxxx",
-    cardStyle: {
-        paddingTop: Platform.OS === 'ios' ? 20 : 0//StatusBar.currentHeight
-    }
-})
+    cardStyle:{
+        paddingTop:Platform.OS==="ios"?20:0,//StatusBar.currentHeight
+    },
+
+});
 
 class MainScreenNavigatorState extends Component{
         static propTypes = {
@@ -248,12 +259,10 @@ class MainScreenNavigatorState extends Component{
 
          _handleAppStateChange = (nextAppState) => {
                 if (this.state.appState.match(/inactive|background/) && nextAppState === 'active') {
-                    console.log('--------------------App has come to the foreground!')
-
-                  
+                    console.log('1.--------------------App has come to the foreground!')
 
                 }
-                console.log("-----------------"+nextAppState);
+                console.log("2.-----------------"+nextAppState);
                 this.setState({appState: nextAppState});
         }
 
@@ -271,13 +280,15 @@ class MainScreenNavigatorState extends Component{
         render(){
             const {dispatch,navReducer} = this.props;
             return(
-                <MainScreenNavigator
-                    navigation={addNavigationHelpers({
-                        dispatch,
-                        state:navReducer,
-                        addListener
-                    })}
-                />
+              
+                    <MainScreenNavigator
+                        navigation={addNavigationHelpers({
+                            dispatch,
+                            state:navReducer,
+                            addListener
+                        })}
+                    />
+          
             );
         }
 }

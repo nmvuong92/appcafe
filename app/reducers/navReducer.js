@@ -9,14 +9,14 @@ import { MainScreenNavigator } from './../Router';
 
 
 // Start with two routes: The Main screen, with the Login screen on top.
-const firstAction = MainScreenNavigator.router.getActionForPathAndParams('Tabxxx');
+const firstAction = MainScreenNavigator.router.getActionForPathAndParams('Home');
 
 const tempNavState = MainScreenNavigator.router.getStateForAction(firstAction);
-const secondAction = MainScreenNavigator.router.getActionForPathAndParams('Tabxxx');
+const secondAction = MainScreenNavigator.router.getActionForPathAndParams('Home');
 
 
 const initialState = MainScreenNavigator.router.getStateForAction(
-  secondAction,
+  //secondAction,
   tempNavState
 );
 
@@ -39,11 +39,11 @@ let navReducer  = (state=initialState,action)=>{
         break;
 
       case 'KhuyenMaiScreen':
-      
-          nextState = MainScreenNavigator.router.getStateForAction(
-            NavigationActions.navigate({ routeName: 'KhuyenMaiScreen' }),
-            state
-          );
+        
+        nextState = MainScreenNavigator.router.getStateForAction(
+          NavigationActions.navigate({ routeName: 'KhuyenMaiScreen' }),
+          state
+        );
           break;
       case 'RegisterScreen':
           nextState = MainScreenNavigator.router.getStateForAction(

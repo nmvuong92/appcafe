@@ -1,15 +1,18 @@
-import React,{Component} from 'react';
+import React from 'react';
 import {
   StyleSheet,
   Text,
   View,
   Dimensions,
   FlatList,
-  Image,
+
   Platform
 } from 'react-native';
-import GioHangPage from './pages/GioHangPage';
-import Loading from './../common/components/Loading';
+
+import Image from 'react-native-image-progress';
+import ProgressBar from 'react-native-progress/Bar';
+
+
 // screen sizing
 const { width, height } = Dimensions.get('window');
 // orientation must fixed
@@ -23,57 +26,66 @@ const PRODUCT_ITEM_OFFSET = 5;
 const PRODUCT_ITEM_MARGIN = PRODUCT_ITEM_OFFSET * 2;
 
 // main
-export default class GioHang extends Component {
-  
-      constructor(props){
-            super(props);
-            this.state = {
-                appIsReady: false,
-            };
-      }
-    
-      fetchData = async small => {
-        const start_time = Date.now();
-        try {
-          // ~7700 records
-          let uri = 'https://jsonplaceholder.typicode.com/photos';
-          if (small === true) {
-            // 5 records
-            uri =
-              'https://jsonplaceholder.typicode.com/photos';
-          }
-          let response = await fetch(uri);
-          console.log(
-            'Download remote data took: ' + (Date.now() - start_time) + 'ms.'
-          );
-          // const data = await response.json();
-          let data = await response.text();
-          // https://github.com/facebook/react-native/issues/10377
-          if (Platform.OS === 'android') {
-            data = data.replace(/\r?\n/g, '').replace(/[\u0080-\uFFFF]/g, '');
-          }
-          data = JSON.parse(data);
-          console.log('Items in catalog: ' + data.length);
-          this.setState({
-            appIsReady: true,
-            data: data,
-          });
-        } catch (error) {
-          console.error(error);
-        }
-      };
-    
-      componentWillMount = () => {
-        this.fetchData();
-      };
-      
-    
-      render() {
-        if (this.state.appIsReady) {
-          return <GioHangPage screenProps={{ data: this.state.data }} />;
-        }
-        return <Loading />;
-      }
+export default class GioHangPage extends React.Component {
+ 
+  _keyExtractor = item => {
+    return item.id;
+  };
+
+  _renderItem = data => {
+    const item = data.item;
+    return (
+      <View style={styles.item}>
+        {!item.thumbnailUrl
+          ? <View style={styles.itemImage}>
+              <Text>No image</Text>
+            </View>
+          : 
+            <Image 
+                    source={{ uri: item.thumbnailUrl }} 
+                    indicator={ProgressBar} 
+                    style={styles.itemImage}/>
+            }
+        <Text numberOfLines={3} style={styles.itemTitle}>
+          {item.title}
+        </Text>
+        <View style={styles.itemFooter}>
+          <Text>Mínimo: {item.title}</Text>
+          <Text>UxB: {item.title}</Text>
+          <Text
+            style={
+              !item.id>3 ? styles.itemPrice : styles.itemPriceClearance
+            }>
+            {item.id}
+          </Text>
+        </View>
+      </View>
+    );
+  };
+
+  _getItemLayout = (data, index) => {
+    const productHeight = PRODUCT_ITEM_HEIGHT + PRODUCT_ITEM_MARGIN;
+    return {
+      length: productHeight,
+      offset: productHeight * index,
+      index,
+    };
+  };
+
+  render() {
+    return (
+      <View style={styles.container}>
+        <FlatList
+          style={styles.listContainer}
+          data={this.props.screenProps.data}
+          keyExtractor={this._keyExtractor}
+          renderItem={this._renderItem}
+          getItemLayout={this._getItemLayout}
+          numColumns={numColumns}
+        />
+      </View>
+    );
+  }
 }
 
 
