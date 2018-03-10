@@ -1,5 +1,5 @@
 import React,{Component} from 'react';
-import {View,Text,TouchableOpacity,StyleSheet,TextInput,Image,Dimensions,ScrollView} from 'react-native';
+import {View,Text,TouchableOpacity,StyleSheet,TextInput,Image,Dimensions,ScrollView,Platform} from 'react-native';
 
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
@@ -13,16 +13,19 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import Feather from 'react-native-vector-icons/Feather';
 import IconBadge from 'react-native-icon-badge';
 
-import {VCOLOR} from './../common/constants';
+import {VCOLOR} from './../../common/constants';
 
 import { SearchBar } from 'react-native-elements';
 
 import {connect} from 'react-redux';
-import { fetchFoodInfo,fetchFood } from './../actions/ProductAction';
-import {CalcUP,CalcDOWN} from './../actions/CalcAction';
-import LoadMoreFooter from './../common/components/LoadMoreFooter';
+import { fetchFoodInfo,fetchFood } from './../../actions/ProductAction';
+import {CalcUP,CalcDOWN} from './../../actions/CalcAction';
+import LoadMoreFooter from './../../common/components/LoadMoreFooter';
 import {NavigationActions} from 'react-navigation';
-import HeadPadding from './../common/components/HeadPadding';
+import HeadPadding from './../../common/components/HeadPadding';
+import axios from 'axios';
+
+
 let deviceWidth= Dimensions.get('window').width;
 
 class HomePage extends Component{
@@ -30,6 +33,8 @@ class HomePage extends Component{
     constructor(props){
         super(props);
         this.state={
+            appIsReady:false,
+            data:[],
             searchClearIcon: false,
             newProductList:[{
                 name:"Product 1",
@@ -46,7 +51,14 @@ class HomePage extends Component{
         this.setState({searchClearIcon: false})
         }
     }
+    fetchData = async small => {
 
+        fetch('http://10.0.2.2:2213/ApiProductCat')  
+        .then(function(response) {
+            return response.json()
+        });
+       
+    };
     render(){
         const {authReducer,navReducer,dispatch} = this.props;
         return (
@@ -94,20 +106,23 @@ class HomePage extends Component{
 
                 <ScrollView contentContainerStyle={styles.scroll_container}>
                             <View style={styles.banner}>
-                                <Image style={styles.banner_img} source={require('./../assets/images/banner.jpg')}/>
+                                <Image style={styles.banner_img} source={require('./../../assets/images/banner.jpg')}/>
                             </View>
                         
                             <View style={styles.header_menu}>
                                 <View style={{flex:1}}>
-                                    <Image style={{width:80,height:50}} source={require('./../assets/images/logo.png')}/>
+                                    <Image style={{width:80,height:50}} source={require('./../../assets/images/logo.png')}/>
                                 </View>
                                 <View style={{flex:3,flexDirection:'row',justifyContent:'space-around'}}>
                                         <TouchableOpacity style={styles.head_btn} onPress={()=>{
+                                              console.log(this.fetchData());
+                                         
+                                                        
                                                 //this.props.screenProps.rootNavigation.navigate("SanPham");
                                               this.props.navigation.navigate('ScreenNotOnTabbar2');
                                               //this.props.rootNavigation.navigation.navigate("KhuyenMai");
                                             }}> 
-                                            <Image style={{width:32,height:32}} source={require('./../assets/images/icons/icon1_32.png')}/>
+                                            <Image style={{width:32,height:32}} source={require('./../../assets/images/icons/icon1_32.png')}/>
                                             <Text style={{fontSize:12}}>Sản phẩm</Text>
                                         </TouchableOpacity>
 
@@ -116,14 +131,14 @@ class HomePage extends Component{
                                                // this.props.navigation.navigate('KhuyenMaiScreen');
                                                 dispatch({type:'KhuyenMaiScreen'});
                                             }}> 
-                                            <Image style={{width:32,height:32}} source={require('./../assets/images/icons/icon2_32.png')}/>
+                                            <Image style={{width:32,height:32}} source={require('./../../assets/images/icons/icon2_32.png')}/>
                                             <Text style={{fontSize:12}}>Khuyến mãi</Text>
                                         </TouchableOpacity>
 
                                         <TouchableOpacity style={styles.head_btn} onPress={()=>{
                                                 dispatch({type:'RegisterScreen'});
                                             }}> 
-                                            <Image style={{width:32,height:32}} source={require('./../assets/images/icons/icon3_32.png')}/>
+                                            <Image style={{width:32,height:32}} source={require('./../../assets/images/icons/icon3_32.png')}/>
                                             <Text style={{fontSize:12}}>Đăng ký</Text>
                                         </TouchableOpacity>
 
@@ -132,7 +147,7 @@ class HomePage extends Component{
                                                 dispatch({type:'LoginScreen'});
                                               
                                             }}> 
-                                            <Image style={{width:32,height:32}} source={require('./../assets/images/icons/icon4_32.png')}/>
+                                            <Image style={{width:32,height:32}} source={require('./../../assets/images/icons/icon4_32.png')}/>
                                             <Text style={{fontSize:12}}>Đăng nhập</Text>
                                         </TouchableOpacity>
 
@@ -151,7 +166,7 @@ class HomePage extends Component{
                                                         <Text style={styles.product_item_title}>Kiếng xe</Text>
                                                 </View>
                                                 <View style={styles.product_item_body}>
-                                                    <Image style={{width:100,height:100}} source={require('./../assets/images/sc.png')}/>
+                                                    <Image style={{width:100,height:100}} source={require('./../../assets/images/sc.png')}/>
                                                 </View>
                                         </View>       
                                         <View style={styles.product_item}>
@@ -159,7 +174,7 @@ class HomePage extends Component{
                                                         <Text style={styles.product_item_title}>Kiếng xe</Text>
                                                 </View>
                                                 <View style={styles.product_item_body}>
-                                                    <Image style={{width:100,height:100}} source={require('./../assets/images/sc.png')}/>
+                                                    <Image style={{width:100,height:100}} source={require('./../../assets/images/sc.png')}/>
                                                 </View>
                                         </View>
                                         <View style={styles.product_item}>
@@ -167,7 +182,7 @@ class HomePage extends Component{
                                                         <Text style={styles.product_item_title}>Kiếng xe</Text>
                                                 </View>
                                                 <View style={styles.product_item_body}>
-                                                    <Image style={{width:100,height:100}} source={require('./../assets/images/sc.png')}/>
+                                                    <Image style={{width:100,height:100}} source={require('./../../assets/images/sc.png')}/>
                                                 </View>
                                         </View>
                                         <View style={styles.product_item}>
@@ -175,7 +190,7 @@ class HomePage extends Component{
                                                         <Text style={styles.product_item_title}>Kiếng xe</Text>
                                                 </View>
                                                 <View style={styles.product_item_body}>
-                                                    <Image style={{width:100,height:100}} source={require('./../assets/images/sc.png')}/>
+                                                    <Image style={{width:100,height:100}} source={require('./../../assets/images/sc.png')}/>
                                                 </View>
                                         </View> 
 
@@ -203,7 +218,7 @@ class HomePage extends Component{
                                                         <Text style={styles.product_item_title}>Kiếng xe</Text>
                                                 </View>
                                                 <View style={styles.product_item_body}>
-                                                    <Image style={{width:100,height:100}} source={require('./../assets/images/sc.png')}/>
+                                                    <Image style={{width:100,height:100}} source={require('./../../assets/images/sc.png')}/>
                                                 </View>
                                         </View>       
                                         <View style={styles.product_item}>
@@ -211,7 +226,7 @@ class HomePage extends Component{
                                                         <Text style={styles.product_item_title}>Kiếng xe</Text>
                                                 </View>
                                                 <View style={styles.product_item_body}>
-                                                    <Image style={{width:100,height:100}} source={require('./../assets/images/sc.png')}/>
+                                                    <Image style={{width:100,height:100}} source={require('./../../assets/images/sc.png')}/>
                                                 </View>
                                         </View>
                                         <View style={styles.product_item}>
@@ -219,7 +234,7 @@ class HomePage extends Component{
                                                         <Text style={styles.product_item_title}>Kiếng xe</Text>
                                                 </View>
                                                 <View style={styles.product_item_body}>
-                                                    <Image style={{width:100,height:100}} source={require('./../assets/images/sc.png')}/>
+                                                    <Image style={{width:100,height:100}} source={require('./../../assets/images/sc.png')}/>
                                                 </View>
                                         </View>
                                         <View style={styles.product_item}>
@@ -227,7 +242,7 @@ class HomePage extends Component{
                                                         <Text style={styles.product_item_title}>Kiếng xe</Text>
                                                 </View>
                                                 <View style={styles.product_item_body}>
-                                                    <Image style={{width:100,height:100}} source={require('./../assets/images/sc.png')}/>
+                                                    <Image style={{width:100,height:100}} source={require('./../../assets/images/sc.png')}/>
                                                 </View>
                                         </View> 
 
@@ -250,15 +265,15 @@ class HomePage extends Component{
                                 
                                     
                                 
-                                    <Image source={require('./../assets/images/sc.png')} />
+                                    <Image source={require('./../../assets/images/sc.png')} />
                                 
-                                    <Image source={require('./../assets/images/sc.png')} />
+                                    <Image source={require('./../../assets/images/sc.png')} />
                                 
-                                    <Image source={require('./../assets/images/sc.png')} />
+                                    <Image source={require('./../../assets/images/sc.png')} />
                                 
-                                    <Image source={require('./../assets/images/sc.png')} />
+                                    <Image source={require('./../../assets/images/sc.png')} />
                                 
-                                    <Image source={require('./../assets/images/sc.png')} />
+                                    <Image source={require('./../../assets/images/sc.png')} />
                                 
                                 
                                 

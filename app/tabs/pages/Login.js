@@ -17,7 +17,7 @@ import IconBadge from 'react-native-icon-badge';
 import {connect} from 'react-redux';
 import { addNavigationHelpers, NavigationActions } from "react-navigation";
 
-import Header from './../common/components/Header';
+import Header from './../../common/components/Header';
 class Login extends Component{
     constructor(props){
         super(props);

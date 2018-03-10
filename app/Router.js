@@ -2,11 +2,8 @@ import React,{Component} from 'react';
 import {StackNavigator,TabNavigator,addNavigationHelpers,NavigationActions} from 'react-navigation';
 
 import {connect} from 'react-redux';
-import Home from './screens/Home';
-import User from './screens/User';
-import Detail from './screens/Detail';
-
-import Main from './screens/Main';
+import Home from './tabs/Home';
+import Detail from './tabs/pages/Detail';
 
 import Icon from 'react-native-vector-icons/FontAwesome';
 
@@ -17,15 +14,15 @@ import TaiKhoan from './tabs/TaiKhoan';
 import TichDiem from './tabs/TichDiem';
 import NganhHang from './tabs/NganhHang';
 import GioHang from './tabs/GioHang';
-import Register from './screens/Register';
+import Register from './tabs/pages/Register';
 
 import NotificationIcon from './common/components/NotificationIcon';
 import {StatusBar,AppState,View,StyleSheet} from 'react-native';
 
 import PropTypes from 'prop-types';
 import {addListener} from './redux';
-import Login from './screens/Login';
-import Logout from './screens/Logout';
+import Login from './tabs/pages/Login';
+import Logout from './tabs/pages/Logout';
 
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';

@@ -42,7 +42,7 @@ import MainComponent from './app/components/MainComponent';
 import {Provider} from 'react-redux';
 import store from './app/store/store';
 import MainTab from './app/MainTab';
-import AppFirst from './app/AppFirst';
+
 
 import { StackNavigator, addNavigationHelpers } from "react-navigation";
 
