@@ -4,7 +4,7 @@ import {Avatar,Card,Button,Divider} from 'react-native-elements';
 import Separator from './../common/components/Separator';
 import Loading from './../common/components/Loading';
 import {connect} from 'react-redux';
-import DSSP from './pages/TaiKhoanPage';
+import DSSP from './pages/DSSP';
 class TaiKhoan extends Component{
     constructor(props){
         super(props);

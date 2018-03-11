@@ -6,15 +6,25 @@ const initialState = {
 export default  notificaitonReducer  = (state=initialState,action)=>{
     switch (action.type) {
     
-       case "K_NOTIFICATION_UP_BADGE":
+       case types.NOTI_UP:
             return{
                 ...state,
-                ...{isLoading:true,notifications:state.count+1}
+                ...{count:state.count+action.value}
             };
-       case "K_NOTIFICATION_DOWN_BADGE":
+       case types.NOTI_DOWN:
+            if(state.count+action.value>10){
+                alert("Error, maximum: 10");
+                break;
+            }
             return{
                 ...state,
-                ...{isLoading:true,notifications:state.count-1}
+                ...{count:state.count-action.value}
+            };
+        case types.NOTI_SET_EQUAL:
+            
+            return{
+                ...state,
+                ...{count:action.value}
             };
        default:
             return state;

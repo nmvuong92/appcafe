@@ -1,6 +1,10 @@
 import React,{Component} from 'react';
-import {View,Text, FlatList, StyleSheet,Image,ActivityIndicator} from 'react-native';
-export default class DSSP extends Component{
+import {View,Text, FlatList, StyleSheet,Image,ActivityIndicator,TouchableOpacity} from 'react-native';
+import {fetchSanPham} from './../../actions/sanPhamAction';
+import {connect} from 'react-redux';
+import Loading from './../../common/components/Loading';
+import * as types from './../../actions/actionTypes';
+class DSSP extends Component{
     constructor(props){
         super(props);
         this.state = {
@@ -13,38 +17,20 @@ export default class DSSP extends Component{
             page_size:10
         }
     }
-     paginate (array, page_size, page_number) {
-        --page_number; // because pages logically start with 1, but technically with 0
-        return array.slice(page_number * page_size, (page_number + 1) * page_size);
+ 
+    componentDidMount() {
+        this.makeRemoteRequest();
     }
-
-      
-    componentDidMount(){
-        //this.makeRemoteRequest();
-    }
+   
     makeRemoteRequest(){
-        const {page,seed}=this.state;
-        this.setState(
-            {
-                loading:true,
-            }
-        );
-        const url="https://jsonplaceholder.typicode.com/photos";
-        fetch(url)
-        .then((response)=>response.json())
-        .then((responseJson)=>{
-            this.setState({
-                data:[...this.state.data,...this.paginate(responseJson,this.state.page_size,this.state.page)],
-                mang:responseJson,
-                error:responseJson.error||null,
-                loading:false,
-                refreshing:false
-            });
-        })
-        .catch((e)=>{
-            this.setState({error,loading:false,refreshing:false})
+        const {sanPhamReducer,dispatch} = this.props;
+        dispatch(fetchSanPham());
+        this.setState({
+            data:sanPhamReducer.products,
+            isFetching:sanPhamReducer.isFetching,
         });
     }
+
     handleRefresh=()=>{
         this.setState({
             page:1,
@@ -68,41 +54,47 @@ export default class DSSP extends Component{
           this.onEndReachedCalledDuringMomentum = true;
         }
     }
+    onPressSanPhamItem = (item)=>{
+        const {navReducer,dispatch}  = this.props;
+        dispatch({type:"SanPham_ChitietSanPham_Screen",id:item.id});
+    }
     render(){
 
-         
         return(
             <View style={styles.container}>
                 {
                     this.state.loading?<ActivityIndicator size="large" />:null
                 }
-
-                <View style={{height:150,width:"100%",backgroundColor:"yellow"}}>
-                    
-                </View>
+                  <Text>SLSP: {this.state.data}</Text>
+                <Text>{" s "+this.state.isFetching}</Text>
                 <FlatList
                 data={this.state.data}
                 renderItem={ ({item})  =>
-                    <View style={ao.dong}>
-                        <Text>{item.id+". "+this.state.page+"/"+item.title}</Text> 
-                        <Image
-                            style={
-                                {
-                                    width:50,
-                                    height:50
+                     <TouchableOpacity onPress={()=>{
+                        this.onPressSanPhamItem(item);
+                     }}>
+                        <View style={ao.dong}>
+                          
+                            <Text>{item.id+". "+this.state.page+"/"+item.title}</Text> 
+                            <Image
+                                style={
+                                    {
+                                        width:50,
+                                        height:50
+                                    }
                                 }
-                            }
-                        source={
-                            {
-                                uri:"https://picsum.photos/200/300/?random"
-                            }
-                        }/>
-                    </View>
+                            source={
+                                {
+                                    uri:"https://picsum.photos/200/300/?random"
+                                }
+                            }/>
+                        </View>
+                    </TouchableOpacity>
                 }
                 keyExtractor={item=>item.id+""}
                 //ItemSeparatorComponent={this.renderSeparator}
                 //ListHeaderComponent={this.renderHeader}
-            // ListFooterComponent={this.renderFooter}
+                // ListFooterComponent={this.renderFooter}
                 refreshing={this.state.refreshing}
                 onRefresh={this.handleRefresh}
                 onEndReached={this.onEndReached}
@@ -118,7 +110,12 @@ export default class DSSP extends Component{
       
     }
 }
-
+const mapStateToProps = state => ({
+    navReducer:state.navReducer,
+    authReducer:state.authReducer,
+    sanPhamReducer:state.sanPhamReducer,
+});
+export default connect(mapStateToProps)(DSSP);
 var ao = StyleSheet.create({
     dong:{
         borderBottomWidth:1,

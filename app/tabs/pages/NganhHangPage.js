@@ -14,6 +14,7 @@ import Image from 'react-native-image-progress';
 import ProgressBar from 'react-native-progress/CircleSnail';
 import {connect} from 'react-redux';
 
+import {fetchSanPham} from './../../actions/sanPhamAction';
 // screen sizing
 const { width, height } = Dimensions.get('window');
 // orientation must fixed
@@ -27,14 +28,16 @@ const PRODUCT_ITEM_OFFSET = 5;
 const PRODUCT_ITEM_MARGIN = PRODUCT_ITEM_OFFSET * 2;
 
 // main
-class GioHangPage extends React.Component {
+class NganhHangPage extends React.Component {
  
   _keyExtractor = item => {
     return item.id;
   };
   onPressChonDM = (that,data)=>{
-    const {dispatch} = this.props;
+    const {dispatch,sanPhamReducer} = this.props;
     dispatch({type:"goBack",dataBack:{type:"chon_danh_muc",data:data}});
+    dispatch(fetchSanPham(data.ID));
+    
  }
   _renderItem = data => {
     const item = data.item;
@@ -82,9 +85,10 @@ class GioHangPage extends React.Component {
 
 const mapStateToProps = (state) => ({
   navReducer:state.navReducer,
-  authReducer:state.authReducer
+  authReducer:state.authReducer,
+  sanPhamReducer:state.sanPhamReducer
 });
-export default connect(mapStateToProps)(GioHangPage);
+export default connect(mapStateToProps)(NganhHangPage);
 
 
 const colors = {

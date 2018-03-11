@@ -1,10 +1,8 @@
 //link api 
-const kUrlHost = 'http://api.eleteam.com/v1'; 
+export const website = 'http://thuanhanhmobileapp.thietkevuondao.com'; 
+export const api = website+"/api";
 
-//chuc nang 1
-export const kUrlCategoryListWithProduct    = kUrlHost + '/category/list-with-product';
-export const kUrlProductView                = kUrlHost + '/product/view?id=';
+export const api_sp = api+"/SanPham";
+export const api_dmsp = api+"/DanhMucSanPham";
 
-//chuc nang 2
-export const kUrlBannerList                 = kUrlHost + '/banner/list';
-export const kUrlHomeListArticles           = kUrlHost + '/home/list-articles';
+

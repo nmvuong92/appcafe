@@ -36,7 +36,7 @@ import { getLanguages } from 'react-native-i18n';
 import RNRestart from 'react-native-restart'; // Import package from node modules
 
 
-import AppIntroPage from './app/components/AppIntroPage';
+
 
 import MainComponent from './app/components/MainComponent';
 import {Provider} from 'react-redux';

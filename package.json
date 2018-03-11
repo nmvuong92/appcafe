@@ -11,7 +11,6 @@
     "prop-types": "^15.6.1",
     "react": "16.2.0",
     "react-native": "0.53.3",
-    "react-native-app-intro": "https://github.com/merryjs/react-native-app-intro",
     "react-native-deprecated-custom-components": "^0.1.1",
     "react-native-device-info": "^0.17.3",
     "react-native-elements": "^0.19.0",
@@ -31,8 +30,7 @@
     "redux-logger": "^3.0.6",
     "redux-persist": "^5.9.1",
     "redux-saga": "^0.16.0",
-    "redux-thunk": "^2.2.0",
-    "tcomb-form-native": "^0.6.11"
+    "redux-thunk": "^2.2.0"
   },
   "devDependencies": {
     "babel-jest": "22.4.1",

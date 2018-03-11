@@ -35,16 +35,19 @@ import Octicons from 'react-native-vector-icons/Octicons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Feather from 'react-native-vector-icons/Feather';
 import IconBadge from 'react-native-icon-badge';
+import ChiTietSanPham from './tabs/ChiTietSanPham';
 
 const opt_hide_tabbar={
-        tabBarVisible:false,
-        //header:null,
-   
+    tabBarVisible:false,
+    header:null,
+    swipeEnabled:false
+
 }
 
 const opt_hide_tabbar2={
     tabBarVisible:false,
-    //header:null,
+    header:null,
+    swipeEnabled:false
 
 }
 const HomeStack  = StackNavigator({
@@ -100,6 +103,11 @@ const HomeStack  = StackNavigator({
     LogoutScreen:{
         screen:Logout
     },
+
+    NganhHangScreen:{
+        screen:NganhHang,
+        navigationOptions:opt_hide_tabbar
+    },
 },{
     navigationOptions:{
         headerStyle:{
@@ -109,19 +117,41 @@ const HomeStack  = StackNavigator({
 });
 
 
-export const MainScreenNavigator = TabNavigator({
-    Home:HomeStack,
-    NganhHang:{
-        screen:NganhHang,
+
+const SanPhamStack  = StackNavigator({
+    SanPham:{
+        screen:SanPham,
         navigationOptions: {
             showLabel:true,
             showIcon:true,
-            tabBarLabel:'Ngành hàng',
+            tabBarLabel:'Sản phẩm',
             
             header:null,
-            tabBarIcon:  <MaterialIcons color="black" size={32} name="view-comfy"/>
-        }
+            tabBarIcon:   <MaterialIcons color="black" size={32} name="view-comfy"/>,
+        },
+        
     },
+    SanPham_NganhHang_Screen:{
+        screen:NganhHang,
+        navigationOptions:opt_hide_tabbar
+    },
+    SanPham_ChitietSanPham_Screen:{
+        screen:ChiTietSanPham,
+        navigationOptions:opt_hide_tabbar2
+    },
+},{
+    navigationOptions:{
+      
+        headerStyle:{
+            marginTop:24
+        }
+    }
+});
+
+
+export const MainScreenNavigator = TabNavigator({
+    Home:HomeStack,
+    SanPham:SanPhamStack,
     GioHang:{
         screen:GioHang,
         navigationOptions: {
@@ -185,7 +215,7 @@ export const MainScreenNavigator = TabNavigator({
     },
 },{
    
-   // initialRouteName: 'Home',
+   initialRouteName: 'Home',
     tabBarPosition:'bottom',
     swipeEnabled:true,
     showIcon:true,

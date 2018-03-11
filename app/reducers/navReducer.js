@@ -19,16 +19,33 @@ const initialState = MainScreenNavigator.router.getStateForAction(
   //secondAction,
   tempNavState
 );
+initialState.dataBack = null;
 
 let navReducer  = (state=initialState,action)=>{
     
     let nextState;
     switch (action.type) {
+      case 'Home':
+          nextState = MainScreenNavigator.router.getStateForAction(
+            NavigationActions.navigate({ routeName: 'Home' }),
+            state
+          );
+        break;
+      case 'goBack':
+          nextState = MainScreenNavigator.router.getStateForAction(
+            NavigationActions.back(),
+            state
+          );
+          nextState = {...nextState,dataBack:action.dataBack}
+          //console.log(nextState);
+        break;
+    
       case 'Login':
         nextState = MainScreenNavigator.router.getStateForAction(
           NavigationActions.back(),
           state
         );
+       
         break;
       case 'Logout':
         
@@ -58,6 +75,26 @@ let navReducer  = (state=initialState,action)=>{
             state
           );
           break;
+
+      case 'SanPham_NganhHang_Screen':
+          nextState = MainScreenNavigator.router.getStateForAction(
+            NavigationActions.navigate({ routeName: 'SanPham_NganhHang_Screen' }),
+            state
+          );
+          break;
+      //chi tiet san pham
+
+      case 'SanPham_ChitietSanPham_Screen':
+          nextState = MainScreenNavigator.router.getStateForAction(
+            NavigationActions.navigate( { 
+              routeName: 'SanPham_ChitietSanPham_Screen',
+              params: {
+                id: action.id
+              }
+            }),
+            state
+          );
+        break;
       default:
         nextState = MainScreenNavigator.router.getStateForAction(action, state);
         break;
