@@ -1,7 +1,4 @@
 
-// caclc
-export const kCalcUP               = "kCalcUP";
-export const kCalcDOWN             = "kCalcDOWN";
 
 //tab
 export const kTabNumUP  ="kTabNumUP";
@@ -28,3 +25,9 @@ export const DMSP_RECEIVE ="DMSP_RECEIVE";
 export const NOTI_UP="NOTI_UP";
 export const NOTI_DOWN="NOTI_DOWN";
 export const NOTI_SET_EQUAL="NOTI_SET_EQUAL";
+
+
+//cart
+export const CART_ADD = "";
+export const CART_CLEAR="";
+export const CART_REMOVE_ITEM="";

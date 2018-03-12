@@ -1,10 +1,8 @@
 import React,{Component} from 'react';
 import {View,Text,TouchableOpacity} from 'react-native';
 import {Avatar,Card,Button,Divider} from 'react-native-elements';
-import Separator from './../common/components/Separator';
 import Loading from './../common/components/Loading';
 import {connect} from 'react-redux';
-import DSSP from './pages/DSSP';
 class TaiKhoan extends Component{
     constructor(props){
         super(props);
@@ -19,11 +17,7 @@ class TaiKhoan extends Component{
    
     render(){
 
-        const {authReducer,navReducer} = this.props;
-        //let isLoggedIn=authReducer.isLoggedIn;
-        let isLoggedIn=true;
         return (
-            this.state.isloading?<Loading/>:!isLoggedIn?<Text>Vui long Dang Nhap</Text>:this.state.dssp?<DSSP/>:
             <View style={{alignContent:'center',justifyContent:'center',alignItems: 'center',}}>
            
                 <Avatar

@@ -26,14 +26,14 @@ class Login extends Component{
         }
     }
     goBack(){
-        const {dispatch,notificationReducer} = this.props;
+        const {dispatch,cartReducer} = this.props;
         const { navigate } = this.props.navigation;
         //navigate('LogoutScreen', { name: 'Brent' });
         dispatch(NavigationActions.back());
     }
     render(){
-        const {notificationReducer} = this.props;
-        let count_notification = notificaitonReducer.count;
+        const {cartReducer} = this.props;
+        let count_cart_notification = cartReducer.count;
         return (
             <View>
                 <Header
@@ -49,7 +49,7 @@ class Login extends Component{
 
                    
 
-                    title={'资讯详情 '+count_notification}
+                    title={'资讯详情 '+count_cart_notification}
                 />
             </View>
         );
@@ -58,7 +58,7 @@ class Login extends Component{
 
 const mapStateToProps = state=>({
    navReducer:state.navReducer,
-   notificationReducer:state.notificationReducer,
+   cartReducer:state.cartReducer,
 });
 //khong can chia se nen connect rong
 //khi ma exprt connect ==> co 1 bien dispatch

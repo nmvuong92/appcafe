@@ -15,8 +15,6 @@ export default class AppNavigator extends Component {
 
     }
     render() {
-        let Cstate = store.getState().calcReducer.authIsLogin;
-      
         return (
             <Provider store={store}>
                    <MainScreenNavigator />

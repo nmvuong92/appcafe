@@ -19,7 +19,7 @@ import { SearchBar } from 'react-native-elements';
 
 import {connect} from 'react-redux';
 import { fetchFoodInfo,fetchFood } from './../../actions/ProductAction';
-import {CalcUP,CalcDOWN} from './../../actions/CalcAction';
+
 import LoadMoreFooter from './../../common/components/LoadMoreFooter';
 import {NavigationActions} from 'react-navigation';
 import HeadPadding from './../../common/components/HeadPadding';
@@ -51,14 +51,7 @@ class HomePage extends Component{
         this.setState({searchClearIcon: false})
         }
     }
-    fetchData = async small => {
-
-        fetch('http://10.0.2.2:2213/ApiProductCat')  
-        .then(function(response) {
-            return response.json()
-        });
-       
-    };
+  
     render(){
         const {authReducer,navReducer,dispatch} = this.props;
         return (
@@ -115,7 +108,7 @@ class HomePage extends Component{
                                 </View>
                                 <View style={{flex:3,flexDirection:'row',justifyContent:'space-around'}}>
                                         <TouchableOpacity style={styles.head_btn} onPress={()=>{
-                                              console.log(this.fetchData());
+                                            
                                          
                                                         
                                                 //this.props.screenProps.rootNavigation.navigate("SanPham");
@@ -196,8 +189,7 @@ class HomePage extends Component{
 
 
                                         <TouchableOpacity style={{backgroundColor:VCOLOR.do_dam}} onPress={()=>{
-                                                //load more
-                                                dispatch(CalcUP(2));
+                                                
 
 
                                         }}> 

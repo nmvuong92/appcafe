@@ -1,9 +1,10 @@
 import * as types from './../actions/actionTypes';
 const initialState = {
     count:5,
+    cartItems:[]
 }
 
-export default  notificaitonReducer  = (state=initialState,action)=>{
+export default  cartReducer  = (state=initialState,action)=>{
     switch (action.type) {
     
        case types.NOTI_UP:
@@ -21,10 +22,24 @@ export default  notificaitonReducer  = (state=initialState,action)=>{
                 ...{count:state.count-action.value}
             };
         case types.NOTI_SET_EQUAL:
-            
             return{
                 ...state,
                 ...{count:action.value}
+            };
+       case types.CART_ADD:
+            return{
+                ...state,
+                ...{cartItems:action.newCartItems}
+            };
+       case types.CART_REMOVE_ITEM:
+            return {
+                ...state,
+                ...{cartItems:action.newCartItems}
+            };
+        case types.CART_CLEAR:
+            return {
+                ...state,
+                ...{cartItems:[]}
             };
        default:
             return state;

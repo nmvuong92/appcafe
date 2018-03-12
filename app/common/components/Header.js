@@ -8,12 +8,32 @@ import {
     Platform
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import CartBadgeIcon from './cartBadgeIcon';
+import{NavigationActions} from 'react-navigation';
+import {connect} from 'react-redux';
+class Header extends Component {
+    goBack(){
+        const {dispatch} = this.props;       
+        dispatch(NavigationActions.back());
+    }
 
-export default class Header extends Component {
+
     render() {
         let NavigationBar = [];
+        if (this.props.showBack != undefined) {
+            NavigationBar.push(
+                <TouchableOpacity
+                    key={'autoBackIcon'}
+                    activeOpacity={0.75}
+                    style={styles.leftIcon}
+                    onPress={()=>{this.goBack();}}
+                >
+                    <Icon color="black" size={30} name="angle-left"/>
+                </TouchableOpacity>
+            )
+        }   
 
-        // 左边图片按钮
+
         if (this.props.leftIcon != undefined) {
             NavigationBar.push(
                 <TouchableOpacity
@@ -26,8 +46,20 @@ export default class Header extends Component {
                 </TouchableOpacity>
             )
         }
-
-        // 标题
+     
+     
+        if (this.props.showCartBadgeIcon != undefined) {
+            NavigationBar.push(
+                <TouchableOpacity
+                    key={'RightCartBadgeIcon'}
+                    activeOpacity={0.75}
+                    style={styles.rightIcon}
+                    onPress={this.props.CartBadgeIconAction}
+                >
+                    <CartBadgeIcon/>
+                </TouchableOpacity>
+            )
+        }
         if (this.props.title != undefined) {
             NavigationBar.push(
                 <View key={'title'} style={styles.titleWrap}>
@@ -35,20 +67,16 @@ export default class Header extends Component {
                 </View>
             )
         }
-
-        // 自定义标题View
         if (this.props.titleView != undefined) {
             let Component = this.props.titleView;
             NavigationBar.push(
                 <Component key={'titleView'}/>
             )
         }
-
-        // 右边图片按钮
         if (this.props.rightIcon != undefined) {
             NavigationBar.push(
                 <TouchableOpacity
-                    key={'rightIcon'}
+                    key={'rightIcon1'}
                     activeOpacity={0.75}
                     style={styles.rightIcon}
                     onPress={this.props.rightIconAction}
@@ -70,7 +98,6 @@ export default class Header extends Component {
                 </TouchableOpacity>
             )
         }
-        // 右边文字按钮
         if (this.props.rightButton != undefined) {
             NavigationBar.push(
                 <TouchableOpacity
@@ -107,6 +134,10 @@ export default class Header extends Component {
     }
 }
 
+const mapStateToProps = state => ({
+    navReducer:state.navReducer,
+});
+export default connect(mapStateToProps)(Header);
 const styles = StyleSheet.create({
     navigationBarContainer: {
         flexDirection: 'row',

@@ -1,148 +1,232 @@
 import React,{Component} from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  Dimensions,
-  FlatList,
-  Image,
-  Platform
-} from 'react-native';
+import {View,Text,TouchableOpacity,StyleSheet,FlatList} from 'react-native';
 import GioHangPage from './pages/GioHangPage';
+import DSSP from './pages/DSSP';
+import { SearchBar } from 'react-native-elements';
+import {VCOLOR} from './../common/constants';
+import {connect} from 'react-redux';
+import {fetchSanPham} from './../actions/sanPhamAction';
+import {cartCRUD} from './../actions/cartAction';
 import Loading from './../common/components/Loading';
-// screen sizing
-const { width, height } = Dimensions.get('window');
-// orientation must fixed
-const SCREEN_WIDTH = width < height ? width : height;
-// const SCREEN_HEIGHT = width < height ? height : width;
-const isSmallDevice = SCREEN_WIDTH <= 414;
-const numColumns = isSmallDevice ? 2 : 3;
-// item size
-const PRODUCT_ITEM_HEIGHT = 255;
-const PRODUCT_ITEM_OFFSET = 5;
-const PRODUCT_ITEM_MARGIN = PRODUCT_ITEM_OFFSET * 2;
 
-// main
-export default class GioHang extends Component {
-  
-      constructor(props){
-            super(props);
-            this.state = {
-                appIsReady: false,
-            };
-      }
-    
-      fetchData = async small => {
-        const start_time = Date.now();
-        try {
-          // ~7700 records
-          let uri = 'https://jsonplaceholder.typicode.com/photos';
-          if (small === true) {
-            // 5 records
-            uri =
-              'https://jsonplaceholder.typicode.com/photos';
-          }
-          let response = await fetch(uri);
-          console.log(
-            'Download remote data took: ' + (Date.now() - start_time) + 'ms.'
-          );
-          // const data = await response.json();
-          let data = await response.text();
-          // https://github.com/facebook/react-native/issues/10377
-          if (Platform.OS === 'android') {
-            data = data.replace(/\r?\n/g, '').replace(/[\u0080-\uFFFF]/g, '');
-          }
-          data = JSON.parse(data);
-          console.log('Items in catalog: ' + data.length);
-          this.setState({
-            appIsReady: true,
-            data: data,
-          });
-        } catch (error) {
-          console.error(error);
+import Image from 'react-native-image-progress';
+import ProgressBar from 'react-native-progress/CircleSnail';
+import { Button, ButtonGroup} from 'react-native-elements'
+import Toast from 'react-native-root-toast';
+
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import EvilIcons from 'react-native-vector-icons/EvilIcons';
+import Entypo from 'react-native-vector-icons/Entypo';
+import Foundation from 'react-native-vector-icons/Foundation';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import Zocial from 'react-native-vector-icons/Zocial';
+import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
+import Octicons from 'react-native-vector-icons/Octicons';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import Feather from 'react-native-vector-icons/Feather';
+import IconBadge from 'react-native-icon-badge';
+
+
+class GioHang extends Component{
+    constructor(props){
+        super(props);
+        this.state={
+       
+            appIsReady:false,
+            showBtnTimKiem:false,
+            data:[],
+            searchClearIcon: false,
+            tukhoa:"",
+
+            loading:false,
+            seed:1,
+            error:null,
+            refreshing:false,
+            page:0,
+            page_size:10
         }
-      };
+    }
+   
+    componentDidMount(){
+        const {sanPhamReducer,cartReducer,dispatch} =this.props;
+        dispatch(cartCRUD("sync"));
+        //lay dssp
+        //dispatch(fetchSanPham(sanPhamReducer.danhmuc,sanPhamReducer.tukhoa));
+    }
     
-      componentWillMount = () => {
-        this.fetchData();
-      };
-      
-    
-      render() {
-        if (this.state.appIsReady) {
-          return <GioHangPage screenProps={{ data: this.state.data }} />;
+    //khi thay doi o tim kiem
+    _onChangeSearchText = (searchText) => {
+       
+        if (searchText) {
+            this.setState({searchClearIcon: true,showBtnTimKiem:true})
+        } else {
+             this.setState({searchClearIcon: false,showBtnTimKiem:false})
         }
-        return <Loading />;
-      }
+        this.setState({
+            tukhoa:searchText
+        });
+    }
+
+    //bam vao san pham item
+    onPressProductItem = (item)=>{
+        const {navReducer,dispatch}  = this.props;
+        dispatch({type:"SanPham_ChitietSanPham_Screen",id:item.ID});
+    }
+
+    //bam vao nut tim kiem
+    onPressTimKiem = () => {
+
+        const {sanPhamReducer,dispatch} = this.props;
+        // dispatch();
+        console.log(this.state.tukhoa);
+        dispatch(fetchSanPham(sanPhamReducer.danhmuc,this.state.tukhoa));
+    
+    }
+    //hien thi chon danh muc san pham
+    onPressSelectDM = () => {
+        const {dispatch} = this.props;
+        dispatch({type:'SanPham_NganhHang_Screen'});
+    }
+    //hien thi btn tim kiem
+    _renderBtnTimKiem(){
+        if(this.state.showBtnTimKiem){
+            return (
+                <TouchableOpacity onPress={this.onPressTimKiem}>
+                         <Text>Tìm kiếm</Text>
+                 </TouchableOpacity>
+            );
+        }
+        return null;
+    }
+    //pull refresh
+    handleRefresh=()=>{  
+       const {sanPhamReducer,dispatch} =this.props;
+        this.setState({
+            page:1,
+            data:[],
+            refreshing:sanPhamReducer.isFetching,
+            seed:this.state.seed+1,
+        },()=>{
+            
+            //lay dssp
+            dispatch(fetchSanPham(sanPhamReducer.danhmuc,sanPhamReducer.tukhoa));
+        });
+
+        
+    }
+    //
+    onEndReached = () => {
+        if (!this.onEndReachedCalledDuringMomentum) {
+          this.handleLoadMore();
+          this.onEndReachedCalledDuringMomentum = true;
+        }
+    }
+    handleLoadMore=()=>{
+        const {sanPhamReducer,dispatch} =this.props;
+        this.setState({
+            page:this.state.page+1,
+        },()=>{
+            //dispatch(fetchSanPham(sanPhamReducer.danhmuc,sanPhamReducer.tukhoa));
+        });
+    }
+    //
+    render(){
+        const {navReducer}=this.props;
+       // console.log(navReducer);
+        const {dispatch,sanPhamReducer,cartReducer} = this.props;
+
+
+        return (
+            sanPhamReducer.isFetching?<Loading/>:
+            <View style={styles.container}>
+                    <Button
+                    large
+                    backgroundColor="red"
+                    color="white"
+                    icon={{name: 'opencart', type: 'font-awesome'}}
+                    title='Xóa tất cả'
+                    onPress={()=>{
+                        const {cartReducer,dispatch} =this.props;
+                        dispatch(cartCRUD("0"));
+                    }}
+                    />
+
+                 <View style={{flex:1}}>
+                        <FlatList
+                            data={cartReducer.cartItems}
+                            renderItem={({item}) =>
+                                <TouchableOpacity key={item.ID} onPress={()=>{
+                                    this.onPressProductItem(item);
+                                }} style={styles.productItem}>
+                                    <Image 
+                                        source={{ uri: item.HinhAnh }} 
+                                        indicator={ProgressBar} 
+                                        style={styles.itemImage}/>
+                                    <Text>{item.TenSanPham} ID: {item.ID}</Text>
+                                    <Text>{item.DanhMuc.TenDanhMuc}</Text>
+                                    <Text>{item.Gia}</Text>
+                                    <Text>Số lượng sản phẩm: {item.SLSP}</Text>
+                                    <View style={{flexDirection:"row",}}>
+
+
+                                        <Feather.Button name="plus-circle" color="red" backgroundColor="#fff" onPress={()=>{
+                                            dispatch(cartCRUD("+",item,1));
+                                        }}></Feather.Button>
+
+                                        <Feather.Button name="minus-circle" color="red" backgroundColor="#fff" onPress={()=>{
+                                            dispatch(cartCRUD("-",item,1));
+                                        }}></Feather.Button>
+
+
+                                        <FontAwesome.Button name="remove" color="red" backgroundColor="#fff" onPress={()=>{
+                                                dispatch(cartCRUD("x",item));
+                                        }}></FontAwesome.Button>
+
+                                     
+                                    </View>
+                                       
+                                      
+                            
+                                </TouchableOpacity>
+                            }
+                            keyExtractor={(item,index) => item.ID+""}
+                            refreshing={this.state.refreshing}
+                            onRefresh={this.handleRefresh}  
+
+                            onEndReached={this.onEndReached} 
+                            onEndReachedThreshold={0.5}
+                            onMomentumScrollBegin={() => { this.onEndReachedCalledDuringMomentum = false; }}
+                        />
+                 </View>
+            
+               
+            </View>
+        );
+    };
 }
 
+const mapStateToProps = state => ({
+    navReducer:state.navReducer,
+    authReducer:state.authReducer,
+    sanPhamReducer:state.sanPhamReducer,
+    cartReducer:state.cartReducer,
+});
+export default connect(mapStateToProps)(GioHang);
 
-const colors = {
-  snow: 'white',
-  darkPurple: '#140034',
-  placeholder: '#eee',
-};
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.15)',
-  },
-  listContainer: {
-    flex: 1,
-    padding: PRODUCT_ITEM_OFFSET,
-  },
-  item: {
-    margin: PRODUCT_ITEM_OFFSET,
-    overflow: 'hidden',
-    borderRadius: 3,
-    width: (SCREEN_WIDTH - PRODUCT_ITEM_MARGIN) / numColumns -
-      PRODUCT_ITEM_MARGIN,
-    height: PRODUCT_ITEM_HEIGHT,
-    flexDirection: 'column',
-    backgroundColor: colors.snow,
-    ...Platform.select({
-      ios: {
-        shadowColor: 'rgba(0,0,0, .2)',
-        shadowOffset: { height: 0, width: 0 },
-        shadowOpacity: 1,
-        shadowRadius: 1,
-      },
-      android: {
-        elevation: 1,
-      },
-    }),
-  },
-  itemImage: {
-    width: (SCREEN_WIDTH - PRODUCT_ITEM_MARGIN) / numColumns -
-      PRODUCT_ITEM_MARGIN,
-    height: 125,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  itemTitle: {
-    flex: 1,
-    ...Platform.select({
-      ios: {
-        fontWeight: '400',
-      },
-    }),
-    margin: PRODUCT_ITEM_OFFSET * 2,
-  },
-  itemFooter: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingTop: PRODUCT_ITEM_OFFSET * 2,
-    borderWidth: 0,
-    borderTopWidth: StyleSheet.hairlineWidth,
-    borderColor: 'rgba(0,0,0,0.15)',
-    margin: PRODUCT_ITEM_OFFSET * 2,
-  },
-  itemPrice: {
-    fontWeight: 'bold',
-  },
-  itemPriceClearance: {
-    fontWeight: 'bold',
-    color: 'red',
-  },
+const styles=StyleSheet.create({
+    container:{
+        flex:1,
+    },
+    productItem:{
+        borderWidth:1,
+        marginBottom:2,
+        position:"relative",
+        
+    },
+    itemImage:{
+        width: 50,
+        height: 50,
+        justifyContent: 'center',
+        alignItems: 'center',
+    }
 });

@@ -4,9 +4,13 @@ import rootReducer from './../reducers/rootReducer';
 
 import {middleware} from './../redux';
 import thunk from 'redux-thunk';
-/*
-let createStoreWithMiddleware = applyMiddleware(thunk)(createStore);
-let store = createStoreWithMiddleware(rootReducer);
-export default store;
-*/
-export default compose(applyMiddleware(thunk,middleware))(createStore)(rootReducer);
+
+
+import { persistStore, persistReducer } from 'redux-persist'
+import storage from 'redux-persist/lib/storage' // defaults to localStorage for web and AsyncStorage for react-native
+
+
+
+const reduxDevTools = window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+
+export default store = createStore(rootReducer,compose(applyMiddleware(thunk,middleware)));

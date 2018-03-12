@@ -14,7 +14,7 @@ import {
   AsyncStorage,
   Image
 } from 'react-native';
-import Toast from 'react-native-root-toast';
+
 
 
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -37,11 +37,8 @@ import RNRestart from 'react-native-restart'; // Import package from node module
 
 
 
-
-import MainComponent from './app/components/MainComponent';
 import {Provider} from 'react-redux';
 import store from './app/store/store';
-import MainTab from './app/MainTab';
 
 
 import { StackNavigator, addNavigationHelpers } from "react-navigation";

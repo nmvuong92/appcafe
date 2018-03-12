@@ -16,7 +16,7 @@ import NganhHang from './tabs/NganhHang';
 import GioHang from './tabs/GioHang';
 import Register from './tabs/pages/Register';
 
-import NotificationIcon from './common/components/NotificationIcon';
+import CartBadgeIcon from './common/components/cartBadgeIcon';
 import {StatusBar,AppState,View,StyleSheet} from 'react-native';
 
 import PropTypes from 'prop-types';
@@ -36,6 +36,8 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import Feather from 'react-native-vector-icons/Feather';
 import IconBadge from 'react-native-icon-badge';
 import ChiTietSanPham from './tabs/ChiTietSanPham';
+
+import{cartCRUD} from './actions/cartAction';
 
 const opt_hide_tabbar={
     tabBarVisible:false,
@@ -149,6 +151,8 @@ const SanPhamStack  = StackNavigator({
 });
 
 
+
+
 export const MainScreenNavigator = TabNavigator({
     Home:HomeStack,
     SanPham:SanPhamStack,
@@ -160,7 +164,7 @@ export const MainScreenNavigator = TabNavigator({
             tabBarLabel:'Giỏ hàng',
             
             header:null,
-            tabBarIcon: <NotificationIcon/>,
+            tabBarIcon: <CartBadgeIcon/>,
         }
     },
     /*SanPham:{
@@ -255,7 +259,7 @@ class MainScreenNavigatorState extends Component{
         navReducer: PropTypes.object.isRequired,
       };
 
-       constructor(props){
+       constructor(props){  
            super(props);
            //
            this.state={
@@ -270,6 +274,8 @@ class MainScreenNavigatorState extends Component{
 
             /*const {dispatch,navReducer} = this.props;
             dispatch({type:'KhuyenMaiScreen'});*/
+            const {dispatch} = this.props;
+            dispatch(cartCRUD("sync"));
 
 
             BackHandler.addEventListener("hardwareBackPress", this.onBackPress);
@@ -315,13 +321,13 @@ class MainScreenNavigatorState extends Component{
                             addListener
                         })}
                     />
-          
             );
         }
 }
 
 const mapStateToProps = state => ({
     navReducer:state.navReducer,
+    cardReducer:state.cardReducer,
 });
 
 export default connect(mapStateToProps)(MainScreenNavigatorState);

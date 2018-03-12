@@ -1,4 +1,4 @@
-// NotificationIcon.js
+
 import React,{Component} from 'react';
 import { Text, Image, View,Platform } from 'react-native';
 import { connect } from 'react-redux';
@@ -16,13 +16,12 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import Feather from 'react-native-vector-icons/Feather';
 import IconBadge from 'react-native-icon-badge';
 
-
-
-class NotificationIcon extends Component {
+class CartBadgeIcon extends Component {
 
   render() {
-    const { notificaitonReducer } = this.props;
-    let notifications= notificaitonReducer.count;
+    const { cartReducer } = this.props;
+    //đếm số lượng sản phẩm trong giỏ hàng
+    let count_cart_notification= cartReducer.cartItems.length;
     // below is an example notification icon absolutely positioned 
         return (
         <View style={{
@@ -33,29 +32,24 @@ class NotificationIcon extends Component {
             alignItems: 'center'}}>
              <FontAwesome color="black" size={32} name="shopping-cart"/>
         {/* <Image source={require('./../../assets/images/icons/shopping_cart_32.png')}/> */}
-        {notifications > 0 ?
+        {count_cart_notification > 0 ?
             <View style={{
             position: "absolute",
             top: 0,
             right: Platform.OS==="ios"?-20:0,
-            borderRadius: 20,
-            backgroundColor: 'pink',
-            paddingRight:2,
-            paddingLeft:2,
+            borderRadius: 10,
+            backgroundColor: 'red',
+            paddingRight:3,
+            paddingLeft:3,
           
             zIndex: 2}}>
-            <Text style={{fontWeight:'bold'}}>{notifications}</Text>
+            <Text style={{color:"white",fontSize:10}}>{count_cart_notification}</Text>
             </View>
             : undefined}
         </View>
         );
     }
 }
-/*
-const mapStateToProps = state => ({ notifications: state.notifications });
-export default connect(mapStateToProps, null)(NotificationIcon);
-*/
-
 export default connect((state)=>{
-    return {notificaitonReducer} = state;
-})(NotificationIcon);
+    return {cartReducer} = state;
+})(CartBadgeIcon);

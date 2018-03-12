@@ -4,12 +4,18 @@ import * as urls from  './../common/constants_url';
 
 
 export let fetchSanPham = (danhmuc=null,tukhoa="")=> {
-    console.log("-----------------fetchSanPham----------------");
+    if(__DEV__){
+            console.log("-----------------fetchSanPham----------------");
+    }
+   
     let URL =urls.api_sp+"/layds"+(tukhoa!=""?"?search="+tukhoa:"");
     if(danhmuc!=null){
         URL =urls.api_sp+"/layds?iddm="+danhmuc.ID+(tukhoa!=""?"&search="+tukhoa:"");
     }
-    console.log("url: "+URL);
+    if(__DEV__){
+            console.log("url: "+URL);
+    }
+   
 
     return dispatch => {
         dispatch(fetchFood(true));
@@ -24,9 +30,15 @@ export let fetchSanPham = (danhmuc=null,tukhoa="")=> {
     }
 }
 export let fetchSanPhamCT = (idsp)=> {
-    console.log("-----------------fetchSanPhamCT----------------");
+    if(__DEV__){
+            console.log("-----------------fetchSanPhamCT----------------");
+    }
+   
     let URL =urls.api_sp+"/laysp?id="+idsp;
-    console.log("url: "+URL);
+    if(__DEV__){
+            console.log("url: "+URL);
+    }
+   
 
     return dispatch => {
         dispatch(fetchFood(true));
@@ -35,7 +47,10 @@ export let fetchSanPhamCT = (idsp)=> {
             dispatch(fetchFood(false));
             dispatch(receiveFoodCT(response));
         }, (error) => {alert(error)
-            console.log(`Fetch food info error: ${error}`);
+            if(__DEV__){
+                console.log(`Fetch food info error: ${error}`);
+            }
+           
             dispatch(receiveFoodCT(null))
         })
     }

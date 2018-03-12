@@ -19,7 +19,8 @@ import Image from 'react-native-image-progress';
 import ProgressBar from 'react-native-progress/CircleSnail';
 
 import {fetchSanPham} from './../actions/sanPhamAction';
-
+import Header from './../common/components/Header';
+import{NavigationActions} from 'react-navigation';
 
 class NganhHang extends Component{
     constructor(props){
@@ -37,7 +38,11 @@ class NganhHang extends Component{
     }
 
      
-    
+    goBack(){
+        const {dispatch} = this.props;       
+        dispatch(NavigationActions.back());
+    }
+
     componentDidMount(){
         const {dispatch} =this.props;
         //lay dssp
@@ -57,21 +62,36 @@ class NganhHang extends Component{
         const {danhMucSanPhamReducer} = this.props;
         return (
             danhMucSanPhamReducer.isFetching?<Loading/>:
-            <FlatList
-                data={danhMucSanPhamReducer.data}
-                renderItem={({item}) =>
-                    <TouchableOpacity key={item.ID} onPress={()=>{
-                        this.onPressItem(item);
-                    }} style={styles.productItem}>
-                        <Image 
-                            source={{ uri: item.HinhAnh }} 
-                            indicator={ProgressBar} 
-                            style={styles.itemImage}/>
-                        <Text>{item.TenDanhMuc}</Text>
-                    </TouchableOpacity>
-                }
-                keyExtractor={(item,index) => item.ID+""}
-            />
+            <View>
+                <Header
+                    showBack={true}
+                    // leftIcon='angle-left'
+                    // leftIconAction={()=>this.goBack()}
+
+                    // rightIcon='address-book'
+                    // rightIconAction={()=>this.goBack()}
+
+                    // rightIcon2='heart'
+                    // rightIconAction2={()=>this.goBack()}
+
+                    title="Chọn danh mục sản phẩm"
+                />
+                <FlatList
+                    data={danhMucSanPhamReducer.data}
+                    renderItem={({item}) =>
+                        <TouchableOpacity key={item.ID} onPress={()=>{
+                            this.onPressItem(item);
+                        }} style={styles.productItem}>
+                            <Image 
+                                source={{ uri: item.HinhAnh }} 
+                                indicator={ProgressBar} 
+                                style={styles.itemImage}/>
+                            <Text>{item.TenDanhMuc}</Text>
+                        </TouchableOpacity>
+                    }
+                    keyExtractor={(item,index) => item.ID+""}
+                />
+            </View>
         );
     };
     

@@ -1,20 +1,18 @@
 import { combineReducers} from 'redux';
 
-import calcReducer from './calcReducer';
 import ProductReducer from './ProductReducer';
 
 //
 import navReducer from './navReducer';
 import authReducer from './authReducer';
-import notificaitonReducer from './notificaitonReducer';
+import cartReducer from './cartReducer';
 import sanPhamReducer from './sanPhamReducer';
 import danhMucSanPhamReducer from './danhMucSanPhamReducer';
-export default rootReducer = combineReducers({
-    calcReducer,
+export default rootReducer = combineReducers({  
     ProductReducer,
     navReducer,
     authReducer,
-    notificaitonReducer,
+    cartReducer,
     sanPhamReducer,
     danhMucSanPhamReducer
 });

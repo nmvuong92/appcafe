@@ -14,7 +14,7 @@ import GioHangPage from './pages/GioHangPage';
 import Loading from './../common/components/Loading';
 import {connect} from 'react-redux';
 import {fetchSanPhamCT} from './../actions/sanPhamAction';
-import {setNotificationCounter} from './../actions/notificationAction';
+import {setNotificationCounter,cartCRUD} from './../actions/cartAction';
 import Toast from 'react-native-root-toast';
 
 import { addNavigationHelpers, NavigationActions } from "react-navigation";
@@ -22,8 +22,11 @@ import { PricingCard,Card,Button } from 'react-native-elements'
 import Header from './../common/components/Header';
 import * as vUtils from './../common/vUtils';
 
+
 const imageHeight = Math.round(window.width * 9 / 16);
 const imageWidth = window.width;
+
+import CartBadgeIcon from './../common/components/cartBadgeIcon';
 const users = [
     {
        name: 'brynn',
@@ -36,7 +39,6 @@ class ChiTietSanPham extends Component{
 
   
     constructor(props){
-        
         super(props);
         //
       
@@ -53,6 +55,7 @@ class ChiTietSanPham extends Component{
         dispatch(fetchSanPhamCT(itemId));
 
     }
+
     goBack(){
         const {dispatch} = this.props;       
         dispatch(NavigationActions.back());
@@ -69,26 +72,31 @@ class ChiTietSanPham extends Component{
     render(){
         const { params } = this.props.navigation.state;
         const itemId = params ? params.id : null;
-        const {sanPhamReducer,dispatch} = this.props;
+        const {sanPhamReducer,dispatch,cartReducer} = this.props;
         let sanpham = sanPhamReducer.spChiTiet;
         return (
-            sanpham==null?<Text>Not found</Text>:
+            sanpham==null?<Loading/>:
        
             <View style={styles.container}>
 
                  <Header
+
+                    //showBack={true}
                     leftIcon='angle-left'
                     leftIconAction={()=>this.goBack()}
 
-                    rightIcon='address-book'
-                    rightIconAction={()=>this.goBack()}
+                    // rightIcon='address-book'
+                    // rightIconAction={()=>this.goBack()}
 
-                    rightIcon2='heart'
-                    rightIconAction2={()=>this.goBack()}
+                    // rightIcon2='heart'
+                    // rightIconAction2={()=>this.goBack()}
                 
-
+                    showCartBadgeIcon={true}
+                    CartBadgeIconAction={()=>this.goBack()}
                     title={sanpham.TenSanPham}
                 />
+
+      
 
                  <ScrollView>
                     <View style={{alignContent:"center",alignItems:"center"}}>
@@ -119,9 +127,6 @@ class ChiTietSanPham extends Component{
                     }}
                 />
                 
-               
-               
-               
                 <Card title="Giá bán">
                     <View style={styles.user}>
                             <Text style={styles.name}>{sanpham.Gia}</Text>
@@ -159,7 +164,15 @@ class ChiTietSanPham extends Component{
                         backgroundColor="red"
                         color="white"
                         icon={{name: 'opencart', type: 'font-awesome'}}
-                        title='MUA HÀNG' />
+                        title='MUA HÀNG'
+                        onPress={()=>{
+                            dispatch(setNotificationCounter("+",1));
+                            dispatch(cartCRUD("+",sanpham,1));
+                           
+                            
+                            Toast.show("Đã thêm sản phẩm vào giỏ hàng", {position:Toast.positions.TOP});
+                        }}
+                        />
 
                 </View>
                
@@ -173,7 +186,7 @@ const mapStateToProps = state => ({
     navReducer:state.navReducer,
     authReducer:state.authReducer,
     sanPhamReducer:state.sanPhamReducer,
-    notificationReducer:state.notificationReducer
+    cartReducer:state.cartReducer
 });
 export default connect(mapStateToProps)(ChiTietSanPham);
 const styles = StyleSheet.create({
