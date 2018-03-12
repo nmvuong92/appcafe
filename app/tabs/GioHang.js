@@ -26,6 +26,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import Feather from 'react-native-vector-icons/Feather';
 import IconBadge from 'react-native-icon-badge';
 
+import Header from'./../common/components/Header';
 
 class GioHang extends Component{
     constructor(props){
@@ -140,18 +141,24 @@ class GioHang extends Component{
         return (
             sanPhamReducer.isFetching?<Loading/>:
             <View style={styles.container}>
-                    <Button
-                    large
-                    backgroundColor="red"
-                    color="white"
-                    icon={{name: 'opencart', type: 'font-awesome'}}
-                    title='Xóa tất cả'
-                    onPress={()=>{
+                <Header
+                    showBack={true}
+                    //leftIcon='angle-left'
+                    //leftIconAction={()=>this.goBack()}
+                   
+                     rightIcon='trash'
+                     rightIconAction={()=>{
                         const {cartReducer,dispatch} =this.props;
                         dispatch(cartCRUD("0"));
-                    }}
-                    />
+                     }}
 
+                    // rightIcon2='heart'
+                    // rightIconAction2={()=>this.goBack()}
+
+                    //showCartBadgeIcon={true}
+                    //CartBadgeIconAction={()=>this.goBack()}
+                    title={cartReducer.cartItems.length+" sản phẩm"}
+                />
                  <View style={{flex:1}}>
                         <FlatList
                             data={cartReducer.cartItems}
@@ -164,10 +171,10 @@ class GioHang extends Component{
                                         indicator={ProgressBar} 
                                         style={styles.itemImage}/>
                                     <Text>{item.TenSanPham} ID: {item.ID}</Text>
-                                    <Text>{item.DanhMuc.TenDanhMuc}</Text>
+                                    <Text>{item.TenDanhMuc}</Text>
                                     <Text>{item.Gia}</Text>
                                     <Text>Số lượng sản phẩm: {item.SLSP}</Text>
-                                    <View style={{flexDirection:"row",}}>
+                                    <View style={{flexDirection:"row",alignContent:"center",alignItems:"center",alignSelf:"flex-end"}}>
 
 
                                         <Feather.Button name="plus-circle" color="red" backgroundColor="#fff" onPress={()=>{
@@ -187,7 +194,7 @@ class GioHang extends Component{
                                     </View>
                                        
                                       
-                            
+                               
                                 </TouchableOpacity>
                             }
                             keyExtractor={(item,index) => item.ID+""}
@@ -199,7 +206,21 @@ class GioHang extends Component{
                             onMomentumScrollBegin={() => { this.onEndReachedCalledDuringMomentum = false; }}
                         />
                  </View>
-            
+                 <View style={styles.footer}>
+                                        <Button
+                                            large
+                                            backgroundColor="red"
+                                            color="white"
+                                            icon={{name: 'opencart', type: 'font-awesome'}}
+                                            title='THANH TOÁN'
+                                            onPress={()=>{
+                                              
+                                                
+                                               
+                                            }}
+                                            />
+
+                  </View>
                
             </View>
         );
@@ -217,11 +238,12 @@ export default connect(mapStateToProps)(GioHang);
 const styles=StyleSheet.create({
     container:{
         flex:1,
+        position:"relative",
     },
     productItem:{
         borderWidth:1,
         marginBottom:2,
-        position:"relative",
+       
         
     },
     itemImage:{
@@ -229,5 +251,11 @@ const styles=StyleSheet.create({
         height: 50,
         justifyContent: 'center',
         alignItems: 'center',
+    },
+    footer:{
+        position:'absolute',
+        bottom:0,
+        right:0,
+        left:0,
     }
 });

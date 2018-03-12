@@ -34,12 +34,10 @@ export let cartCRUD = (type,product,quantity)=> { //loai, san pham, soluong
                         console.log(value);
                         var current_cart = [];
                         if(value!=null){
-                                var current_cart = JSON.parse(value);
+                            current_cart = JSON.parse(value);
                         }
                         //set state
-                        dispatch({type:types.CART_ADD,newCartItems:current_cart});
-                        //
-                        console.log("Synched");
+                        dispatch({type:types.CART_ADD,newCartItems:current_cart});                       
                     });
                 break;
             case "+":
@@ -124,11 +122,10 @@ export let cartCRUD = (type,product,quantity)=> { //loai, san pham, soluong
                     });
                 break;
             case "0":
-                console.log("0000");
                 AsyncStorage.removeItem('cart',()=>{
-                    Toast.show("Đã xóa tất cả sản phẩm trong giỏ hàng", {position:Toast.positions.TOP});
+                    Toast.show("Đã xóa", {position:Toast.positions.TOP});
                 });
-                dispatch({type:types.CART_REMOVE_ITEM});
+                dispatch({type:types.CART_CLEAR,newCartItems:[]});
                 break;        
 
             default:

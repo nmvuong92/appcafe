@@ -1,6 +1,5 @@
 import * as types from './../actions/actionTypes';
 const initialState = {
-    count:5,
     cartItems:[]
 }
 
@@ -39,7 +38,7 @@ export default  cartReducer  = (state=initialState,action)=>{
         case types.CART_CLEAR:
             return {
                 ...state,
-                ...{cartItems:[]}
+                ...{cartItems:action.newCartItems}
             };
        default:
             return state;

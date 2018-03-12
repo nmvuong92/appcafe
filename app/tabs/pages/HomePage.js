@@ -107,18 +107,7 @@ class HomePage extends Component{
                                     <Image style={{width:80,height:50}} source={require('./../../assets/images/logo.png')}/>
                                 </View>
                                 <View style={{flex:3,flexDirection:'row',justifyContent:'space-around'}}>
-                                        <TouchableOpacity style={styles.head_btn} onPress={()=>{
-                                            
-                                         
-                                                        
-                                                //this.props.screenProps.rootNavigation.navigate("SanPham");
-                                              this.props.navigation.navigate('ScreenNotOnTabbar2');
-                                              //this.props.rootNavigation.navigation.navigate("KhuyenMai");
-                                            }}> 
-                                            <Image style={{width:32,height:32}} source={require('./../../assets/images/icons/icon1_32.png')}/>
-                                            <Text style={{fontSize:12}}>Sản phẩm</Text>
-                                        </TouchableOpacity>
-
+                                       
 
                                         <TouchableOpacity style={styles.head_btn} onPress={()=>{
                                                // this.props.navigation.navigate('KhuyenMaiScreen');
@@ -143,6 +132,14 @@ class HomePage extends Component{
                                             <Image style={{width:32,height:32}} source={require('./../../assets/images/icons/icon4_32.png')}/>
                                             <Text style={{fontSize:12}}>Đăng nhập</Text>
                                         </TouchableOpacity>
+
+                                         <TouchableOpacity style={styles.head_btn} onPress={()=>{
+                                            
+                                            }}> 
+                                            <Image style={{width:32,height:32}} source={require('./../../assets/images/icons/icon5_32.png')}/>
+                                            <Text style={{fontSize:12}}>Tích điểm</Text>
+                                        </TouchableOpacity>
+
 
 
                                 </View>

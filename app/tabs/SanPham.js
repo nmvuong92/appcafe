@@ -93,7 +93,6 @@ class SanPham extends Component{
             refreshing:sanPhamReducer.isFetching,
             seed:this.state.seed+1,
         },()=>{
-         
             //lay dssp
             dispatch(fetchSanPham(sanPhamReducer.danhmuc,sanPhamReducer.tukhoa));
         });
@@ -169,7 +168,7 @@ class SanPham extends Component{
                                         indicator={ProgressBar} 
                                         style={styles.itemImage}/>
                                     <Text>{item.TenSanPham}</Text>
-                                    <Text>{item.DanhMuc.TenDanhMuc}</Text>
+                                    <Text>{item.TenDanhMuc}</Text>
                                     <Text>{item.Gia}</Text>
                                 </TouchableOpacity>
                             }

@@ -81,9 +81,9 @@ class ChiTietSanPham extends Component{
 
                  <Header
 
-                    //showBack={true}
-                    leftIcon='angle-left'
-                    leftIconAction={()=>this.goBack()}
+                    showBack={true}
+                    //leftIcon='angle-left'
+                    //leftIconAction={()=>this.goBack()}
 
                     // rightIcon='address-book'
                     // rightIconAction={()=>this.goBack()}
@@ -116,20 +116,10 @@ class ChiTietSanPham extends Component{
                 </Card>
 
 
-                <PricingCard
-                    color='#4f9deb'
-                    title='Giá bán'
-                    price={vUtils.formatVND(sanpham.Gia)}
-                    info={[sanpham.DanhMuc.TenDanhMuc]}
-                    button={{ title: 'MUA HÀNG', icon: 'flight-takeoff' }}
-                    onButtonPress = {()=>{
-                        alert("Buyed");
-                    }}
-                />
-                
+             
                 <Card title="Giá bán">
-                    <View style={styles.user}>
-                            <Text style={styles.name}>{sanpham.Gia}</Text>
+                    <View style={styles.center}>
+                            <Text style={vUtils.vStyles.price}>{vUtils.formatVND(sanpham.Gia)}</Text>
                     </View>
                 </Card>
                 <Card title="Size">
@@ -150,7 +140,7 @@ class ChiTietSanPham extends Component{
 
                 <Card title="Danh mục">
                     <View style={styles.user}>
-                            <Text style={styles.name}>{sanpham.DanhMuc.TenDanhMuc}</Text>
+                            <Text style={styles.name}>{sanpham.TenDanhMuc}</Text>
                     </View>
                 </Card>
 
@@ -163,7 +153,7 @@ class ChiTietSanPham extends Component{
                         large
                         backgroundColor="red"
                         color="white"
-                        icon={{name: 'opencart', type: 'font-awesome'}}
+                        icon={{name: 'cart-plus', type: 'font-awesome'}}
                         title='MUA HÀNG'
                         onPress={()=>{
                             dispatch(setNotificationCounter("+",1));
@@ -173,7 +163,6 @@ class ChiTietSanPham extends Component{
                             Toast.show("Đã thêm sản phẩm vào giỏ hàng", {position:Toast.positions.TOP});
                         }}
                         />
-
                 </View>
                
             </View>
@@ -192,8 +181,12 @@ export default connect(mapStateToProps)(ChiTietSanPham);
 const styles = StyleSheet.create({
     container:{
         flex: 1,
-        position: 'relative'
+        position: 'relative',
        
+    },
+    center:{
+        alignContent:"center",
+        alignItems:"center",
     },
    
   

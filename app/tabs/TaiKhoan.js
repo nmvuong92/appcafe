@@ -16,8 +16,14 @@ class TaiKhoan extends Component{
    
    
     render(){
-
+        const {authReducer} = this.props;
+        let isLoggedIn = authReducer.isLoggedIn;
         return (
+            !isLoggedIn?
+            <View>
+                <Text>Vui lòng đăng nhập</Text>
+            </View>
+            :
             <View style={{alignContent:'center',justifyContent:'center',alignItems: 'center',}}>
            
                 <Avatar
