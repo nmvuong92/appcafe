@@ -50,6 +50,7 @@ class GioHang extends Component{
     componentDidMount(){
         const {sanPhamReducer,cartReducer,dispatch} =this.props;
         dispatch(cartCRUD("sync"));
+        console.log("sync now");
         //lay dssp
         //dispatch(fetchSanPham(sanPhamReducer.danhmuc,sanPhamReducer.tukhoa));
     }
