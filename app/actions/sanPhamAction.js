@@ -55,6 +55,8 @@ export let fetchSanPhamCT = (idsp)=> {
         })
     }
 }
+
+
 export let setFilter = (danhmuc,tukhoa)=>{
     return { type:types.PRODUCT_FILTER_SET,danhmuc:danhmuc,tukhoa:tukhoa}
 }

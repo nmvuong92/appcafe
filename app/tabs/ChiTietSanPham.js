@@ -8,7 +8,8 @@ import {
     ListView,
     InteractionManager,
     Animated,
-    Platform} from 'react-native';
+    Platform,
+    WebView} from 'react-native';
 import {window} from './../common/constants';
 import GioHangPage from './pages/GioHangPage';
 import Loading from './../common/components/Loading';
@@ -60,7 +61,10 @@ class ChiTietSanPham extends Component{
         const {dispatch} = this.props;       
         dispatch(NavigationActions.back());
     }
-
+    goCart(){
+        const {dispatch} = this.props;       
+        dispatch({type:'ChiTietSanPham_GioHang_Screen'});
+    }
     onPressMuaHang = (sanpham)=>{
         alert(sanpham.TenSanPham);
     }
@@ -74,6 +78,7 @@ class ChiTietSanPham extends Component{
         const itemId = params ? params.id : null;
         const {sanPhamReducer,dispatch,cartReducer} = this.props;
         let sanpham = sanPhamReducer.spChiTiet;
+        let scalesPageToFit=Platform.OS==="ios"?true:false;
         return (
             sanpham==null?<Loading/>:
        
@@ -92,7 +97,11 @@ class ChiTietSanPham extends Component{
                     // rightIconAction2={()=>this.goBack()}
                 
                     showCartBadgeIcon={true}
-                    CartBadgeIconAction={()=>this.goBack()}
+                    CartBadgeIconAction={
+                        ()=>{
+                            this.goCart();
+                        }
+                    }
                     title={sanpham.TenSanPham}
                 />
 
@@ -132,18 +141,23 @@ class ChiTietSanPham extends Component{
                             <Text style={styles.name}>{sanpham.MauSac}</Text>
                     </View>
                 </Card>
-                <Card title="Mô tả">
-                    <View style={styles.user}>
-                            <Text style={styles.name}>{sanpham.MoTa}</Text>
-                    </View>
-                </Card>
+               
 
                 <Card title="Danh mục">
                     <View style={styles.user}>
                             <Text style={styles.name}>{sanpham.TenDanhMuc}</Text>
                     </View>
                 </Card>
+                <Card title="Mô tả">
 
+                    <WebView style={{height:200,}}
+                        source={{html: sanpham.MoTa}}
+                        startInLoadingState={sanpham==null}
+                        bounces={false}
+                        scalesPageToFit={Platform.OS==="ios"?false:true}
+                    />
+
+                </Card>
 
                 </ScrollView>
 

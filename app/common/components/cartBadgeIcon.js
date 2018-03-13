@@ -29,14 +29,15 @@ class CartBadgeIcon extends Component {
             flex: 1,
             alignSelf: 'stretch',
             justifyContent: 'space-around',
-            alignItems: 'center'}}>
+            alignItems: 'center',
+            position:'relative',}}>
              <FontAwesome color="black" size={32} name="shopping-cart"/>
         {/* <Image source={require('./../../assets/images/icons/shopping_cart_32.png')}/> */}
         {count_cart_notification > 0 ?
             <View style={{
             position: "absolute",
             top: 0,
-            right: Platform.OS==="ios"?-20:0,
+            right: Platform.OS==="ios"?20:0,
             borderRadius: 10,
             backgroundColor: 'red',
             paddingRight:3,

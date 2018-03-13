@@ -10,6 +10,7 @@ import Loading from './../common/components/Loading';
 
 import Image from 'react-native-image-progress';
 import ProgressBar from 'react-native-progress/CircleSnail';
+import { HeadPadding } from '../common/vUtils';
 
 class SanPham extends Component{
     constructor(props){
@@ -126,6 +127,7 @@ class SanPham extends Component{
         return (
             sanPhamReducer.isFetching?<Loading/>:
             <View style={styles.container}>
+                <HeadPadding/>
                 <View>
                         <View>
                             <SearchBar

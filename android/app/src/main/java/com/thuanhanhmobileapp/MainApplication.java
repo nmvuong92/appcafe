@@ -3,6 +3,14 @@ package com.thuanhanhmobileapp;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.oblador.vectoricons.VectorIconsPackage;
+import com.avishayil.rnrestart.ReactNativeRestartPackage;
+import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
+import com.AlexanderZaytsev.RNI18n.RNI18nPackage;
+import com.oblador.vectoricons.VectorIconsPackage;
+import com.avishayil.rnrestart.ReactNativeRestartPackage;
+import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
+import com.AlexanderZaytsev.RNI18n.RNI18nPackage;
 import com.avishayil.rnrestart.ReactNativeRestartPackage;
 import com.AlexanderZaytsev.RNI18n.RNI18nPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
@@ -27,6 +35,14 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new VectorIconsPackage(),
+            new ReactNativeRestartPackage(),
+            new ReactNativePushNotificationPackage(),
+            new RNI18nPackage(),
+            new VectorIconsPackage(),
+            new ReactNativeRestartPackage(),
+            new ReactNativePushNotificationPackage(),
+            new RNI18nPackage(),
             new ReactNativeRestartPackage(),
             new RNI18nPackage(),
             new VectorIconsPackage(),

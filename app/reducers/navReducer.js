@@ -92,12 +92,39 @@ let navReducer  = (state=initialState,action)=>{
                 id: action.id
               }
             }),
-            state
+            NavigationActions.navigate({ routeName: 'Home' }),
           );
         break;
-      default:
-        nextState = MainScreenNavigator.router.getStateForAction(action, state);
+
+        //SAN PHAM->CHI TIET->GIOHANG
+
+      case 'ChiTietSanPham_GioHang_Screen':
+          nextState = MainScreenNavigator.router.getStateForAction(
+            NavigationActions.navigate({ routeName: 'ChiTietSanPham_GioHang_Screen' }),
+            state
+          );
+          break;
+
+     case 'TichDiemScreen':
+          nextState = MainScreenNavigator.router.getStateForAction(
+            NavigationActions.navigate({ routeName: 'TichDiemScreen' }),
+            state
+          );
+          break;
+      case 'Home_ChitietSanPham_Screen':
+        nextState = MainScreenNavigator.router.getStateForAction(
+          NavigationActions.navigate( { 
+            routeName: 'Home_ChitietSanPham_Screen',
+            params: {
+              id: action.id
+            }
+          }),
+          state
+        );
         break;
+      default:
+          nextState = MainScreenNavigator.router.getStateForAction(action, state);
+          break;
     }
   
     // Simply return the original `state` if `nextState` is null or undefined.

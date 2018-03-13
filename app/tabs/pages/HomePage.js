@@ -22,9 +22,11 @@ import { fetchFoodInfo,fetchFood } from './../../actions/ProductAction';
 
 import LoadMoreFooter from './../../common/components/LoadMoreFooter';
 import {NavigationActions} from 'react-navigation';
-import HeadPadding from './../../common/components/HeadPadding';
-import axios from 'axios';
 
+import axios from 'axios';
+import {HeadPadding} from './../../common/vUtils';
+import {fetchSanPhamTrangChu} from './../../actions/sanPhamTrangChuAction';
+import Loading from './../../common/components/Loading';
 
 let deviceWidth= Dimensions.get('window').width;
 
@@ -42,7 +44,15 @@ class HomePage extends Component{
             }],
         }
     }
+    componentDidMount(){
+        //const {sanPhamTrangChuReducer,dispatch} =this.props;
+       
+        //lay dssp
+        //dispatch(sanPhamTrangChuReducer());
 
+        const {sanPhamTrangChuReducer,dispatch} = this.props; 
+        dispatch(fetchSanPhamTrangChu());
+    }
       
     _onChangeSearchText = (searchText) => {
         if (searchText) {
@@ -51,9 +61,11 @@ class HomePage extends Component{
         this.setState({searchClearIcon: false})
         }
     }
-  
+   
     render(){
-        const {authReducer,navReducer,dispatch} = this.props;
+        const {authReducer,navReducer,dispatch,sanPhamTrangChuReducer} = this.props;
+        let dssp=sanPhamTrangChuReducer.products;
+        let isFetching = sanPhamTrangChuReducer.isFetching || dssp.length==0;
         return (
             
             <View style={styles.container}>
@@ -134,7 +146,7 @@ class HomePage extends Component{
                                         </TouchableOpacity>
 
                                          <TouchableOpacity style={styles.head_btn} onPress={()=>{
-                                            
+                                               dispatch({type:'TichDiemScreen'});
                                             }}> 
                                             <Image style={{width:32,height:32}} source={require('./../../assets/images/icons/icon5_32.png')}/>
                                             <Text style={{fontSize:12}}>Tích điểm</Text>
@@ -145,130 +157,105 @@ class HomePage extends Component{
                                 </View>
                             </View>
 
-
-                            <View style={styles.panel}>
+                             {
+                                 isFetching?<Loading/>:
+                                <View>
+                                 <View>
+                                      <View style={styles.panel}>
                                     <View style={styles.panel_header}>
-                                            <Text style={styles.panel_title}>SẢN PHẨM MỚI</Text>
+                                            <Text style={styles.panel_title}>SẢN PHẨM HOT</Text>
                                     </View>      
                                     <View style={styles.panel_body}>
-                                        <View style={styles.product_item}>
-                                                <View style={styles.product_item_header}>
-                                                        <Text style={styles.product_item_title}>Kiếng xe</Text>
-                                                </View>
-                                                <View style={styles.product_item_body}>
-                                                    <Image style={{width:100,height:100}} source={require('./../../assets/images/sc.png')}/>
-                                                </View>
-                                        </View>       
-                                        <View style={styles.product_item}>
-                                                <View style={styles.product_item_header}>
-                                                        <Text style={styles.product_item_title}>Kiếng xe</Text>
-                                                </View>
-                                                <View style={styles.product_item_body}>
-                                                    <Image style={{width:100,height:100}} source={require('./../../assets/images/sc.png')}/>
-                                                </View>
-                                        </View>
-                                        <View style={styles.product_item}>
-                                                <View style={styles.product_item_header}>
-                                                        <Text style={styles.product_item_title}>Kiếng xe</Text>
-                                                </View>
-                                                <View style={styles.product_item_body}>
-                                                    <Image style={{width:100,height:100}} source={require('./../../assets/images/sc.png')}/>
-                                                </View>
-                                        </View>
-                                        <View style={styles.product_item}>
-                                                <View style={styles.product_item_header}>
-                                                        <Text style={styles.product_item_title}>Kiếng xe</Text>
-                                                </View>
-                                                <View style={styles.product_item_body}>
-                                                    <Image style={{width:100,height:100}} source={require('./../../assets/images/sc.png')}/>
-                                                </View>
-                                        </View> 
+
+                                        {
+                                            dssp.HOT.map(function(item,index){
+                                                return (
+                                                    <TouchableOpacity style={styles.product_item}  key={"hot_"+index}  onPress={()=>{
+                                                       
+                                                        dispatch({type:"Home_ChitietSanPham_Screen",id:item.ID});
+                                                    }}>
+                                                            <View>
+                                                                <View style={styles.product_item_header}>
+                                                                        <Text style={styles.product_item_title}>{item.TenSanPham}</Text>
+                                                                </View>
+                                                                <View style={styles.product_item_body}>
+                                                                    <Image style={{width:100,height:100}} source={{uri:item.HinhAnh}}/>
+                                                                </View>
+                                                            </View>  
+                                                    </TouchableOpacity>
+                                                )
+                                            })
+                                        }
 
 
-                                        <TouchableOpacity style={{backgroundColor:VCOLOR.do_dam}} onPress={()=>{
+                                        {/*<TouchableOpacity style={{backgroundColor:VCOLOR.do_dam}} onPress={()=>{
                                                 
 
 
                                         }}> 
                                                 <Text style={{fontSize:12,color:'white',padding:5}}>Xem thêm >></Text>
                                         </TouchableOpacity>
-                                              
+                                        */     }
                                     </View>      
                             </View>
 
 
-                               <View style={styles.panel}>
+
+                                     
+                                 </View>
+                         
+
+                                 <View>
+                                      <View style={styles.panel}>
                                     <View style={styles.panel_header}>
-                                            <Text style={styles.panel_title}>SẢN PHẨM HOT</Text>
+                                            <Text style={styles.panel_title}>SẢN PHẨM MỚI</Text>
                                     </View>      
                                     <View style={styles.panel_body}>
-                                        <View style={styles.product_item}>
-                                                <View style={styles.product_item_header}>
-                                                        <Text style={styles.product_item_title}>Kiếng xe</Text>
-                                                </View>
-                                                <View style={styles.product_item_body}>
-                                                    <Image style={{width:100,height:100}} source={require('./../../assets/images/sc.png')}/>
-                                                </View>
-                                        </View>       
-                                        <View style={styles.product_item}>
-                                                <View style={styles.product_item_header}>
-                                                        <Text style={styles.product_item_title}>Kiếng xe</Text>
-                                                </View>
-                                                <View style={styles.product_item_body}>
-                                                    <Image style={{width:100,height:100}} source={require('./../../assets/images/sc.png')}/>
-                                                </View>
-                                        </View>
-                                        <View style={styles.product_item}>
-                                                <View style={styles.product_item_header}>
-                                                        <Text style={styles.product_item_title}>Kiếng xe</Text>
-                                                </View>
-                                                <View style={styles.product_item_body}>
-                                                    <Image style={{width:100,height:100}} source={require('./../../assets/images/sc.png')}/>
-                                                </View>
-                                        </View>
-                                        <View style={styles.product_item}>
-                                                <View style={styles.product_item_header}>
-                                                        <Text style={styles.product_item_title}>Kiếng xe</Text>
-                                                </View>
-                                                <View style={styles.product_item_body}>
-                                                    <Image style={{width:100,height:100}} source={require('./../../assets/images/sc.png')}/>
-                                                </View>
-                                        </View> 
+
+                                        {
+                                            dssp.HOT.map(function(item,index){
+                                                return (
+                                                    <TouchableOpacity style={styles.product_item}  key={"new_"+index}  onPress={()=>{
+                                                       
+                                                        dispatch({type:"Home_ChitietSanPham_Screen",id:item.ID});
+                                                    }}>
+                                                            <View>
+                                                                <View style={styles.product_item_header}>
+                                                                        <Text style={styles.product_item_title}>{item.TenSanPham}</Text>
+                                                                </View>
+                                                                <View style={styles.product_item_body}>
+                                                                    <Image style={{width:100,height:100}} source={{uri:item.HinhAnh}}/>
+                                                                </View>
+                                                            </View>  
+                                                    </TouchableOpacity>
+                                                   
+                                                )
+                                            })
+                                        }
 
 
-                                        <TouchableOpacity style={{backgroundColor:VCOLOR.do_dam,padding:5}} onPress={()=>{
+                                        {/*<TouchableOpacity style={{backgroundColor:VCOLOR.do_dam}} onPress={()=>{
+                                                
+
 
                                         }}> 
-                                                <Text style={{fontSize:12,color:'white'}}>Xem thêm >></Text>
+                                                <Text style={{fontSize:12,color:'white',padding:5}}>Xem thêm >></Text>
                                         </TouchableOpacity>
-                                        
-                                        <View>
-                                           
-                                        </View> 
+                                        */     }
                                     </View>      
                             </View>
 
-                              <View style={{backgroundColor: "#ECEFF1"}}>
-  
-                                <ScrollView horizontal={true}>
-                                
-                                    
-                                
-                                    <Image source={require('./../../assets/images/sc.png')} />
-                                
-                                    <Image source={require('./../../assets/images/sc.png')} />
-                                
-                                    <Image source={require('./../../assets/images/sc.png')} />
-                                
-                                    <Image source={require('./../../assets/images/sc.png')} />
-                                
-                                    <Image source={require('./../../assets/images/sc.png')} />
-                                
-                                
-                                
-                                </ScrollView>
-                                
-                                </View>
+
+
+                                     
+                                 </View>
+
+                    
+
+                                 </View>
+                             }    
+
+                             
 
 
 
@@ -296,6 +283,8 @@ class HomePage extends Component{
 const mapStateToProps = state => ({
     navReducer:state.navReducer,
     authReducer:state.authReducer,
+    sanPhamTrangChuReducer:state.sanPhamTrangChuReducer,
+   
 });
 
 export default connect(mapStateToProps)(HomePage);

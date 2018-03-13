@@ -25,7 +25,7 @@ import Octicons from 'react-native-vector-icons/Octicons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Feather from 'react-native-vector-icons/Feather';
 import IconBadge from 'react-native-icon-badge';
-
+import Icon from 'react-native-vector-icons/Ionicons';
 import Header from'./../common/components/Header';
 
 class GioHang extends Component{
@@ -163,39 +163,53 @@ class GioHang extends Component{
                         <FlatList
                             data={cartReducer.cartItems}
                             renderItem={({item}) =>
-                                <TouchableOpacity key={item.ID} onPress={()=>{
-                                    this.onPressProductItem(item);
-                                }} style={styles.productItem}>
+                                <View key={item.ID} style={styles2.containerStyle}>
                                     <Image 
                                         source={{ uri: item.HinhAnh }} 
                                         indicator={ProgressBar} 
-                                        style={styles.itemImage}/>
-                                    <Text>{item.TenSanPham} ID: {item.ID}</Text>
-                                    <Text>{item.TenDanhMuc}</Text>
-                                    <Text>{item.Gia}</Text>
-                                    <Text>Số lượng sản phẩm: {item.SLSP}</Text>
-                                    <View style={{flexDirection:"row",alignContent:"center",alignItems:"center",alignSelf:"flex-end"}}>
+                                        style={styles2.imageStyle}/>
+
+                                         <View style={styles2.textStyle}>
+                                            <Text style={{ color: '#2e2f30' }}>{item.TenSanPham}</Text>
+                                            <View style={styles2.priceStyle}>
+                                            <Text style={{ color: '#2e2f30', fontSize: 12 }}>${item.Gia}</Text>
+                                            </View>
+                                        </View>
+
+      <View style={styles2.counterStyle}>
+        <Icon.Button 
+          name="ios-remove" 
+          size={25} 
+          color='#fff' 
+          backgroundColor='#fff' 
+          style={{ borderRadius: 15, backgroundColor: '#bbb', height: 30, width: 30 }} 
+          iconStyle={{ marginRight: 0 }}
+          onPress={()=>{
+                dispatch(cartCRUD("-",item,1));
+            }}
+        />
+
+        <Text>{item.SLSP}</Text>
+
+        <Icon.Button 
+          name="ios-add" 
+          size={25} 
+          color='#fff' 
+          backgroundColor='#fff' 
+          style={{ borderRadius: 15, backgroundColor: '#bbb', height: 30, width: 30 }} 
+          iconStyle={{ marginRight: 0 }}
+          onPress={()=>{
+                dispatch(cartCRUD("+",item,1));
+          }}
+        />
+
+      </View>
 
 
-                                        <Feather.Button name="plus-circle" color="red" backgroundColor="#fff" onPress={()=>{
-                                            dispatch(cartCRUD("+",item,1));
-                                        }}></Feather.Button>
-
-                                        <Feather.Button name="minus-circle" color="red" backgroundColor="#fff" onPress={()=>{
-                                            dispatch(cartCRUD("-",item,1));
-                                        }}></Feather.Button>
-
-
-                                        <FontAwesome.Button name="remove" color="red" backgroundColor="#fff" onPress={()=>{
-                                                dispatch(cartCRUD("x",item));
-                                        }}></FontAwesome.Button>
-
-                                     
-                                    </View>
-                                       
+                               
                                       
                                
-                                </TouchableOpacity>
+                                </View>
                             }
                             keyExtractor={(item,index) => item.ID+""}
                             refreshing={this.state.refreshing}
@@ -259,3 +273,46 @@ const styles=StyleSheet.create({
         left:0,
     }
 });
+
+
+
+const styles2 = StyleSheet.create({
+    containerStyle: {
+      flexDirection: 'row',
+      flex: 1,
+      borderBottomWidth: 1,
+      borderColor: '#e2e2e2',
+      padding: 10,
+      paddingLeft: 15,
+      backgroundColor: '#fff'
+    },
+    lastItemStyle: {
+      flexDirection: 'row',
+      flex: 1,
+      padding: 10,
+      paddingLeft: 15,
+      backgroundColor: '#fff'
+    },
+    imageStyle: {
+      width: 50, 
+      height: 50, 
+      marginRight: 20
+    },
+    textStyle: {
+      flex: 2,
+      justifyContent: 'center'
+    },
+    priceStyle: {
+      backgroundColor: '#ddd',
+      width: 40,
+      alignItems: 'center',
+      marginTop: 3,
+      borderRadius: 3
+    },
+    counterStyle: {
+      flex: 1,
+      flexDirection: 'row',
+      justifyContent: 'space-around',
+      alignItems: 'center'
+    }
+  });

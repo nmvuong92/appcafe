@@ -19,7 +19,7 @@ import Register from './tabs/pages/Register';
 import CartBadgeIcon from './common/components/cartBadgeIcon';
 import {StatusBar,AppState,View,StyleSheet} from 'react-native';
 
-import PropTypes from 'prop-types';
+
 import {addListener} from './redux';
 import Login from './tabs/pages/Login';
 import Logout from './tabs/pages/Logout';
@@ -38,18 +38,19 @@ import IconBadge from 'react-native-icon-badge';
 import ChiTietSanPham from './tabs/ChiTietSanPham';
 
 import{cartCRUD} from './actions/cartAction';
+import {isIphoneX} from './common/vUtils';
 
 const opt_hide_tabbar={
     tabBarVisible:false,
     header:null,
-    swipeEnabled:false
+   // swipeEnabled:false
 
 }
 
 const opt_hide_tabbar2={
     tabBarVisible:false,
     header:null,
-    swipeEnabled:false
+   // swipeEnabled:false
 
 }
 const HomeStack  = StackNavigator({
@@ -75,11 +76,7 @@ const HomeStack  = StackNavigator({
     },
     LoginScreen:{
         screen:Login,
-        navigationOptions:{
-            tabBarVisible:false,
-            header:null,
-        
-        }
+        navigationOptions:opt_hide_tabbar
     },
     ScreenNotOnTabbar:{
         screen:SanPham,
@@ -105,9 +102,16 @@ const HomeStack  = StackNavigator({
     LogoutScreen:{
         screen:Logout
     },
-
+    TichDiemScreen:{
+        screen:TichDiem,
+        navigationOptions:opt_hide_tabbar
+    },
     NganhHangScreen:{
         screen:NganhHang,
+        navigationOptions:opt_hide_tabbar
+    },
+    Home_ChitietSanPham_Screen:{
+        screen:ChiTietSanPham,
         navigationOptions:opt_hide_tabbar
     },
 },{
@@ -118,6 +122,25 @@ const HomeStack  = StackNavigator({
     }
 });
 
+
+const ChiTietSanPhamStack  = StackNavigator({
+    ChiTietSanPhamScreen:{
+        screen:ChiTietSanPham,
+        navigationOptions: opt_hide_tabbar2
+        
+    },
+    ChiTietSanPham_GioHang_Screen:{
+        screen:GioHang,
+        navigationOptions:opt_hide_tabbar2
+    },
+},{
+    navigationOptions:{
+      
+        headerStyle:{
+            //marginTop:24
+        }
+    }
+});
 
 
 const SanPhamStack  = StackNavigator({
@@ -137,15 +160,12 @@ const SanPhamStack  = StackNavigator({
         screen:NganhHang,
         navigationOptions:opt_hide_tabbar
     },
-    SanPham_ChitietSanPham_Screen:{
-        screen:ChiTietSanPham,
-        navigationOptions:opt_hide_tabbar2
-    },
+    SanPham_ChitietSanPham_Screen:ChiTietSanPhamStack,
 },{
     navigationOptions:{
       
         headerStyle:{
-            marginTop:24
+            //marginTop:24
         }
     }
 });
@@ -248,16 +268,13 @@ export const MainScreenNavigator = TabNavigator({
     },
    
     cardStyle:{
-        paddingTop:Platform.OS==="ios"?20:0,//StatusBar.currentHeight
+       // paddingTop:isIphoneX()?100:Platform.OS==="ios"?20:0,//StatusBar.currentHeight
     },
 
 });
 
 class MainScreenNavigatorState extends Component{
-        static propTypes = {
-        dispatch: PropTypes.func.isRequired,
-        navReducer: PropTypes.object.isRequired,
-      };
+   
 
        constructor(props){  
            super(props);

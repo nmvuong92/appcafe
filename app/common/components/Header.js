@@ -11,6 +11,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import CartBadgeIcon from './cartBadgeIcon';
 import{NavigationActions} from 'react-navigation';
 import {connect} from 'react-redux';
+import {isIphoneX} from './../../common/vUtils';
 class Header extends Component {
     goBack(){
         const {dispatch} = this.props;       
@@ -146,7 +147,7 @@ const styles = StyleSheet.create({
         borderBottomColor: '#ccc',
         borderBottomWidth: 0.5,
         backgroundColor: 'white',
-        marginTop: Platform.OS==="ios"?20:0
+        marginTop: isIphoneX()?40:Platform.OS==="ios"?20:0
     },
     titleWrap: {
         flex:1,
