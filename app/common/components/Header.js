@@ -21,7 +21,7 @@ class Header extends Component {
 
     render() {
         let NavigationBar = [];
-        if (this.props.showBack != undefined) {
+        if (this.props.showBack != undefined&&this.props.showBack==true) {
             NavigationBar.push(
                 <TouchableOpacity
                     key={'autoBackIcon'}
@@ -35,7 +35,7 @@ class Header extends Component {
         }   
 
 
-        if (this.props.leftIcon != undefined) {
+        if (this.props.leftIcon != undefined&&this.props.leftIcon==true) {
             NavigationBar.push(
                 <TouchableOpacity
                     key={'leftIcon'}
@@ -49,7 +49,7 @@ class Header extends Component {
         }
      
      
-        if (this.props.showCartBadgeIcon != undefined) {
+        if (this.props.showCartBadgeIcon != undefined && this.props.showCartBadgeIcon==true) {
             NavigationBar.push(
                 <TouchableOpacity
                     key={'RightCartBadgeIcon'}

@@ -23,11 +23,13 @@ import { fetchFoodInfo,fetchFood } from './../../actions/ProductAction';
 import LoadMoreFooter from './../../common/components/LoadMoreFooter';
 import {NavigationActions} from 'react-navigation';
 
-import axios from 'axios';
-import {HeadPadding} from './../../common/vUtils';
+import {HeadPadding,formatVND,vStyles} from './../../common/vUtils';
 import {fetchSanPhamTrangChu} from './../../actions/sanPhamTrangChuAction';
 import Loading from './../../common/components/Loading';
+import CartBadgeIcon from './../../common/components/cartBadgeIcon';
 
+import CornerLabel from './../../components/CornerLabel';
+import LoadingActivityIndicator from './../../common/components/LoadingActivityIndicator';
 let deviceWidth= Dimensions.get('window').width;
 
 class HomePage extends Component{
@@ -64,89 +66,62 @@ class HomePage extends Component{
    
     render(){
         const {authReducer,navReducer,dispatch,sanPhamTrangChuReducer} = this.props;
-        let dssp=sanPhamTrangChuReducer.products;
+        let dssp=sanPhamTrangChuReducer.List;
         let isFetching = sanPhamTrangChuReducer.isFetching || dssp.length==0;
+        let isLoggedIn = authReducer.user!=null;
         return (
             
             <View style={styles.container}>
-                <HeadPadding/>    
-                <View style={styles.searchBar}>
-                    <View style={{flex:9}}>
-                        {/* <TextInput style={{height: 40, borderColor: 'gray', borderWidth: 1,backgroundColor:'white'}} /> */}
-                        <SearchBar
-                            ref={search => this.search = search}
-                            lightTheme
-                            round
-                            clearIcon={this.state.searchClearIcon}
-                            containerStyle={{
-                                backgroundColor:VCOLOR.do_dam,
-                                borderBottomColor: VCOLOR.do_dam,
-                                borderTopColor: VCOLOR.do_dam,
-                            }}
-                         
-                            icon={{ type: 'font-awesome', name: 'search' }}
-                            
-                            onChangeText={this._onChangeSearchText}
-                            onClearText={()=>{
-                                this.search.blur();
-                            }}
-                          
-                            
-                            placeholder='Tìm kiếm...' />
-                    </View>
-                    <View style={{flex:1,flexDirection:'row',alignItems:'center'}}>
-                        {/* <FontAwesome.Button name='search' borderRadius={0} backgroundColor={VCOLOR.do_dam} color='black'
-                            onPress={()=>{
-                                console.log("GioHang");
-                            }}
-                        ></FontAwesome.Button> */}
-                        <Ionicons.Button name='md-cart' borderRadius={0} backgroundColor={VCOLOR.do_dam} color='black'
-                            onPress={()=>{
-                                console.log("GioHang");
-                            }}
-                        ></Ionicons.Button>
-                    </View>
-                </View>
-
+                
+              
+           
 
                 <ScrollView contentContainerStyle={styles.scroll_container}>
-                            <View style={styles.banner}>
-                                <Image style={styles.banner_img} source={require('./../../assets/images/banner.jpg')}/>
-                            </View>
+
+                            <Image style={{width:"100%",height:200}} source={require('./../../assets/images/banner.jpg')}/>
                         
                             <View style={styles.header_menu}>
                                 <View style={{flex:1}}>
                                     <Image style={{width:80,height:50}} source={require('./../../assets/images/logo.png')}/>
                                 </View>
-                                <View style={{flex:3,flexDirection:'row',justifyContent:'space-around'}}>
+                                <View style={{flex:3,flexDirection:'row',justifyContent:'flex-end'}}>
                                        
 
                                         <TouchableOpacity style={styles.head_btn} onPress={()=>{
                                                // this.props.navigation.navigate('KhuyenMaiScreen');
-                                                dispatch({type:'KhuyenMaiScreen'});
+                                                dispatch({type:'Home_KhuyenMai_Wrap'});
                                             }}> 
                                             <Image style={{width:32,height:32}} source={require('./../../assets/images/icons/icon2_32.png')}/>
                                             <Text style={{fontSize:12}}>Khuyến mãi</Text>
                                         </TouchableOpacity>
 
-                                        <TouchableOpacity style={styles.head_btn} onPress={()=>{
+                                      
+
+                                        {
+                                            isLoggedIn?null:
+                                            
+                                            <TouchableOpacity style={styles.head_btn} onPress={()=>{
                                                 dispatch({type:'RegisterScreen'});
                                             }}> 
-                                            <Image style={{width:32,height:32}} source={require('./../../assets/images/icons/icon3_32.png')}/>
-                                            <Text style={{fontSize:12}}>Đăng ký</Text>
-                                        </TouchableOpacity>
-
-
-                                        <TouchableOpacity style={styles.head_btn} onPress={()=>{
+                                                <Image style={{width:32,height:32}} source={require('./../../assets/images/icons/icon3_32.png')}/>
+                                                <Text style={{fontSize:12}}>Đăng ký</Text>
+                                            </TouchableOpacity>
+                                        }
+                                        {
+                                             isLoggedIn?null:
+                                             <TouchableOpacity style={styles.head_btn} onPress={()=>{
                                                 dispatch({type:'LoginScreen'});
-                                              
                                             }}> 
-                                            <Image style={{width:32,height:32}} source={require('./../../assets/images/icons/icon4_32.png')}/>
-                                            <Text style={{fontSize:12}}>Đăng nhập</Text>
-                                        </TouchableOpacity>
+                                                <Image style={{width:32,height:32}} source={require('./../../assets/images/icons/icon4_32.png')}/>
+                                                <Text style={{fontSize:12}}>Đăng nhập</Text>
+                                            </TouchableOpacity>
+                                                                                    
+                                        }
+                                       
+                                       
 
                                          <TouchableOpacity style={styles.head_btn} onPress={()=>{
-                                               dispatch({type:'TichDiemScreen'});
+                                               dispatch({type:'TichDiem_Wrap'});
                                             }}> 
                                             <Image style={{width:32,height:32}} source={require('./../../assets/images/icons/icon5_32.png')}/>
                                             <Text style={{fontSize:12}}>Tích điểm</Text>
@@ -156,9 +131,9 @@ class HomePage extends Component{
 
                                 </View>
                             </View>
-
+                                     
                              {
-                                 isFetching?<Loading/>:
+                                 isFetching?<LoadingActivityIndicator loading={isFetching}/>:
                                 <View>
                                  <View>
                                       <View style={styles.panel}>
@@ -174,14 +149,32 @@ class HomePage extends Component{
                                                        
                                                         dispatch({type:"Home_ChitietSanPham_Screen",id:item.ID});
                                                     }}>
-                                                            <View>
-                                                                <View style={styles.product_item_header}>
-                                                                        <Text style={styles.product_item_title}>{item.TenSanPham}</Text>
-                                                                </View>
-                                                                <View style={styles.product_item_body}>
-                                                                    <Image style={{width:100,height:100}} source={{uri:item.HinhAnh}}/>
-                                                                </View>
-                                                            </View>  
+                                                          
+                                                       
+                                                        <View style={styles.product_item_body}>
+                                                            <Image style={{width:100,height:100}} source={{uri:item.HinhAnh}}/>
+                                                        </View>
+                                                        <Text style={vStyles.product_name}>{item.TenSanPham} {item.New?<Text style={{color:"red",fontSize:9,fontWeight:'bold'}}>NEW</Text>:null}</Text>
+                                                        <Text style={vStyles.cat_name}>{item.TenDanhMuc}</Text>
+                                                        <Text style={vStyles.price}>{formatVND(item.Gia)}</Text>
+                                                    
+                                                        {item.KM?<CornerLabel
+                                                            alignment={'right'}
+                                                            cornerRadius={36}
+                                                            style={{backgroundColor: 'green', }}
+                                                            textStyle={{fontSize: 12, color: '#fff', }}>
+                                                            KM
+                                                        </CornerLabel>:null}
+
+                                                    
+
+                                                        {item.Hot?<CornerLabel
+                                                            alignment={'left'}
+                                                            cornerRadius={36}
+                                                            style={{backgroundColor: 'red', }}
+                                                            textStyle={{fontSize: 12, color: '#fff', }}>
+                                                            HOT
+                                                        </CornerLabel>:null}
                                                     </TouchableOpacity>
                                                 )
                                             })
@@ -219,14 +212,30 @@ class HomePage extends Component{
                                                        
                                                         dispatch({type:"Home_ChitietSanPham_Screen",id:item.ID});
                                                     }}>
-                                                            <View>
-                                                                <View style={styles.product_item_header}>
-                                                                        <Text style={styles.product_item_title}>{item.TenSanPham}</Text>
-                                                                </View>
-                                                                <View style={styles.product_item_body}>
-                                                                    <Image style={{width:100,height:100}} source={{uri:item.HinhAnh}}/>
-                                                                </View>
-                                                            </View>  
+                                                       
+                                                            <View style={styles.product_item_body}>
+                                                                <Image style={{width:100,height:100}} source={{uri:item.HinhAnh}}/>
+                                                            </View>
+                                                            <Text style={vStyles.cat_name}>{item.TenDanhMuc}</Text>
+                                                            <Text style={vStyles.price}>{formatVND(item.Gia)}</Text>
+                                                        
+                                                            {item.KM?<CornerLabel
+                                                                alignment={'right'}
+                                                                cornerRadius={36}
+                                                                style={{backgroundColor: 'green', }}
+                                                                textStyle={{fontSize: 12, color: '#fff', }}>
+                                                                KM
+                                                            </CornerLabel>:null}
+
+                                                        
+
+                                                            {item.Hot?<CornerLabel
+                                                                alignment={'left'}
+                                                                cornerRadius={36}
+                                                                style={{backgroundColor: 'red', }}
+                                                                textStyle={{fontSize: 12, color: '#fff', }}>
+                                                                HOT
+                                                            </CornerLabel>:null}
                                                     </TouchableOpacity>
                                                    
                                                 )
@@ -290,6 +299,7 @@ const mapStateToProps = state => ({
 export default connect(mapStateToProps)(HomePage);
 
 const styles = StyleSheet.create({
+  
     container:{
         flex:1,
         backgroundColor:'#ffffff',
@@ -308,13 +318,16 @@ const styles = StyleSheet.create({
         height: deviceWidth * 0.5
     },
     header_menu:{
-        height:50,
+      
         backgroundColor:VCOLOR.xam,
+        paddingTop:3,
+        paddingBottom:2,
         
         flexDirection:'row'
     },
     head_btn:{
-       alignItems:'center'
+       alignItems:'center',
+       marginRight:10,
     },
     panel:{
         marginBottom: 15,
@@ -333,7 +346,6 @@ const styles = StyleSheet.create({
         flexWrap:'wrap',
         justifyContent:'center',
         alignItems:'center',
-        width: '100%', 
         paddingTop: 5,
     },
     panel_title:{
@@ -342,15 +354,17 @@ const styles = StyleSheet.create({
     },
     product_item:{
         alignItems: 'center',
-        width: '48%', 
+       
         borderColor:VCOLOR.xam,
         borderWidth:1,
         margin: 2,
-        borderRadius:5
+        borderRadius:5,
+        width:'49%',
+        padding:3,
     },
     product_item_header:{
-        backgroundColor:VCOLOR.xam,
-        width:'100%',
+      
+      
         alignItems: 'center',
     },
     product_item_title:{
@@ -362,4 +376,25 @@ const styles = StyleSheet.create({
     scroll_container:{
        
     },
+    gia:{
+
+    },
+    KM:{
+        color:"blue",
+      
+        marginRight:2,
+        fontSize:10,
+    },
+    HOT:{
+        color:"red",
+     
+        marginRight:2,
+        fontSize:10,
+    },
+    NEW:{
+        color:"green",
+      
+        marginRight:2,
+        fontSize:10,
+    }
 });

@@ -27,24 +27,39 @@ import { addNavigationHelpers, NavigationActions } from "react-navigation";
 
 import Header from './../../common/components/Header';
 import Loading from './../../common/components/Loading';
+import * as authAction from './../../actions/authAction';
 
 class Login extends Component{
     constructor(props){
         super(props);
         this.state = {
-            mobile: '',
-            password: '',
+            CMND: '',
+            MatKhau: '',
         };
     }
+    
+
     goBack(){
         const {dispatch,cartReducer} = this.props;
-        const { navigate } = this.props.navigation;
+        //const { navigate } = this.props.navigation;
         //navigate('LogoutScreen', { name: 'Brent' });
         dispatch(NavigationActions.back());
     }
+  
+    componentDidUpdate(){
+        const {authReducer} = this.props;
+        if(authReducer.user!=null){
+            this.goBack();
+         }
+    }
     render(){
-        const {cartReducer} = this.props;
+        const {cartReducer,authReducer,dispatch} = this.props;
+        
         let count_cart_notification = cartReducer.count;
+
+       
+        
+
         return (
                 <View style={styles.container}>
                               
@@ -67,61 +82,49 @@ class Login extends Component{
                 <View style={[styles.formInput, styles.formInputSplit]}>
                     <Image source={require('./../../assets/images/user.png')} style={{width:25,height:25,resizeMode: 'contain'}}/>
                     <TextInput
-                        ref="login_name"
-                        placeholder='Tài khoản'
-                        style={styles.loginInput}
-                        onChangeText={this.onChangeMobile.bind(this)} />
+                        onChangeText={(text) => this.setState({CMND:text})}
+                        value={this.state.CMND}
+                        placeholder='CMND'
+                        style={styles.loginInput}/>
                 </View>
                 <View style={[styles.formInput, styles.formInputSplit]}>
                     <Image source={require('./../../assets/images/passicon.png')} style={{width:25,height:25,resizeMode: 'contain'}}/>
                     <TextInput
-                        ref="login_psw"
+                        onChangeText={(text) => this.setState({MatKhau:text})}
+                        value={this.state.MatKhau}
                         style={styles.loginInput}
                         secureTextEntry={true}
-                        placeholder='Mật khẩu'
-                        onChangeText={this.onChangePassword.bind(this)} />
+                        placeholder='Mật khẩu'/>
                 </View>
-                <TouchableOpacity style={styles.loginBtn} onPress={this._login.bind(this)}>
+                <TouchableOpacity style={styles.loginBtn} onPress={()=>{
+                    dispatch(authAction.postLogin(this.state.CMND,this.state.MatKhau));
+                }}>
                     <Text style={styles.loginText}>Đăng nhập</Text>
                 </TouchableOpacity>
+
+                
                 <View style={styles.registerWrap}>
-                    <TouchableOpacity style={{alignItems:'flex-start',flex:1}} onPress={this._forgetPassword.bind(this)}>
+                    <TouchableOpacity style={{alignItems:'flex-start',flex:1}} onPress={()=>{
+
+                    }}>
                         <Text style={{color:'#62a2e0'}}>Quyên mật khẩu?</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={{alignItems:'flex-end',flex:1}} onPress={this._register.bind(this)}>
+                    <TouchableOpacity style={{alignItems:'flex-end',flex:1}} onPress={()=>{
+
+                    }}>
                         <Text style={{color:'#62a2e0'}}>Đăng ký</Text>
                     </TouchableOpacity>
                 </View>
             </View>
         );
     };
-    _register() {
-
-    }
-
-    _forgetPassword() {
-
-    }
-
-    _login(){
-        let {mobile, password} = this.state;
-
-        
-    }
-    onChangeMobile(text){
-        this.state.mobile = text;
-        // this.setState({'mobile': text});
-    }
-    onChangePassword(text){
-        this.state.password = text;
-        // this.setState({'password': text});
-    }
-
+   
 }
 
 const mapStateToProps = state=>({
    navReducer:state.navReducer,
    cartReducer:state.cartReducer,
+   authReducer:state.authReducer,
 });
 //khong can chia se nen connect rong
 //khi ma exprt connect ==> co 1 bien dispatch

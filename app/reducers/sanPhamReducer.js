@@ -1,7 +1,16 @@
 import * as types from './../actions/actionTypes';
 const initialState = {
     isFetching: false,
-    products:[],
+ 
+    List:[],
+    Paging:{
+        TotalRecords:0,
+        RecordsPerPage:0,
+        CurrentPage:0,
+        PageNext:0,
+        TotalPages:0,
+    },
+
     spChiTiet:null,
     danhmuc:null,
     tukhoa:"",
@@ -20,7 +29,11 @@ export default ProductReducer  = (state=initialState,action)=>{
             
             return{
                 ...state,
-                ...{products:action.data, isFetching: false} //gan food moi, loading false
+                ...{
+                    List:action.List, 
+                    isFetching: false,
+                    Paging:action.Paging,
+                } //gan food moi, loading false
             };
      
        case types.PRODUCT_SPCT_RECEIVE: //nhan ve food

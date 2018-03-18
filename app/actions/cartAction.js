@@ -29,9 +29,7 @@ export let cartCRUD = (type,product,quantity)=> { //loai, san pham, soluong
         switch (type) {
             case "sync":
                 AsyncStorage.getItem('cart')
-                .then(function (value) {
-                        console.log("+AsyncStorage");
-                        console.log(value);
+                .then(function (value) {                                            
                         var current_cart = [];
                         if(value!=null){
                             current_cart = JSON.parse(value);
@@ -42,9 +40,7 @@ export let cartCRUD = (type,product,quantity)=> { //loai, san pham, soluong
                 break;
             case "+":
                 AsyncStorage.getItem('cart')
-                .then(function (value) {
-                        console.log("+AsyncStorage");
-                        console.log(value);
+                .then(function (value) {                      
                         var current_cart = [];
                         product.SLSP=quantity;
                         if(value!=null){
@@ -63,8 +59,7 @@ export let cartCRUD = (type,product,quantity)=> { //loai, san pham, soluong
                                 //nếu chưa tồn tại thì thêm mới 
                                 if(!check_exists){
                                     current_cart.push(product);
-                                }
-                                console.log("check_exists: "+check_exists);
+                                }                                
                         } else{
                             //add
                             current_cart.push(product);
@@ -75,8 +70,7 @@ export let cartCRUD = (type,product,quantity)=> { //loai, san pham, soluong
                     });
                 break;
 
-            case "-":
-                console.log("----");
+            case "-":              
                 AsyncStorage.getItem('cart')
                 .then(function (value) {
                         if(value!=null){

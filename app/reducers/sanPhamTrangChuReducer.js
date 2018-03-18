@@ -1,7 +1,7 @@
 import * as types from './../actions/actionTypes';
 const initialState = {
     isFetching: false,
-    products:[],
+    List:[],
 }
 
 export default sanPhamTrangChuReducer  = (state=initialState,action)=>{
@@ -17,7 +17,7 @@ export default sanPhamTrangChuReducer  = (state=initialState,action)=>{
             
             return{
                 ...state,
-                ...{products:action.data, isFetching: false} //gan food moi, loading false
+                ...{List:action.data, isFetching: false} //gan food moi, loading false
             };
     
        default: //mac dinh

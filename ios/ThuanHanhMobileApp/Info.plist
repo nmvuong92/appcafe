@@ -42,31 +42,12 @@
 	<string/>
 	<key>NSAppTransportSecurity</key>
 	<dict>
-		<key>NSAllowsArbitraryLoads</key>
-		<true/>
-		<key>NSAllowsArbitraryLoadsInWebContent</key>
-		<true/>
-		<key>NSAllowsLocalNetworking</key>
-		<true/>
 		<key>NSExceptionDomains</key>
 		<dict>
-			<key>placehold.it</key>
+			<key>localhost</key>
 			<dict>
-				<key>NSIncludesSubdomains</key>
+				<key>NSExceptionAllowsInsecureHTTPLoads</key>
 				<true/>
-				<key>NSTemporaryExceptionAllowsInsecureHTTPLoads</key>
-				<true/>
-				<key>NSTemporaryExceptionMinimumTLSVersion</key>
-				<string>TLSv1.1</string>
-			</dict>
-			<key>thuanhanhmobileapp.thietkevuondao.com</key>
-			<dict>
-				<key>NSIncludesSubdomains</key>
-				<true/>
-				<key>NSTemporaryExceptionAllowsInsecureHTTPLoads</key>
-				<true/>
-				<key>NSTemporaryExceptionMinimumTLSVersion</key>
-				<string>TLSv1.1</string>
 			</dict>
 		</dict>
 	</dict>

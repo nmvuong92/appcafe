@@ -16,7 +16,8 @@ export default ProductReducer  = (state=initialState,action)=>{
        case "FOOD_INFO_RECEIVE_FOOD": //nhan ve food
             return{
                 ...state,
-                ...{food:ation.food, isFetchingFood: false} //gan food moi, loading false
+                ...{
+                    food:ation.food, isFetchingFood: false} //gan food moi, loading false
             };
 
        default: //mac dinh

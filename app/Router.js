@@ -7,7 +7,7 @@ import Detail from './tabs/pages/Detail';
 
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-import {Image,Platform,Button,BackHandler} from 'react-native';
+import {Image,Platform,Button,BackHandler,BackAndroid,NetInfo} from 'react-native';
 import SanPham from './tabs/SanPham';
 import KhuyenMai from './tabs/KhuyenMai';
 import TaiKhoan from './tabs/TaiKhoan';
@@ -15,8 +15,15 @@ import TichDiem from './tabs/TichDiem';
 import NganhHang from './tabs/NganhHang';
 import GioHang from './tabs/GioHang';
 import Register from './tabs/pages/Register';
+import DonHang from './tabs/DonHang';
+import CTDonHang from './tabs/pages/CTDonHang';
+import ThanhToanForm from './tabs/pages/ThanhToanForm';
+import CTArticle from './tabs/pages/CTArticle';
+
 
 import CartBadgeIcon from './common/components/cartBadgeIcon';
+import DonHangBadgeIcon from './common/components/donHangBadgeIcon';
+
 import {StatusBar,AppState,View,StyleSheet} from 'react-native';
 
 
@@ -25,20 +32,15 @@ import Login from './tabs/pages/Login';
 import Logout from './tabs/pages/Logout';
 
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import EvilIcons from 'react-native-vector-icons/EvilIcons';
-import Entypo from 'react-native-vector-icons/Entypo';
-import Foundation from 'react-native-vector-icons/Foundation';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import Zocial from 'react-native-vector-icons/Zocial';
-import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
-import Octicons from 'react-native-vector-icons/Octicons';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import Feather from 'react-native-vector-icons/Feather';
-import IconBadge from 'react-native-icon-badge';
+
 import ChiTietSanPham from './tabs/ChiTietSanPham';
 
 import{cartCRUD} from './actions/cartAction';
 import {isIphoneX} from './common/vUtils';
+import {getUser} from './common/Storage';
+import {initialSyncSetUser} from './actions/authAction';
+import {fetchDanhSachDonHang} from './actions/donHangAction';
 
 const opt_hide_tabbar={
     tabBarVisible:false,
@@ -47,199 +49,279 @@ const opt_hide_tabbar={
 
 }
 
-const opt_hide_tabbar2={
-    tabBarVisible:false,
-    header:null,
-   // swipeEnabled:false
-
-}
-const HomeStack  = StackNavigator({
-    Home:{
-        screen:Home,
-        navigationOptions: {
-            showLabel:true,
-            showIcon:true,
-            tabBarLabel:'Trang chủ',
-            
-            header:null,
-            tabBarIcon:  <FontAwesome color="black" size={32} name="home"/>,
-           
-        }
-    },
-    Detail:{
-        screen:Detail,
-        navigationOptions:opt_hide_tabbar
-    },
-    RegisterScreen:{
-        screen:Register,
-        navigationOptions:opt_hide_tabbar
-    },
-    LoginScreen:{
-        screen:Login,
-        navigationOptions:opt_hide_tabbar
-    },
-    ScreenNotOnTabbar:{
-        screen:SanPham,
-        navigationOptions:opt_hide_tabbar
-    },
-    ScreenNotOnTabbar2:{
-        screen:TichDiem,
-        navigationOptions:opt_hide_tabbar
-    },
-    KhuyenMaiScreen:{
-        screen:KhuyenMai,
-        navigationOptions:opt_hide_tabbar
-       /* navigationOptions: {
-            showLabel:true,
-            showIcon:true,
-            // tabBarLabel:'Khuyến mãi',
-
-            header:null,
-            tabBarLabel: 'Khuyến mãi',
-            tabBarIcon: <Image style={{width: 32, height: 32}} source={require("./assets/images/icons/icon2_32.png")}/>
-        }*/
-    },
-    LogoutScreen:{
-        screen:Logout
-    },
-    TichDiemScreen:{
-        screen:TichDiem,
-        navigationOptions:opt_hide_tabbar
-    },
-    NganhHangScreen:{
-        screen:NganhHang,
-        navigationOptions:opt_hide_tabbar
-    },
-    Home_ChitietSanPham_Screen:{
-        screen:ChiTietSanPham,
-        navigationOptions:opt_hide_tabbar
-    },
-},{
-    navigationOptions:{
-        headerStyle:{
-            marginTop:24
-        }
-    }
-});
-
-
-const ChiTietSanPhamStack  = StackNavigator({
-    ChiTietSanPhamScreen:{
-        screen:ChiTietSanPham,
-        navigationOptions: opt_hide_tabbar2
-        
-    },
-    ChiTietSanPham_GioHang_Screen:{
-        screen:GioHang,
-        navigationOptions:opt_hide_tabbar2
-    },
-},{
-    navigationOptions:{
-      
-        headerStyle:{
-            //marginTop:24
-        }
-    }
-});
-
-
-const SanPhamStack  = StackNavigator({
-    SanPham:{
-        screen:SanPham,
-        navigationOptions: {
-            showLabel:true,
-            showIcon:true,
-            tabBarLabel:'Sản phẩm',
-            
-            header:null,
-            tabBarIcon:   <MaterialIcons color="black" size={32} name="view-comfy"/>,
-        },
-        
-    },
-    SanPham_NganhHang_Screen:{
-        screen:NganhHang,
-        navigationOptions:opt_hide_tabbar
-    },
-    SanPham_ChitietSanPham_Screen:ChiTietSanPhamStack,
-},{
-    navigationOptions:{
-      
-        headerStyle:{
-            //marginTop:24
-        }
-    }
-});
-
-
 
 
 export const MainScreenNavigator = TabNavigator({
-    Home:HomeStack,
-    SanPham:SanPhamStack,
-    GioHang:{
-        screen:GioHang,
-        navigationOptions: {
-            showLabel:true,
-            showIcon:true,
-            tabBarLabel:'Giỏ hàng',
+    HomeTab:StackNavigator({
+        Home:{
+            screen:Home,
             
-            header:null,
-            tabBarIcon: <CartBadgeIcon/>,
-        }
-    },
-    /*SanPham:{
-        screen:SanPham,
-        navigationOptions: {
-            showLabel:true,
-            showIcon:true,
-            //tabBarLabel:'Sản phẩm',
+            navigationOptions: {
+                showLabel:true,
+                showIcon:true,
+                header:null,
 
-            header:null,
-            tabBarLabel: 'Sản phẩm',
-            tabBarIcon: <Image style={{width: 32, height: 32}} source={require("./assets/images/icons/icon1_32.png")}/>
-        }
-    },
-    KhuyenMai:{
-        screen:KhuyenMai,
-        navigationOptions: {
-            showLabel:true,
-            showIcon:true,
-            // tabBarLabel:'Khuyến mãi',
+                tabBarLabel:'Trang chủ',
+                tabBarIcon:  <FontAwesome color="black" size={28} name="home"/>,
+            }
+        },
+        Detail:{
+            screen:Detail,
+            navigationOptions:opt_hide_tabbar
+        },
+        RegisterScreen:{
+            screen:Register,
+            navigationOptions:opt_hide_tabbar
+        },
+        LoginScreen:{
+            screen:Login,
+            navigationOptions:opt_hide_tabbar
+        },
+        ScreenNotOnTabbar:{
+            screen:SanPham,
+            navigationOptions:opt_hide_tabbar
+        },
+        ScreenNotOnTabbar2:{
+            screen:TichDiem,
+            navigationOptions:opt_hide_tabbar
+        },
+        Home_KhuyenMai_Wrap:StackNavigator({
+            Home_KhuyenMaiScreen:{
+                screen:KhuyenMai,
+                navigationOptions:opt_hide_tabbar
+            },
+            Home_KhuyenMai_ChiTietSanPham_Wap:StackNavigator({
+                Home_KhuyenMai_ChiTietSanPham_Screen:{
+                    screen:ChiTietSanPham,
+                    navigationOptions:opt_hide_tabbar,
+                },
+                Home_KhuyenMai_ChiTietSanPham_GioHang_Wrap:StackNavigator({
+                    Home_KhuyenMai_ChiTietSanPham_GioHang_Screen:{
+                        screen:GioHang,
+                        navigationOptions:opt_hide_tabbar
+                    },
+                    Home_KhuyenMai_ChiTietSanPham_GioHang_ThanhToan_Screen:{
+                        screen:ThanhToanForm,
+                        navigationOptions:opt_hide_tabbar
+                    },
+                    Home_KhuyenMai_ChiTietSanPham_GioHang_ChiTietSanPham_Screen:{
+                        screen:ChiTietSanPham,
+                        navigationOptions:opt_hide_tabbar
+                    },
+                },{
+                    navigationOptions:{
+                        initialRouteName:"Home_KhuyenMai_ChiTietSanPham_GioHang_Screen",
+                  }
+                }), //Home_KhuyenMai_ChiTietSanPham_ChiTietSanPham_GioHang_Wrap 
+            },{
+                navigationOptions:{
+                    initialRouteName:"Home_KhuyenMai_ChiTietSanPham_Screen",
+                }
+            }), //end Home_KhuyenMai_ChiTietSanPham_Wap
+            
+        },{
+            navigationOptions:{
+                initialRouteName:"Home_KhuyenMaiScreen",
+                headerStyle:{
+                    //marginTop:24
+                }
+            }
+        }),
+        LogoutScreen:{
+            screen:Logout
+        },
+        TichDiem_Wrap:StackNavigator({
+            TichDiem_Screen:{
+                screen:TichDiem,
+                navigationOptions: opt_hide_tabbar
+            },
+            TichDiem_CTDonHang_Screen:{
+                screen:CTDonHang,
+                navigationOptions: opt_hide_tabbar
+            },
+        },{
+            navigationOptions:{
+                initialRouteName:"TichDiem_Screen",
+          }
+        }), //Home_ChiTietSanPham_GioHang_Wrap {
+           
+        NganhHangScreen:{
+            screen:NganhHang,
+            navigationOptions:opt_hide_tabbar
+        },
 
-            header:null,
-            tabBarLabel: 'Khuyến mãi',
-            tabBarIcon: <Image style={{width: 32, height: 32}} source={require("./assets/images/icons/icon2_32.png")}/>
-        }
-    },
-    TichDiem:{
-        screen:TichDiem,
-        navigationOptions: {
-            showLabel:true,
-            showIcon:true,
-            //tabBarLabel:'Tích điểm',
+        Home_ChitietSanPham_Wrap:StackNavigator({
+            Home_ChitietSanPham_Screen:{
+                screen:ChiTietSanPham,
+                navigationOptions: opt_hide_tabbar
+            },
+            Home_ChiTietSanPham_GioHang_Wrap:StackNavigator({
+                Home_ChitietSanPham_GioHang_Screen:{
+                    screen:GioHang,
+                    navigationOptions: opt_hide_tabbar
+                },
+                Home_ChitietSanPham_GioHang_ThanhToan_Screen:{
+                    screen:ThanhToanForm,
+                    navigationOptions: opt_hide_tabbar
+                },
+                Home_ChitietSanPham_GioHang_ChiTietSanPham_Screen:{
+                    screen:ChiTietSanPham,
+                    navigationOptions:opt_hide_tabbar
+                },
+            },{
+                navigationOptions:{
+                    initialRouteName:"Home_ChitietSanPham_GioHang_Screen",
+              }
+            }), //Home_ChiTietSanPham_GioHang_Wrap 
+        },{
+            navigationOptions:{
+                initialRouteName:"Home_ChitietSanPham_Screen",
+          }
+        }), //Home_ChitietSanPham_Wrap 
 
-            //
-            header:null,
-            tabBarLabel: 'Tích điểm',
-            tabBarIcon: <Image style={{width: 32, height: 32}} source={require("./assets/images/icons/icon5_32.png")}/>
+    },{
+        navigationOptions:{
+            headerStyle:{
+                marginTop:24
+            },
+            tabBarLabel:'Trang chủ',
+            tabBarIcon:  <FontAwesome color="black" size={28} name="home"/>,
         }
-    },*/
-    TaiKhoan:{
-        screen:TaiKhoan,
-        navigationOptions: {
-            showLabel:true,
-            showIcon:true,
-            //tabBarLabel:'Tài khoản',
+    }), //end home stack
+    SanPhamTab:StackNavigator({
+        SanPham:{
+            screen:SanPham,
+            navigationOptions: {
+                showLabel:true,
+                showIcon:true,
+                tabBarLabel:'Sản phẩm',
+                
+                header:null,
+                tabBarIcon:<MaterialIcons color="black" size={28} name="view-comfy"/>,
+            },
+            
+        },
+        SanPham_NganhHang_Screen:{
+            screen:NganhHang,
+            navigationOptions:opt_hide_tabbar
+        },
+        SanPham_ChitietSanPham_Wrap:StackNavigator({
+            SanPham_ChitietSanPham_Screen:{
+                screen:ChiTietSanPham,
+                navigationOptions: opt_hide_tabbar
+            },
+            SanPham_ChiTietSanPham_GioHang_Wrap:StackNavigator({
+                SanPham_ChiTietSanPham_GioHang_Screen:{
+                    screen:GioHang,
+                    navigationOptions: opt_hide_tabbar
+                },
+                SanPham_ChiTietSanPham_GioHang_ThanhToanForm_Screen:{
+                    screen:ThanhToanForm,
+                    navigationOptions:opt_hide_tabbar
+                },
+                SanPham_ChiTietSanPham_GioHang_ChiTietSanPham_Screen:{
+                    screen:ChiTietSanPham,
+                    navigationOptions:opt_hide_tabbar
+                },
+            },{
+                navigationOptions:{
+                    initialRouteName:"SanPham_ChiTietSanPham_GioHang_Screen",
+                    tabBarLabel:'Sản phẩm',
+                    tabBarIcon:<MaterialIcons color="black" size={28} name="view-comfy"/>,
+              }
+            }), //end ChiTietSanPham_GioHang_Screen
+        },{
+            navigationOptions:{
+                initialRouteName:"SanPham_ChitietSanPham_Screen",
+                headerStyle:{
+                    //marginTop:24
+                }
+            }
+        }),
+    }), //end san pham stack
+    GioHangTab:StackNavigator({
+        GioHangScreen:{
+            screen:GioHang,
+            navigationOptions: {
+                showLabel:true,
+                showIcon:true,
+                tabBarLabel:'Giỏ hàng',
+                
+                header:null,
+                tabBarIcon: <CartBadgeIcon/>,
+            }
+        },
+        GioHang_ThanhToanForm_Screen:{
+            screen:ThanhToanForm,
+            navigationOptions:opt_hide_tabbar
+        },
+        GioHang_ChiTietSanPham_Screen:{
+            screen:ChiTietSanPham,
+            navigationOptions:opt_hide_tabbar
+        },
+        GioHang_ThanhToan_DonHang_Screen:{
+            screen:DonHang,
+            navigationOptions:opt_hide_tabbar
+        },
+        ThanhToan_Screen:{
+            screen:ThanhToanForm,
+            navigationOptions:opt_hide_tabbar
+        },
+    },{
+        navigationOptions:{
+            initialRouteName:"GioHangScreen",
+        }
+    }), //end ChiTietSanPham_GioHang_Screen
+    DonHangTab:StackNavigator({
+        DonHangScreen:{
+            screen:DonHang,
+            navigationOptions: {
+                showLabel:true,
+                showIcon:true,
+                header:null,
+                tabBarLabel:'Đơn hàng',
+                tabBarIcon: <DonHangBadgeIcon/>,
+            },
+        },
+        DonHang_CTDonHang_Screen:{
+            screen:CTDonHang,
+            navigationOptions:opt_hide_tabbar
+        },
+    },{
+        navigationOptions:{
+            initialRouteName:"DonHangScreen",
+            tabBarLabel:'Đơn hàng',
+            tabBarIcon: <DonHangBadgeIcon/>,
+        }
+    }), //end don hang tab
+    TaiKhoanTab:StackNavigator({
+        TaiKhoan_Screen:{
+            screen:TaiKhoan,
+            navigationOptions: {
+                showLabel:true,
+                showIcon:true,
+                //tabBarLabel:'Tài khoản',
 
-            //
-            header:null,
+                //
+                header:null,
+                tabBarLabel: 'Tài khoản',
+                tabBarIcon:  <FontAwesome color="black" size={28} name="user"/>
+            }
+        },
+        CTArticle_Screen:{
+            screen:CTArticle,
+            navigationOptions:opt_hide_tabbar
+        },
+    },{
+        navigationOptions:{
+            initialRouteName:"TaiKhoan_Screen",
             tabBarLabel: 'Tài khoản',
-            tabBarIcon:  <FontAwesome color="black" size={32} name="user"/>
+            tabBarIcon:  <FontAwesome color="black" size={28} name="user"/>
         }
-    },
+    }), //end don hang tab
 },{
    
-   initialRouteName: 'Home',
+    initialRouteName: 'HomeTab',
     tabBarPosition:'bottom',
     swipeEnabled:true,
     showIcon:true,
@@ -284,6 +366,12 @@ class MainScreenNavigatorState extends Component{
            }
        }
 
+        shouldCloseApp(nav) {
+            return nav.index == 0;
+        }
+        componentDidUpdate(){
+            console.log(this.props.navigation);
+        }
         //Handling the Hardware Back Button in Android
         componentDidMount() {
             console.log("---------componentDidMount");
@@ -294,18 +382,63 @@ class MainScreenNavigatorState extends Component{
             const {dispatch} = this.props;
             dispatch(cartCRUD("sync"));
 
+            //login
+            getUser().then((user)=>{
+                dispatch(initialSyncSetUser(user))
+                if(user!=null){
+                    dispatch(fetchDanhSachDonHang(user,1,10));
+                }
+            });
 
-            BackHandler.addEventListener("hardwareBackPress", this.onBackPress);
+
+           // BackHandler.addEventListener("hardwareBackPress", this.onBackPress);
 
             //
             AppState.addEventListener('change', this._handleAppStateChange);
+
+            BackHandler.addEventListener('hardwareBackPress', this.onBackPress.bind(this));
+
+
+            NetInfo.isConnected.addEventListener(
+                'connectionChange',
+                this._handleConnectivityChange
+            );
+            NetInfo.isConnected.fetch().done(
+                (isConnected) => { this.setState({isConnected}); }
+            );
+
+
         }
+       
         componentWillUnmount() {
+            NetInfo.isConnected.removeEventListener(
+                'change',
+                this._handleConnectivityChange
+            );
+
+
+            BackHandler.removeEventListener('hardwareBackPress', this.onBackPress.bind(this));
+           
             console.log("---------componentWillUnmount");
-            BackHandler.removeEventListener("hardwareBackPress", this.onBackPress);
             //
-            AppState.removeEventListener('change', this._handleAppStateChange);
+            AppState.removeEventListener('connectionChange', this._handleAppStateChange);
         }
+        _handleConnectivityChange = (isConnected) => {
+            console.log("isConnected: "+isConnected);
+        };
+
+        onBackPress () {
+      
+            const { dispatch, navReducer } = this.props;
+            console.log("Back pressed", navReducer);
+            const activeRoute = navReducer.routes[navReducer.index];
+            if (activeRoute.index === 0) {
+              return false;
+            }
+            dispatch(NavigationActions.back());
+            return true;
+        }
+
 
          _handleAppStateChange = (nextAppState) => {
                 if (this.state.appState.match(/inactive|background/) && nextAppState === 'active') {
@@ -318,15 +451,7 @@ class MainScreenNavigatorState extends Component{
 
           
 
-        onBackPress = () => {
-            const { dispatch, navReducer } = this.props;
-            if (navReducer.index === 0) {
-                return false;
-            }
-            dispatch(NavigationActions.back());
-            return true;
-        };
-
+     
         render(){
             const {dispatch,navReducer} = this.props;
             return(
@@ -345,6 +470,7 @@ class MainScreenNavigatorState extends Component{
 const mapStateToProps = state => ({
     navReducer:state.navReducer,
     cardReducer:state.cardReducer,
+    authReducer:state.authReducer,
 });
 
 export default connect(mapStateToProps)(MainScreenNavigatorState);

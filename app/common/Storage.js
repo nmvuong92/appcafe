@@ -9,11 +9,11 @@ export const getUser = () => {
             if (user) {
                 return JSON.parse(user);
             } else {
-                return {};
+                return null;
             }
         })
         .catch(error => {
-            // console.log(error);
+             throw null;
         });
 };
 

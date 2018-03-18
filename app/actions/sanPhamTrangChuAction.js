@@ -3,12 +3,12 @@ import Util from './../common/utils';
 import * as urls from  './../common/constants_url';
 
 
-export let fetchSanPhamTrangChu = ()=> {
+export let fetchSanPhamTrangChu = (page=1,pageSize=10)=> {
     if(__DEV__){
             console.log("-----------------fetchSanPham trang chu----------------");
     }
    
-    let URL =urls.api_sp+"/layds_trangchu";
+    let URL =urls.api_sp+"/layds_trangchu?page="+page+"&pageSize="+pageSize;
 
     return dispatch => {
         dispatch(fetchFoodTrangChu(true));
@@ -26,8 +26,7 @@ export let fetchSanPhamTrangChu = ()=> {
 let fetchFoodTrangChu = (isload)=> {
     return { type:types.PRODUCT_HOMEPAGE_FETCH,isFetching:isload}
 }
-let receiveFoodTrangChu = (food)=> {
-    console.log(food);
+let receiveFoodTrangChu = (food)=> { 
     return {
         type: types.PRODUCT_HOMEPAGE_RECEIVE,
         data: food

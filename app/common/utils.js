@@ -26,28 +26,61 @@ let Util = {
      * @param failCallback failCallback 请求失败回调
      */
     post: (url, data, successCallback, failCallback) => {
-        let formData = new FormData();
-        Object.keys(data).map(function(key) {
-            var value = data[key];
-            formData.append(key, value);
-        });
+   
+
+        var formBody = [];
+        for (var property in data) {
+            var encodedKey = encodeURIComponent(property);
+            var encodedValue = encodeURIComponent(data[property]);
+            formBody.push(encodedKey + "=" + encodedValue);
+        }
+        formBody = formBody.join("&");
 
         let fetchOptions = {
             method: 'POST',
+           
             headers: {
-                'Accept': 'application/json',
+                // 'Accept': 'application/json',
                 // 'Content-Type': 'application/json'
-                'Content-Type': 'multipart/form-data',
+                'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
             },
-            body: formData
-            // body: JSON.stringify(data)
+            body: formBody
         };
+
+
 
         fetch(url, fetchOptions)
             .then((response) => response.text())
             .then((responseText) => {
                 let result = JSON.parse(responseText);
-                successCallback(result.status, result.code, result.message, result.data, result.share);
+               // let result = JSON.parse(responseText);
+                successCallback(result);
+            })
+            .catch((err) => {
+               
+                failCallback(err);
+            });
+    },
+
+    postJson: (url, data, successCallback, failCallback) => {
+        let fetchOptions = {
+            method: 'POST',
+            headers: {
+                // 'Accept': 'application/json',
+                // 'Content-Type': 'application/json'
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        };
+
+
+
+        fetch(url, fetchOptions)
+            .then((response) => response.text())
+            .then((responseText) => {
+                let result = JSON.parse(responseText);
+               // let result = JSON.parse(responseText);
+                successCallback(result);
             })
             .catch((err) => {
                 failCallback(err);

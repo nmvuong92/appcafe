@@ -10,7 +10,8 @@ import {
     TouchableOpacity,
     TouchableHighlight,
     InteractionManager,
-    ImageBackground
+    ImageBackground,
+    FlatList
 
 } from 'react-native';
 import {Avatar,Card,Button,Divider} from 'react-native-elements';
@@ -22,43 +23,88 @@ import {window} from './../common/constants';
 import commonStyles,{colors} from './../common/commonStyles';
 import ImageButton from './../common/ImageButton';
 import TextButton from './../common/TextButton';
+import {logout} from './../actions/authAction';
+import {formatVND} from './../common/vUtils';
+import donHangBadgeIcon from './../common/components/donHangBadgeIcon';
+import cartBadgeIcon from './../common/components/cartBadgeIcon';
+import {fetchArticles} from './../actions/articleAction';
 class TaiKhoan extends Component{
     constructor(props){
         super(props);
         this.state={
             isloading:false,
-            dssp:true
+            dssp:true,
+            refreshing:false,
         }
 
         //setTimeout(() => {this.setState({isloading: false})}, 1000)
     }
    
-   
+    //pull refresh
+    handleRefresh=()=>{  
+        //scrolltop
+        this.refs.FlatList.scrollToOffset({x: 0, y: 0, animated: true});
+
+        const {articleReducer,dispatch} =this.props;
+        this.setState({
+            refreshing:articleReducer.isFetching,
+            seed:this.state.seed+1,
+        },()=>{
+            const {authReducer} =this.props;
+            if(authReducer.user!=null){
+                dispatch(fetchArticles());
+            }
+        });
+    }
+
+    onEndReached = () => {
+        
+    }
+    componentDidMount(){
+        const {articleReducer,dispatch} = this.props; 
+        if(authReducer.user!=null){
+            dispatch(fetchArticles());
+        }
+    }
+
+    //bam vao san pham item
+    onPressProductItem = (item)=>{
+        const {dispatch}  = this.props;
+        dispatch({type:"CTArticle_Screen",Article:item});
+    }
+
     render(){
-        const {authReducer,dispatch} = this.props;
-        let isLoggedIn = true;//authReducer.isLoggedIn;
+        const {authReducer,dispatch,articleReducer} = this.props;
+        let isLoggedIn = authReducer.user!=null;//authReducer.isLoggedIn;
+        let user = authReducer.user;
+        let List = articleReducer.List;
         return (
             !isLoggedIn?
-            <View style={{flex:1,alignContent:'center',justifyContent:'center',alignItems: 'center',alignSelf:'center'}}>
+            <View style={styles.container}>
                 <HeadPadding/>
-                <TouchableOpacity onPress={()=>{
-                    
-                     dispatch({type:'LoginScreen'});
-                }}>
-                    <Text>Đăng nhập</Text>
+                <TouchableOpacity
+                    style={[commonStyles.btn, {marginBottom:20}]}
+                    onPress={() => {
+                        dispatch({type:'RegisterScreen'});
+                    }}
+                    underlayColor={colors.backGray}
+                >
+                    <Text style={[{color: colors.white, fontWeight: "bold",textAlign:"center"}]}> Đăng ký </Text>
                 </TouchableOpacity>
 
-                 <TouchableOpacity onPress={()=>{
-                       dispatch({type:'RegisterScreen'});
-                }}>
-                    <Text>Đăng ký</Text>
+                <TouchableOpacity
+                    style={[commonStyles.btn, {marginBottom:20}]}
+                    onPress={() => {
+                        dispatch({type:'LoginScreen'});
+                    }}
+                    underlayColor={colors.backGray}
+                >
+                    <Text style={[{color: colors.white, fontWeight: "bold",textAlign:"center"}]}> Đăng nhập </Text>
                 </TouchableOpacity>
             </View>
             :
             <View style={styles.container}>
-            <View style={styles.headerWrap}>
-                <Text style={styles.header}>我的</Text>
-            </View>
+        
             <ScrollView style={{
                 backgroundColor: 'rgba(240,240,240,0.9)'
             }}>
@@ -67,255 +113,101 @@ class TaiKhoan extends Component{
                         style={styles.loginWrap}
                         onPress={this._onPressHead.bind(this)}
                     >
-                        {true?
-                            <Image style={styles.headIcon} source={require('./../assets/images/img_default_head.png')}/> :
-                            <Image style={styles.headIcon} source={require('./../assets/images/img_default_head.png')}/>
-                        }
-                        {true ?
-                            <Text style={styles.login}>027747892794724</Text> :
-                            <Text style={styles.login}>点击登录</Text>
-                        }
+                   
+                         <Image style={styles.headIcon} source={require('./../assets/images/img_default_head.png')}/> 
+                        <Text style={styles.login}>{user.HoTen}</Text>
+                      
                     </TouchableOpacity>
                 </ImageBackground>
 
-                <Text style={{
-                    width: window.width,
-                    height: 40,
-                    position: 'absolute',
-                    padding: 10,
-                    fontSize: 18,
-                    backgroundColor: 'white'
-                }}>
-                    我的订单
-                </Text>
-                <Text
-                    style={{position: 'absolute', padding: 10, fontSize: 18, marginLeft: window.width - 30}}>
-                    >
-                </Text>
-                <View style={{
-                    width: window.width,
-                    height: 2 / PixelRatio.get(),
-                    backgroundColor: 'gray',
-                    marginTop: 40
-                }}>
-                </View>
-                <View style={{
-                    padding: 10,
-                    flex: 1,
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    backgroundColor: 'white'
-                }}>
-                    <ImageButton
-                        imageStyle={{
-                            width: 30,
-                            height: 30,
-                        }}
-                        onPress={() => {
-                        } }
-                        imageUrl={require('./../assets/images/moneys.png') }
-                        text={'代付款'}
-                    />
-                    <ImageButton
-                        imageStyle={{
-                            width: 30,
-                            height: 30,
-                        }}
-                        onPress={() => {
-                        } }
-                        imageUrl={require('./../assets/images/bus.png') }
-                        text={'物流'}
-                    />
-                    <ImageButton
-                        imageStyle={{
-                            width: 30,
-                            height: 30,
-                        }}
-                        onPress={() => {
-                        } }
-                        imageUrl={require('./../assets/images/tosts.png') }
-                        text={'物流'}
-                    />
+                
 
-                </View>
-
-
-                <Text style={{
-                    marginTop: 10,
-                    width: window.width,
-                    height: 40,
-                    position: 'absolute',
-                    padding: 10,
-                    fontSize: 18,
-                    backgroundColor: 'white'
-                }}>
-                    我的钱包
-                </Text>
-                <View style={{
-                    width:window.width,
-                    height: 2 / PixelRatio.get(),
-                    backgroundColor: 'gray',
-                    marginTop: 50
-                }}>
-                </View>
-
-                <View style={{
-                    padding: 15,
-                    flex: 1,
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    backgroundColor: 'white'
-                }}>
-                    <TextButton
-
-                        onPress={() => {
+             
+                <View style={{padding: 15,flex: 1,flexDirection: 'row',justifyContent: 'center',backgroundColor: 'white'}}>
+                    <TextButton onPress={() => {
                         } }
-                        text={'物流'}
-                        upText={'0'}
-                    />
-                    <TextButton
-
-                        onPress={() => {
-                        } }
-                        text={'物流'}
-                        upText={'0'}
-                    />
-                    <TextButton
-
-                        onPress={() => {
-                        } }
-                        text={'物流'}
-                        upText={'0'}
-                    />
-                    <ImageButton
-                        imageStyle={{
-                            width: 20,
-                            height: 20,
-                        }}
-                        onPress={() => {
-                        } }
-                        imageUrl={require('./../assets/images/RMB.png') }
-                        text={'优红利'}
+                        text={'Điểm tích lũy'}
+                        upText={formatVND(user.DiemTichLuy)}
                     />
                 </View>
 
-                <View style={{
-                    marginTop: 10,
-                    padding: 15,
-                    flex: 1,
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    backgroundColor: 'white'
-                }}>
-                    <ImageButton
-                        imageStyle={{
-                            width: 30,
-                            height: 30,
-                        }}
-                        onPress={() => {
-                        } }
-                        imageUrl={require('./../assets/images/sc.png') }
-                        text={'我的收藏'}
-                    />
-                    <ImageButton
-                        imageStyle={{
-                            width: 30,
-                            height: 30,
-                        }}
-                        onPress={() => {
-                        } }
-                        imageUrl={require('./../assets/images/yj.png') }
-                        text={'浏览记录'}
-                    />
-                    <ImageButton
-                        imageStyle={{
-                            width: 30,
-                            height: 30,
-                        }}
-                        onPress={() => {
-                        } }
-                        imageUrl={require('./../assets/images/wh.png') }
-                        text={'帮组中心'}
-                    />
-                    <ImageButton
-                        imageStyle={{
-                            width: 30,
-                            height: 30,
-                        }}
-                        onPress={() => {
-                        } }
-                        imageUrl={require('./../assets/images/yjj.png') }
-                        text={'意见反馈'}
-                    />
+              
 
-                </View>
-
-                <TouchableOpacity style={{
-                    marginTop: 10,
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    height: 50,
-                    position: 'relative',
-                    backgroundColor: 'white'
-                }} activeOpacity={0.75}>
+                <TouchableOpacity style={styles.li}  activeOpacity={0.75}>
                     <Image
                         source={require('./../assets/images/ri.png') }
                         style={{width: 30, height: 30, marginLeft: 20}}
                     />
                     <Text style={{marginLeft: 10}}>
-                        每日签到
+                        Cập nhật thông tin tài khoản
                     </Text>
-                    <Text style={{
-                        position: 'absolute',
-                        padding: 12,
-                        fontSize: 18,
-                        marginLeft: window.width - 150
-                    }}>
-                        >
-                    </Text>
-
+                
                 </TouchableOpacity>
 
-                <TouchableOpacity style={{
-                    marginTop: 1,
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    height: 50,
-                    position: 'relative',
-                    backgroundColor: 'white'
-                }} activeOpacity={0.75}>
-                    <Image
-                        source={require('./../assets/images/kf.png')}
-                        style={{width: 30, height: 30, marginLeft: 20}}
-                    />
-                    <Text style={{marginLeft: 10}}>
-                        联系客服
-                    </Text>
-                    <Text style={{
-                        position: 'absolute',
-                        padding: 12,
-                        fontSize: 18,
-                        marginLeft: window.width - 150
-                    }}>
-                        >
-                    </Text>
-                </TouchableOpacity>
+             
+                 
+
+                 {
+                     List!=null?
+                     List.map((item,index)=>{
+                         return (
+                            <TouchableOpacity style={styles.li}  activeOpacity={0.75} key={item.Id} onPress={()=>{
+                                this.onPressProductItem(item);
+                            }}>
+                                <Image
+                                    source={{uri:item.ImageThumbnail}}
+                                    style={{width: 30, height: 30, marginLeft: 20}}
+                                />
+                                <Text style={{marginLeft: 10}}>
+                                    {item.Title}
+                                </Text>
+                            </TouchableOpacity>
+                         )
+                     })
+                     :null
+                 }
+                
+
+
+                <View style={styles.info}>
+                    <View style={styles.info_item}>
+                        <Text style={styles.text1}>Họ và tên:</Text>
+                        <Text style={styles.text2}>{user.HoTen}</Text>
+                    </View>
+                    <View style={styles.info_item}>
+                        <Text style={styles.text1}>CMND:</Text>
+                        <Text style={styles.text2}>{user.CMND}</Text>
+                    </View>
+                    <View style={styles.info_item}>
+                        <Text style={styles.text1}>Địa chỉ:</Text>
+                        <Text style={styles.text2}>{user.DiaChi}</Text>
+                    </View>
+                    <View style={styles.info_item}>
+                        <Text style={styles.text1}>Điện thoại:</Text>
+                        <Text style={styles.text2}>{user.DienThoai}</Text>
+                    </View>
+                    <View style={styles.info_item}>
+                        <Text style={styles.text1}>Email:</Text>
+                        <Text style={styles.text2}>{user.Email}</Text>
+                    </View>
+                </View>
+
 
                 <TouchableOpacity
                     style={[commonStyles.btn, {marginBottom:20}]}
                     onPress={() => {
                         Alert.alert(
-                            "确定要登录么?",
+                            "Bạn chắc chắn muốn đăng xuất?",
                             "",
                             [
-                                {text:"确定", onPress:()=>{this._logout()}},
-                                {text:"取消", onPress:()=>{}},
+                                {text:"Đăng xuất", onPress:()=>{this._logout()}},
+                                {text:"Hủy bỏ", onPress:()=>{}},
                             ]
                         );
                     }}
                     underlayColor={colors.backGray}
                 >
-                    <Text style={[{color: colors.white, fontWeight: "bold",textAlign:"center"}]}> 退出登录 </Text>
+                    <Text style={[{color: colors.white, fontWeight: "bold",textAlign:"center"}]}> Đăng xuất </Text>
                 </TouchableOpacity>
             </ScrollView>
         </View>
@@ -328,7 +220,8 @@ class TaiKhoan extends Component{
 
     _logout() {
         InteractionManager.runAfterInteractions(() => {
-           
+            const {authReducer,dispatch} = this.props;
+            dispatch(logout());
         });
     }
 
@@ -337,7 +230,7 @@ class TaiKhoan extends Component{
 //khong can chia se nen connect rong
 //khi ma exprt connect ==> co 1 bien dispatch
 export default connect((state)=>{
-    return {authReducer,navReducer} = state;
+    return {authReducer,navReducer,articleReducer} = state;
 })(TaiKhoan);
 
 
@@ -381,4 +274,28 @@ const styles = StyleSheet.create({
         marginTop: 10,
         borderRadius: 3,
     },
+    info:{
+        marginTop:5,
+        marginBottom:5,
+    },
+    info_item:{
+        backgroundColor:"white",
+        marginBottom:5,
+        marginLeft:5,
+        marginRight:5,
+        padding:5,
+        borderRadius:5
+    },
+    text2:{
+        fontWeight:"bold",
+    },
+    li:{
+        marginTop: 1,
+        flexDirection: 'row',
+        alignItems: 'center',
+        height: 50,
+        position: 'relative',
+        backgroundColor: 'white'
+                
+    }
 });

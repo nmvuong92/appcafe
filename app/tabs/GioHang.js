@@ -27,12 +27,21 @@ import Feather from 'react-native-vector-icons/Feather';
 import IconBadge from 'react-native-icon-badge';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Header from'./../common/components/Header';
+import * as vUtils  from './../common/vUtils';
 
 class GioHang extends Component{
     constructor(props){
-        super(props);
-        this.state={
        
+        super(props);
+
+        const { params } = this.props.navigation.state;
+
+        var thanhtoan_nav=(vUtils.checkNotNullNotUndefined(params)&&vUtils.checkNotNullNotUndefined(params.thanhtoan_nav))?params.thanhtoan_nav:"GioHang_ThanhToanForm_Screen";
+        var cart_ctsp_nav=(vUtils.checkNotNullNotUndefined(params)&&vUtils.checkNotNullNotUndefined(params.cart_ctsp_nav))?params.cart_ctsp_nav:"GioHang_ChiTietSanPham_Screen";
+        this.state={
+            thanhtoan_nav:thanhtoan_nav,
+            cart_ctsp_nav:cart_ctsp_nav,
+
             appIsReady:false,
             showBtnTimKiem:false,
             data:[],
@@ -46,14 +55,21 @@ class GioHang extends Component{
             page:0,
             page_size:10
         }
+       
     }
    
     componentDidMount(){
         const {sanPhamReducer,cartReducer,dispatch} =this.props;
         dispatch(cartCRUD("sync"));
-        console.log("sync now");
         //lay dssp
         //dispatch(fetchSanPham(sanPhamReducer.danhmuc,sanPhamReducer.tukhoa));
+    }
+    goThanhToan(){
+        const {dispatch} =this.props;
+        
+        dispatch({
+            type:this.state.thanhtoan_nav
+        });
     }
     
     //khi thay doi o tim kiem
@@ -70,9 +86,9 @@ class GioHang extends Component{
     }
 
     //bam vao san pham item
-    onPressProductItem = (item)=>{
+    _goCTSP = (item)=>{
         const {navReducer,dispatch}  = this.props;
-        dispatch({type:"SanPham_ChitietSanPham_Screen",id:item.ID});
+        dispatch({type:this.state.cart_ctsp_nav,id:item.ID});
     }
 
     //bam vao nut tim kiem
@@ -113,8 +129,6 @@ class GioHang extends Component{
             //lay dssp
             dispatch(fetchSanPham(sanPhamReducer.danhmuc,sanPhamReducer.tukhoa));
         });
-
-        
     }
     //
     onEndReached = () => {
@@ -137,7 +151,12 @@ class GioHang extends Component{
        // console.log(navReducer);
         const {dispatch,sanPhamReducer,cartReducer} = this.props;
 
+      
+        var tong_tien_gio_hang  =0;
 
+        for(let i=0;i<cartReducer.cartItems.length;i++){
+            tong_tien_gio_hang+=cartReducer.cartItems[i].SLSP*cartReducer.cartItems[i].Gia;
+        }
         return (
             sanPhamReducer.isFetching?<Loading/>:
             <View style={styles.container}>
@@ -163,53 +182,52 @@ class GioHang extends Component{
                         <FlatList
                             data={cartReducer.cartItems}
                             renderItem={({item}) =>
-                                <View key={item.ID} style={styles2.containerStyle}>
-                                    <Image 
-                                        source={{ uri: item.HinhAnh }} 
-                                        indicator={ProgressBar} 
-                                        style={styles2.imageStyle}/>
+                                <TouchableOpacity onPress={()=>{
+                                    this._goCTSP(item);
+                                }}>
+                                    <View key={item.ID} style={styles2.containerStyle}>
+                                        <Image 
+                                            source={{ uri: item.HinhAnh }} 
+                                            indicator={ProgressBar} 
+                                            style={styles2.imageStyle}/>
 
-                                         <View style={styles2.textStyle}>
-                                            <Text style={{ color: '#2e2f30' }}>{item.TenSanPham}</Text>
-                                            <View style={styles2.priceStyle}>
-                                            <Text style={{ color: '#2e2f30', fontSize: 12 }}>${item.Gia}</Text>
+                                            <View style={styles2.textStyle}>
+                                                <Text style={{ color: '#2e2f30' }}>{item.TenSanPham}</Text>
+                                                <View style={styles2.priceStyle}>
+                                                <Text style={{ color: '#2e2f30', fontSize: 12 }}>{vUtils.formatVND(item.Gia)}</Text>
+                                                </View>
                                             </View>
-                                        </View>
 
-      <View style={styles2.counterStyle}>
-        <Icon.Button 
-          name="ios-remove" 
-          size={25} 
-          color='#fff' 
-          backgroundColor='#fff' 
-          style={{ borderRadius: 15, backgroundColor: '#bbb', height: 30, width: 30 }} 
-          iconStyle={{ marginRight: 0 }}
-          onPress={()=>{
-                dispatch(cartCRUD("-",item,1));
-            }}
-        />
+                                            <View style={styles2.counterStyle}>
+                                                <Icon.Button 
+                                                name="ios-remove" 
+                                                size={25} 
+                                                color='#fff' 
+                                                backgroundColor='#fff' 
+                                                style={{ borderRadius: 15, backgroundColor: '#bbb', height: 30, width: 30 }} 
+                                                iconStyle={{ marginRight: 0 }}
+                                                onPress={()=>{
+                                                        dispatch(cartCRUD("-",item,1));
+                                                    }}
+                                                />
 
-        <Text>{item.SLSP}</Text>
+                                                <Text>{item.SLSP}</Text>
 
-        <Icon.Button 
-          name="ios-add" 
-          size={25} 
-          color='#fff' 
-          backgroundColor='#fff' 
-          style={{ borderRadius: 15, backgroundColor: '#bbb', height: 30, width: 30 }} 
-          iconStyle={{ marginRight: 0 }}
-          onPress={()=>{
-                dispatch(cartCRUD("+",item,1));
-          }}
-        />
+                                                <Icon.Button 
+                                                name="ios-add" 
+                                                size={25} 
+                                                color='#fff' 
+                                                backgroundColor='#fff' 
+                                                style={{ borderRadius: 15, backgroundColor: '#bbb', height: 30, width: 30 }} 
+                                                iconStyle={{ marginRight: 0 }}
+                                                onPress={()=>{
+                                                        dispatch(cartCRUD("+",item,1));
+                                                }}
+                                                />
 
-      </View>
-
-
-                               
-                                      
-                               
-                                </View>
+                                            </View>
+                                    </View>
+                                </TouchableOpacity>
                             }
                             keyExtractor={(item,index) => item.ID+""}
                             refreshing={this.state.refreshing}
@@ -218,18 +236,23 @@ class GioHang extends Component{
                             onEndReached={this.onEndReached} 
                             onEndReachedThreshold={0.5}
                             onMomentumScrollBegin={() => { this.onEndReachedCalledDuringMomentum = false; }}
+                            contentContainerStyle={{paddingBottom:150}}
                         />
                  </View>
+
+                 {/* <View>
+                       <Text>Tổng tiền: {tong_tien_gio_hang}</Text>
+                 </View> */}
                  <View style={styles.footer}>
                                         <Button
-                                            large
+                                            disabled={cartReducer.cartItems.length==0}
                                             backgroundColor="red"
                                             color="white"
                                             icon={{name: 'opencart', type: 'font-awesome'}}
-                                            title='THANH TOÁN'
+                                            title={'THANH TOÁN: '+vUtils.formatVND(tong_tien_gio_hang)}
                                             onPress={()=>{
                                               
-                                                
+                                                this.goThanhToan();
                                                
                                             }}
                                             />
@@ -304,7 +327,7 @@ const styles2 = StyleSheet.create({
     },
     priceStyle: {
       backgroundColor: '#ddd',
-      width: 40,
+      width: '80%',
       alignItems: 'center',
       marginTop: 3,
       borderRadius: 3

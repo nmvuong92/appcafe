@@ -26,7 +26,7 @@ class DSSP extends Component{
         const {sanPhamReducer,dispatch} = this.props;
         dispatch(fetchSanPham());
         this.setState({
-            data:sanPhamReducer.products,
+            data:sanPhamReducer.List,
             isFetching:sanPhamReducer.isFetching,
         });
     }
@@ -100,6 +100,7 @@ class DSSP extends Component{
                 onEndReached={this.onEndReached}
                 onEndReachedThreshold={0.5}
                 onMomentumScrollBegin={() => { this.onEndReachedCalledDuringMomentum = false; }}
+                contentContainerStyle={{paddingBottom:150}}
                 />
             </View>
 

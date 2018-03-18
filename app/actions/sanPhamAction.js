@@ -3,18 +3,16 @@ import Util from './../common/utils';
 import * as urls from  './../common/constants_url';
 
 
-export let fetchSanPham = (danhmuc=null,tukhoa="")=> {
+export let fetchSanPham = (danhmuc=null,tukhoa="",page,pageSize)=> {
     if(__DEV__){
             console.log("-----------------fetchSanPham----------------");
     }
    
-    let URL =urls.api_sp+"/layds"+(tukhoa!=""?"?search="+tukhoa:"");
-    if(danhmuc!=null){
-        URL =urls.api_sp+"/layds?iddm="+danhmuc.ID+(tukhoa!=""?"&search="+tukhoa:"");
+    let URL =urls.api_sp+"/layds?page="+page+"&pageSize="+pageSize+(tukhoa!=""?"&search="+tukhoa:"");
+    if(danhmuc!=null&&danhmuc.ID!=-1){
+        URL =urls.api_sp+"/layds?page="+page+"&pageSize="+pageSize+"&iddm="+danhmuc.ID+(tukhoa!=""?"&search="+tukhoa:"");
     }
-    if(__DEV__){
-            console.log("url: "+URL);
-    }
+    console.log(URL);
    
 
     return dispatch => {
@@ -25,7 +23,6 @@ export let fetchSanPham = (danhmuc=null,tukhoa="")=> {
             dispatch(receiveFood(response));
         }, (error) => {alert(error)
             console.log(`Fetch food info error: ${error}`);
-            dispatch(receiveFood([]))
         })
     }
 }
@@ -41,8 +38,9 @@ export let fetchSanPhamCT = (idsp)=> {
    
 
     return dispatch => {
+        dispatch(receiveFoodCT(null))
         dispatch(fetchFood(true));
-        
+       
         Util.get(URL, (response) => {
             dispatch(fetchFood(false));
             dispatch(receiveFoodCT(response));
@@ -67,7 +65,8 @@ let fetchFood = (isload)=> {
 let receiveFood = (food)=> {
     return {
         type: types.PRODUCT_RECEIVE,
-        data: food
+        List: food.List,
+        Paging:food.Paging,
     }
 }
 

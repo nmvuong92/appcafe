@@ -74,6 +74,7 @@ class GioHangPage extends React.Component {
           renderItem={this._renderItem}
           getItemLayout={this._getItemLayout}
           numColumns={numColumns}
+          contentContainerStyle={{paddingBottom:150}}
         />
       </View>
     );

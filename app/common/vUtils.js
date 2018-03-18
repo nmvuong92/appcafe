@@ -1,7 +1,12 @@
 import React,{Component} from 'react';
 import {View,StyleSheet,Dimensions, Platform } from 'react-native';
-export const formatVND = (x) => {
-    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")+" VNĐ";
+import {VCOLOR} from './constants';
+
+export const formatVND = (x,default0="Liên hệ") => {
+    if(x==null||x==0){
+        return default0;
+    }
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")+" ₫";
 }
 
 export const vStyles = StyleSheet.create({
@@ -12,11 +17,23 @@ export const vStyles = StyleSheet.create({
         color:"red"
     },
     price:{
-        fontSize:30,
+        fontSize:15,
         fontWeight: 'bold',
+        color: VCOLOR.price
+    },
+    product_name:{
+        fontSize:11,
+    },
+    cat_name:{
+        fontSize:9,
+        color:"#a5a5a5",
     }
 });
 
+
+export let checkNotNullNotUndefined = (value)=>{
+    return value!=undefined&&value!=null;
+}
 
 
 export const    isIphoneX = () => {

@@ -28,12 +28,7 @@ const imageHeight = Math.round(window.width * 9 / 16);
 const imageWidth = window.width;
 
 import CartBadgeIcon from './../common/components/cartBadgeIcon';
-const users = [
-    {
-       name: 'brynn',
-       avatar: 'https://s3.amazonaws.com/uifaces/faces/twitter/brynn/128.jpg'
-    },
-]
+
 
 class ChiTietSanPham extends Component{
     
@@ -42,18 +37,19 @@ class ChiTietSanPham extends Component{
     constructor(props){
         super(props);
         //
-      
-        this.state = {
-       
-        };
-
-
         const { params } = this.props.navigation.state;
-        const itemId = params ? params.id : null;
-       
+        var read_only=vUtils.checkNotNullNotUndefined(params.read_only)&&params.read_only==true;
+        
+        const product_detail_id =params.id;
+        this.state = {
+            read_only:read_only,
+            cart_nav: params.cart_nav,
+            thanhtoan_nav:params.thanhtoan_nav,
+            product_detail_id:params.id,
+        };
      
-        const {sanPhamReducer,dispatch}  = this.props;
-        dispatch(fetchSanPhamCT(itemId));
+        const {dispatch}  = this.props;
+        dispatch(fetchSanPhamCT(product_detail_id));
 
     }
 
@@ -63,14 +59,17 @@ class ChiTietSanPham extends Component{
     }
     goCart(){
         const {dispatch} = this.props;       
-        dispatch({type:'ChiTietSanPham_GioHang_Screen'});
+        dispatch({
+            type:this.state.cart_nav,
+            thanhtoan_nav:this.state.thanhtoan_nav
+        });
     }
     onPressMuaHang = (sanpham)=>{
         alert(sanpham.TenSanPham);
     }
       
     componentWillMount = () => {
-    
+        //console.log(this.props.navigation);
     };
 
     render(){
@@ -96,8 +95,9 @@ class ChiTietSanPham extends Component{
                     // rightIcon2='heart'
                     // rightIconAction2={()=>this.goBack()}
                 
-                    showCartBadgeIcon={true}
-                    CartBadgeIconAction={
+                   showCartBadgeIcon={!this.state.read_only}
+                   CartBadgeIconAction={
+                       
                         ()=>{
                             this.goCart();
                         }
@@ -151,7 +151,7 @@ class ChiTietSanPham extends Component{
                 <Card title="Mô tả">
 
                     <WebView style={{height:200,}}
-                        source={{html: sanpham.MoTa}}
+                        source={{html: "<!DOCTYPE html><head><meta charset='UTF-8'></head><body>"+sanpham.MoTa+"</body></html>",baseUrl:''}}
                         startInLoadingState={sanpham==null}
                         bounces={false}
                         scalesPageToFit={Platform.OS==="ios"?false:true}
@@ -168,7 +168,7 @@ class ChiTietSanPham extends Component{
                         backgroundColor="red"
                         color="white"
                         icon={{name: 'cart-plus', type: 'font-awesome'}}
-                        title='MUA HÀNG'
+                        title='THÊM VÀO GIỎ HÀNG'
                         onPress={()=>{
                             dispatch(setNotificationCounter("+",1));
                             dispatch(cartCRUD("+",sanpham,1));

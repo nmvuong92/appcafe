@@ -25,4 +25,5 @@ export let VCOLOR =  {
     midGray: '#C7C7CC',
     gray: '#8E8E93',
     black: '#000000',
+    price: '#f57264'
 }

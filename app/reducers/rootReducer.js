@@ -9,6 +9,9 @@ import cartReducer from './cartReducer';
 import sanPhamReducer from './sanPhamReducer';
 import sanPhamTrangChuReducer from './sanPhamTrangChuReducer';
 import danhMucSanPhamReducer from './danhMucSanPhamReducer';
+import sanPhamKhuyenMaiReducer from './sanPhamKhuyenMaiReducer';
+import donHangReducer from './donHangReducer';
+import articleReducer from './articleReducer';
 export default rootReducer = combineReducers({  
     ProductReducer,
     navReducer,
@@ -17,4 +20,7 @@ export default rootReducer = combineReducers({
     sanPhamReducer,
     danhMucSanPhamReducer,
     sanPhamTrangChuReducer,
+    sanPhamKhuyenMaiReducer,
+    donHangReducer,
+    articleReducer
 });

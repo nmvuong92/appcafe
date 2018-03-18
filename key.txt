@@ -1,0 +1,13 @@
+keytool -genkey -v -keystore thuanhanhmobileapp.keystore -alias thuanhanhmobileapp -keyalg RSA -keysize 2048 -validity 10000
+
+keyalias: thuanhanhmobileapp 
+password: 123456789
+first and last name: thuan hanh
+orangizational: vuon dao
+organization: vuon dao
+city: Tp.HCM
+state of province:Quan 11
+Two letter country code:VN
+
+
+keytool -importkeystore -srckeystore thuanhanhmobileapp.keystore -destkeystore thuanhanhmobileapp.keystore -deststoretype pkcs12"

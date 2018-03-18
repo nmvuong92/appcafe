@@ -7,17 +7,29 @@ import {
     Image,
     TouchableOpacity,
     InteractionManager,
+    ScrollView
 } from 'react-native';
+import { addNavigationHelpers, NavigationActions } from "react-navigation";
 import Toast from 'react-native-root-toast';
 import {connect} from 'react-redux';
 import Header from './../../common/components/Header';
 import Loading from './../../common/components/Loading';
+import {postRegister} from './../../actions/authAction';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 class Register extends Component{
     constructor(props){
         super(props);
         this.state = {
-            mobile: '',
-            password: '',
+            CMND:'',
+            HoTen:'',
+            Email:'',
+            DiaChi:'',
+            DienThoai: '',
+            MatKhau: '',
+            XacNhanMatKhau:'',
+
+
+
             code:'',
             verifyCodeText:"",
             user:{},
@@ -41,6 +53,19 @@ class Register extends Component{
             verifyCodeText:text
         });
     }
+    goBack(){
+        const {dispatch,cartReducer} = this.props;
+        //const { navigate } = this.props.navigation;
+        //navigate('LogoutScreen', { name: 'Brent' });
+        dispatch(NavigationActions.back());
+    }
+  
+    componentDidUpdate(){
+        const {authReducer} = this.props;
+        if(authReducer.user!=null){
+            this.goBack();
+         }
+    }
     render(){
         return (
             <View style={styles.container}>
@@ -59,39 +84,90 @@ class Register extends Component{
                         //CartBadgeIconAction={()=>this.goBack()}
                         title={"Đăng ký thành viên"}
                 />
-                    
-                <View style={[styles.formInput, styles.formInputSplit]}>
-                    <Image source={require('./../../assets/images/user.png')} style={{width:25,height:25,resizeMode: 'contain'}}/>
-                    <TextInput
-                        ref="login_name"
-                        placeholder='Tài khoản email'
-                        style={styles.loginInput}
-                        onChangeText={this._onChangeMobile.bind(this)} />
-                </View>
-                <View style={[styles.formInput, styles.formInputSplit]}>
-                    <Image source={require('./../../assets/images/passicon.png')} style={{width:25,height:25,resizeMode: 'contain'}}/>
-                    <TextInput
-                        ref="login_psw"
-                        style={styles.loginInput}
-                        secureTextEntry={true}
-                        placeholder='Mật khẩu'
-                        onChangeText={this._onChangePassword.bind(this)} />
-                </View>
-                <View style={[styles.formInput, styles.formInputSplit]}>
-                    <Image source={require('./../../assets/images/passicon.png')} style={{width:25,height:25,resizeMode: 'contain'}}/>
-                    <TextInput
-                        ref="login_psw"
-                        style={styles.loginInput}
-                        secureTextEntry={true}
-                        placeholder={'Mã xác nhận nhập: '+this.state.verifyCodeText}
-                        onChangeText={this._onChangeCode.bind(this)} />
-                    <TouchableOpacity style={styles.verifyCodeBtn} onPress={this._getCaptcha.bind(this)}>
-                        <Text ref="btnSendVCode" style={styles.verifyCodeText}>{this.state.verifyCodeText}</Text>
-                    </TouchableOpacity>
-                </View>
-                <TouchableOpacity style={styles.registerBtn} onPress={this._register.bind(this)}>
-                    <Text style={styles.registerText}>Đăng ký</Text>
-                </TouchableOpacity>
+
+
+                 <KeyboardAwareScrollView>
+                        <View>
+                            <View style={[styles.formInput, styles.formInputSplit]}>
+                                <Image source={require('./../../assets/images/user.png')} style={{width:25,height:25,resizeMode: 'contain'}}/>
+                                <TextInput
+                                    onChangeText={(text) => this.setState({CMND:text})}
+                                    value={this.state.CMND}
+                                    placeholder='Số CMND (dùng để đăng nhập)'
+                                    style={styles.loginInput} />
+                            </View>
+                            <View style={[styles.formInput, styles.formInputSplit]}>
+                                <Image source={require('./../../assets/images/passicon.png')} style={{width:25,height:25,resizeMode: 'contain'}}/>
+                                <TextInput
+                                onChangeText={(text) => this.setState({MatKhau:text})}
+                                value={this.state.MatKhau}
+                                    style={styles.loginInput}
+                                    secureTextEntry={true}
+                                    placeholder='Mật khẩu'/>
+                            </View>
+                            <View style={[styles.formInput, styles.formInputSplit]}>
+                                <Image source={require('./../../assets/images/passicon.png')} style={{width:25,height:25,resizeMode: 'contain'}}/>
+                                <TextInput
+                                onChangeText={(text) => this.setState({XacNhanMatKhau:text})}
+                                value={this.state.XacNhanMatKhau}
+                                    style={styles.loginInput}
+                                    secureTextEntry={true}
+                                    placeholder='Mật khẩu'/>
+                            </View>
+                        
+                            
+
+                            <View style={[styles.formInput, styles.formInputSplit]}>
+                                <Image source={require('./../../assets/images/user.png')} style={{width:25,height:25,resizeMode: 'contain'}}/>
+                                <TextInput
+                                    onChangeText={(text) => this.setState({HoTen:text})}
+                                    value={this.state.HoTen}
+                                    placeholder='Họ tên'
+                                    style={styles.loginInput} />
+                            </View>
+                        
+                            <View style={[styles.formInput, styles.formInputSplit]}>
+                                <Image source={require('./../../assets/images/user.png')} style={{width:25,height:25,resizeMode: 'contain'}}/>
+                                <TextInput
+                                    onChangeText={(text) => this.setState({DienThoai:text})}
+                                    value={this.state.DienThoai}
+                                    placeholder='Số điện thoại'
+                                    style={styles.loginInput} />
+                            </View>
+                            <View style={[styles.formInput, styles.formInputSplit]}>
+                                <Image source={require('./../../assets/images/user.png')} style={{width:25,height:25,resizeMode: 'contain'}}/>
+                                <TextInput
+                                    onChangeText={(text) => this.setState({DiaChi:text})}
+                                    value={this.state.DiaChi}
+                                    placeholder='Địa chỉ'
+                                    style={styles.loginInput} />
+                            </View>
+                            <View style={[styles.formInput, styles.formInputSplit]}>
+                                <Image source={require('./../../assets/images/user.png')} style={{width:25,height:25,resizeMode: 'contain'}}/>
+                                <TextInput
+                                    onChangeText={(text) => this.setState({Email:text})}
+                                    value={this.state.Email}
+                                    placeholder='Email'
+                                    style={styles.loginInput} />
+                            </View>
+                        
+                            {/* <View style={[styles.formInput, styles.formInputSplit]}>
+                                <Image source={require('./../../assets/images/passicon.png')} style={{width:25,height:25,resizeMode: 'contain'}}/>
+                                <TextInput
+                                    ref="login_psw"
+                                    style={styles.loginInput}
+                                    secureTextEntry={true}
+                                    placeholder={'Mã xác nhận nhập: '+this.state.verifyCodeText}
+                                    onChangeText={this._onChangeCode.bind(this)} />
+                                <TouchableOpacity style={styles.verifyCodeBtn} onPress={this._getCaptcha.bind(this)}>
+                                    <Text ref="btnSendVCode" style={styles.verifyCodeText}>{this.state.verifyCodeText}</Text>
+                                </TouchableOpacity>
+                            </View> */}
+                            <TouchableOpacity style={styles.registerBtn} onPress={this._register.bind(this)}>
+                                <Text style={styles.registerText}>Đăng ký</Text>
+                            </TouchableOpacity>
+                        </View>
+                </KeyboardAwareScrollView>
             </View>
         );
     };
@@ -117,7 +193,9 @@ class Register extends Component{
     };
 
     _register(){
-        let {mobile, password, code} = this.state;
+       
+     
+        
 
         /*
         if (!mobile.length) {
@@ -134,8 +212,16 @@ class Register extends Component{
         }*/
 
         InteractionManager.runAfterInteractions(() => {
-            //const {dispatch} = this.props;
-         
+            const {dispatch} = this.props;
+            dispatch(postRegister({
+                CMND:this.state.CMND,
+                HoTen:this.state.HoTen,
+                Email:this.state.Email,
+                DiaChi:this.state.DiaChi,
+                DienThoai:this.state.DienThoai,
+                MatKhau:this.state.MatKhau,
+                XacNhanMatKhau:this.state.XacNhanMatKhau,
+            }));
         });
     };
 }
@@ -143,6 +229,7 @@ class Register extends Component{
 const mapStateToProps = state=>({
     navReducer:state.navReducer,
     cartReducer:state.cartReducer,
+    authReducer:state.authReducer,
  });
  //khong can chia se nen connect rong
  //khi ma exprt connect ==> co 1 bien dispatch

@@ -16,6 +16,7 @@ export const colors = {
   black: '#586872',
   blue: '#4078c0',
   white: "white",
+  price: "f57264",
 };
 
 const commonStyles = StyleSheet.create({

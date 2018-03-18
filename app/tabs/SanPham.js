@@ -1,5 +1,5 @@
 import React,{Component} from 'react';
-import {View,Text,TouchableOpacity,StyleSheet,FlatList} from 'react-native';
+import {View,Text,TouchableOpacity,StyleSheet,FlatList,ImageBackground} from 'react-native';
 import GioHangPage from './pages/GioHangPage';
 import DSSP from './pages/DSSP';
 import { SearchBar } from 'react-native-elements';
@@ -10,7 +10,11 @@ import Loading from './../common/components/Loading';
 
 import Image from 'react-native-image-progress';
 import ProgressBar from 'react-native-progress/CircleSnail';
-import { HeadPadding } from '../common/vUtils';
+import { HeadPadding,formatVND,vStyles } from '../common/vUtils';
+import CornerLabel from './../components/CornerLabel';
+
+
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 class SanPham extends Component{
     constructor(props){
@@ -27,8 +31,8 @@ class SanPham extends Component{
             seed:1,
             error:null,
             refreshing:false,
-            page:0,
-            page_size:10
+            page:1,
+            page_size:20
         }
     }
 
@@ -38,7 +42,7 @@ class SanPham extends Component{
             tukhoa:sanPhamReducer.tukhoa
         });
         //lay dssp
-        dispatch(fetchSanPham(sanPhamReducer.danhmuc,sanPhamReducer.tukhoa));
+        dispatch(fetchSanPham(sanPhamReducer.danhmuc,sanPhamReducer.tukhoa,this.state.page,this.state.page_size));
     }
     
     //khi thay doi o tim kiem
@@ -52,12 +56,19 @@ class SanPham extends Component{
         this.setState({
             tukhoa:searchText
         });
+
+
     }
 
     //bam vao san pham item
     onPressProductItem = (item)=>{
         const {navReducer,dispatch}  = this.props;
-        dispatch({type:"SanPham_ChitietSanPham_Screen",id:item.ID});
+        dispatch({
+            type:"SanPham_ChitietSanPham_Wrap",
+            id:item.ID,
+            cart_nav:"SanPham_ChiTietSanPham_GioHang_Wrap",
+            thanhtoan_nav:"SanPham_ChiTietSanPham_GioHang_ThanhToanForm_Screen",
+        });
     }
 
     //bam vao nut tim kiem
@@ -66,17 +77,17 @@ class SanPham extends Component{
         const {sanPhamReducer,dispatch} = this.props;
         // dispatch();
         console.log(this.state.tukhoa);
-        dispatch(fetchSanPham(sanPhamReducer.danhmuc,this.state.tukhoa));
+        dispatch(fetchSanPham(sanPhamReducer.danhmuc,this.state.tukhoa,this.state.page,this.state.page_size));
     
     }
     //hien thi chon danh muc san pham
     onPressSelectDM = () => {
         const {dispatch} = this.props;
-        dispatch({type:'SanPham_NganhHang_Screen'});
+        dispatch({type:'SanPham_NganhHang_Screen',page:this.state.page,pageSize:this.state.page_size});
     }
     //hien thi btn tim kiem
     _renderBtnTimKiem(){
-        if(this.state.showBtnTimKiem){
+        if(this.state.showBtnTimKiem==true){
             return (
                 <TouchableOpacity onPress={this.onPressTimKiem}>
                          <Text>Tìm kiếm</Text>
@@ -87,6 +98,8 @@ class SanPham extends Component{
     }
     //pull refresh
     handleRefresh=()=>{  
+       //scrolltop
+       this.refs.FlatList.scrollToOffset({x: 0, y: 0, animated: true});
        const {sanPhamReducer,dispatch} =this.props;
         this.setState({
             page:1,
@@ -95,10 +108,9 @@ class SanPham extends Component{
             seed:this.state.seed+1,
         },()=>{
             //lay dssp
-            dispatch(fetchSanPham(sanPhamReducer.danhmuc,sanPhamReducer.tukhoa));
+            dispatch(fetchSanPham(sanPhamReducer.danhmuc,sanPhamReducer.tukhoa,this.state.page,this.state.page_size));
+            
         });
-
-        
     }
     //
     onEndReached = () => {
@@ -107,12 +119,15 @@ class SanPham extends Component{
           this.onEndReachedCalledDuringMomentum = true;
         }
     }
-    handleLoadMore=()=>{
+    handleLoadMore=(page=1)=>{
+        //scrolltop
+       this.refs.FlatList.scrollToOffset({x: 0, y: 0, animated: true});
+
         const {sanPhamReducer,dispatch} =this.props;
         this.setState({
-            page:this.state.page+1,
+            page:this.state.page+page,
         },()=>{
-            dispatch(fetchSanPham(sanPhamReducer.danhmuc,sanPhamReducer.tukhoa));
+            dispatch(fetchSanPham(sanPhamReducer.danhmuc,sanPhamReducer.tukhoa,this.state.page,this.state.page_size));
         });
     }
     //
@@ -124,8 +139,11 @@ class SanPham extends Component{
             data_id = navReducer.dataBack.data.id;
         }
         const {dispatch,sanPhamReducer} = this.props;
+        let isFetching = sanPhamReducer.isFetching;
+        let Paging=sanPhamReducer.Paging;
         return (
-            sanPhamReducer.isFetching?<Loading/>:
+            <View style={styles.container}>
+           
             <View style={styles.container}>
                 <HeadPadding/>
                 <View>
@@ -152,40 +170,141 @@ class SanPham extends Component{
                                             placeholder='Tìm kiếm...' />
                         </View>
                         <View>
-                                <TouchableOpacity onPress={this.onPressSelectDM}>
-                                    <Text>{sanPhamReducer.danhmuc!=null?sanPhamReducer.danhmuc.TenDanhMuc:"-Tất cả danh mục-"}</Text>
-                                </TouchableOpacity>
+                                 <FontAwesome.Button  name="th-list" style={{alignContent:"center",justifyContent:"center",alignItems:"center"}} alignItems="center" backgroundColor="#3b5998" borderRadius={0} onPress={()=>{
+                                        this.onPressSelectDM();
+                                    }}>
+                                       {sanPhamReducer.danhmuc!=null?sanPhamReducer.danhmuc.TenDanhMuc:"-Tất cả danh mục sản phẩm-"}
+                                 </FontAwesome.Button>
                               {this._renderBtnTimKiem()}
                         </View>
                  </View>
                  <View style={{flex:1}}>
+                        {
+                            sanPhamReducer.List.length==0?
+                            <View>
+                                <Text>0 sản phẩm</Text>
+                            </View>
+                            :null
+                        }
                         <FlatList
-                            data={sanPhamReducer.products}
+                            ref="FlatList"
+                            data={sanPhamReducer.List}
                             renderItem={({item}) =>
                                 <TouchableOpacity key={item.ID} onPress={()=>{
                                     this.onPressProductItem(item);
                                 }} style={styles.productItem}>
+                                  
+
                                     <Image 
                                         source={{ uri: item.HinhAnh }} 
                                         indicator={ProgressBar} 
                                         style={styles.itemImage}/>
-                                    <Text>{item.TenSanPham}</Text>
-                                    <Text>{item.TenDanhMuc}</Text>
-                                    <Text>{item.Gia}</Text>
+                                        <Text style={vStyles.product_name}>{item.TenSanPham} {item.New?<Text style={{color:"red",fontSize:9,fontWeight:'bold'}}>NEW</Text>:null}</Text>
+                                        <Text style={vStyles.cat_name}>{item.TenDanhMuc}</Text>
+                                        <Text style={vStyles.price}>{formatVND(item.Gia)}</Text>
+                                    
+                                        {item.KM?<CornerLabel
+                                            alignment={'right'}
+                                            cornerRadius={36}
+                                            style={{backgroundColor: 'green', }}
+                                            textStyle={{fontSize: 12, color: '#fff', }}>
+                                            KM
+                                        </CornerLabel>:null}
+
+                                    
+
+                                        {item.Hot?<CornerLabel
+                                            alignment={'left'}
+                                            cornerRadius={36}
+                                            style={{backgroundColor: 'red', }}
+                                            textStyle={{fontSize: 12, color: '#fff', }}>
+                                            HOT
+                                        </CornerLabel>:null}
                                 </TouchableOpacity>
                             }
                             keyExtractor={(item,index) => item.ID+""}
                             refreshing={this.state.refreshing}
                             onRefresh={this.handleRefresh}
 
-
-                            onEndReached={this.onEndReached} 
-                            onEndReachedThreshold={0.5}
+                            numColumns={2}
+                            //onEndReached={this.onEndReached} 
+                            //onEndReachedThreshold={0.5}
                             onMomentumScrollBegin={() => { this.onEndReachedCalledDuringMomentum = false; }}
+                            contentContainerStyle={{paddingBottom:150}}
+
+
+                          
                         />
+
+
+                         <View style = { styles.footerStyle }>
+                                <TouchableOpacity 
+                                    activeOpacity = { 0.7 } 
+                                    style = { styles.TouchableOpacity_style }
+                                    onPress = {()=>{
+                                        this.setState({refreshing:true},()=>{
+                                            this.handleRefresh();
+                                        });
+                                    }}
+                                    >
+
+                                    <Text style = { styles.TouchableOpacity_Inside_Text }>Tải lại</Text>
+                                    {
+                                        ( this.state.fetching_Status )
+                                        ?
+                                            <ActivityIndicator color = "#fff" style = {{ marginLeft: 6 }} />
+                                        :
+                                            null
+                                    }
+                                </TouchableOpacity> 
+                                        <TouchableOpacity 
+                                        disabled={this.state.page<=1}
+                                        activeOpacity = { 0.7 } 
+                                        style = { this.state.page<=1?styles.TouchableOpacity_style_disabled:styles.TouchableOpacity_style }
+                                        onPress = { ()=>{
+                                            this.handleLoadMore(-1);
+                                        }} 
+                                        >
+                                        <Text style = { styles.TouchableOpacity_Inside_Text }>Trang trước</Text>
+                                        {
+                                            ( this.state.fetching_Status )
+                                            ?
+                                                <ActivityIndicator color = "#fff" style = {{ marginLeft: 6 }} />
+                                            :
+                                                null
+                                        }
+                                    </TouchableOpacity> 
+                                {
+                                    Paging!=undefined?
+                                    <TouchableOpacity 
+                                        disabled={this.state.page==Paging.TotalPages}
+                                        
+                                        activeOpacity = { 0.7 } 
+                                        style = { this.state.page==Paging.TotalPages?styles.TouchableOpacity_style_disabled:styles.TouchableOpacity_style }
+                                        onPress = { ()=>{
+                                            this.handleLoadMore(+1);
+                                        }} 
+                                        >
+
+                                        <Text style = { styles.TouchableOpacity_Inside_Text }>Trang tiếp theo {this.state.page}/{Paging!=undefined?Paging.TotalPages:""} </Text>
+                                        {
+                                            ( this.state.fetching_Status )
+                                            ?
+                                                <ActivityIndicator color = "#fff" style = {{ marginLeft: 6 }} />
+                                            :
+                                                null
+                                        }
+
+                                    </TouchableOpacity> 
+                                    :
+                                    null
+                                }
+                                </View>
                  </View>
             
                
+                </View>
+            
             </View>
         );
     };
@@ -203,14 +322,74 @@ const styles=StyleSheet.create({
         flex:1,
     },
     productItem:{
+        alignItems: 'center',
+       
+        borderColor:VCOLOR.xam,
         borderWidth:1,
-        marginBottom:2,
-        
+        margin: 2,
+        borderRadius:5,
+        width:'49%'
     },
     itemImage:{
-        width: 50,
-        height: 50,
+        width: "95%",
+        height: 100,
         justifyContent: 'center',
         alignItems: 'center',
-    }
+    },
+    gia:{
+
+    },
+    KM:{
+        color:"blue",
+      
+        marginRight:2,
+        fontSize:10,
+    },
+    HOT:{
+        color:"red",
+     
+        marginRight:2,
+        fontSize:10,
+    },
+    NEW:{
+        color:"green",
+      
+        marginRight:2,
+        fontSize:10,
+    },
+    footerStyle:
+    {
+      padding: 7,
+      alignItems: 'center',
+      justifyContent: 'center',
+      borderTopWidth: 2,
+      borderTopColor: '#009688',
+      flexDirection:"row"
+    },
+    TouchableOpacity_style:
+    {
+      padding: 3,
+      flexDirection: 'row',
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: '#F44336',
+      borderRadius: 5,
+      margin:3
+    },
+    TouchableOpacity_style_disabled:
+    {
+      padding: 3,
+      flexDirection: 'row',
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: 'gray',
+      borderRadius: 5,
+      margin:3
+    },
+    TouchableOpacity_Inside_Text:
+    {
+      textAlign: 'center',
+      color: '#fff',
+      fontSize: 12
+    },
 });
