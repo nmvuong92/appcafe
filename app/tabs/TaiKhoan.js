@@ -28,6 +28,7 @@ import {formatVND} from './../common/vUtils';
 import donHangBadgeIcon from './../common/components/donHangBadgeIcon';
 import cartBadgeIcon from './../common/components/cartBadgeIcon';
 import {fetchArticles} from './../actions/articleAction';
+import Header from './../common/components/Header';
 class TaiKhoan extends Component{
     constructor(props){
         super(props);
@@ -61,10 +62,8 @@ class TaiKhoan extends Component{
         
     }
     componentDidMount(){
-        const {articleReducer,dispatch} = this.props; 
-        if(authReducer.user!=null){
-            dispatch(fetchArticles());
-        }
+        const {dispatch} = this.props; 
+       dispatch(fetchArticles());
     }
 
     //bam vao san pham item
@@ -79,71 +78,68 @@ class TaiKhoan extends Component{
         let user = authReducer.user;
         let List = articleReducer.List;
         return (
-            !isLoggedIn?
+         
             <View style={styles.container}>
-                <HeadPadding/>
-                <TouchableOpacity
-                    style={[commonStyles.btn, {marginBottom:20}]}
-                    onPress={() => {
-                        dispatch({type:'RegisterScreen'});
-                    }}
-                    underlayColor={colors.backGray}
-                >
-                    <Text style={[{color: colors.white, fontWeight: "bold",textAlign:"center"}]}> Đăng ký </Text>
-                </TouchableOpacity>
 
-                <TouchableOpacity
-                    style={[commonStyles.btn, {marginBottom:20}]}
-                    onPress={() => {
-                        dispatch({type:'LoginScreen'});
-                    }}
-                    underlayColor={colors.backGray}
-                >
-                    <Text style={[{color: colors.white, fontWeight: "bold",textAlign:"center"}]}> Đăng nhập </Text>
-                </TouchableOpacity>
-            </View>
-            :
-            <View style={styles.container}>
-        
+               <Header
+                    //showBack={true}
+                    //leftIcon='angle-left'
+                    //leftIconAction={()=>this.goBack()}
+                   
+                    // rightIcon2='heart'
+                    // rightIconAction2={()=>this.goBack()}
+
+                    //showCartBadgeIcon={true}
+                    //CartBadgeIconAction={()=>this.goBack()}
+                    title={"Tài khoản"}
+                />
             <ScrollView style={{
                 backgroundColor: 'rgba(240,240,240,0.9)'
             }}>
-                <ImageBackground style={styles.myBgImage} source={require('./../assets/images/img_my_bg.png')}>
-                    <TouchableOpacity
-                        style={styles.loginWrap}
-                        onPress={this._onPressHead.bind(this)}
-                    >
-                   
-                         <Image style={styles.headIcon} source={require('./../assets/images/img_default_head.png')}/> 
-                        <Text style={styles.login}>{user.HoTen}</Text>
-                      
+                {
+                    isLoggedIn?   
+                    <View>
+                        <ImageBackground style={styles.myBgImage} source={require('./../assets/images/img_my_bg.png')}>
+                        <TouchableOpacity
+                            style={styles.loginWrap}
+                            onPress={this._onPressHead.bind(this)}
+                        >
+                    
+                            <Image style={styles.headIcon} source={require('./../assets/images/img_default_head.png')}/> 
+                            <Text style={styles.login}>{user.HoTen}</Text>
+                        
+                        </TouchableOpacity>
+                        </ImageBackground>
+                        <View style={{padding: 15,flex: 1,flexDirection: 'row',justifyContent: 'center',backgroundColor: 'white'}}>
+                            <TextButton onPress={() => {
+                                } }
+                                text={'Điểm tích lũy'}
+                                upText={formatVND(user.DiemTichLuy)}
+                            />
+                        </View> 
+                        <TouchableOpacity style={styles.li}  activeOpacity={0.75}>
+                        <Image
+                            source={require('./../assets/images/ri.png') }
+                            style={{width: 30, height: 30, marginLeft: 20}}
+                        />
+                        <Text style={{marginLeft: 10}}>
+                            Cập nhật thông tin tài khoản
+                        </Text>
+                    
                     </TouchableOpacity>
-                </ImageBackground>
+                    </View>
 
+                     :
+                    null
+
+                }
+            
                 
 
-             
-                <View style={{padding: 15,flex: 1,flexDirection: 'row',justifyContent: 'center',backgroundColor: 'white'}}>
-                    <TextButton onPress={() => {
-                        } }
-                        text={'Điểm tích lũy'}
-                        upText={formatVND(user.DiemTichLuy)}
-                    />
-                </View>
 
               
 
-                <TouchableOpacity style={styles.li}  activeOpacity={0.75}>
-                    <Image
-                        source={require('./../assets/images/ri.png') }
-                        style={{width: 30, height: 30, marginLeft: 20}}
-                    />
-                    <Text style={{marginLeft: 10}}>
-                        Cập nhật thông tin tài khoản
-                    </Text>
-                
-                </TouchableOpacity>
-
+              
              
                  
 
@@ -168,47 +164,83 @@ class TaiKhoan extends Component{
                  }
                 
 
+                {
+                    isLoggedIn?
+                    <View>
+                        <View style={styles.info}>
+                        <View style={styles.info_item}>
+                            <Text style={styles.text1}>Họ và tên:</Text>
+                            <Text style={styles.text2}>{user.HoTen}</Text>
+                        </View>
+                        <View style={styles.info_item}>
+                            <Text style={styles.text1}>CMND:</Text>
+                            <Text style={styles.text2}>{user.CMND}</Text>
+                        </View>
+                        <View style={styles.info_item}>
+                            <Text style={styles.text1}>Địa chỉ:</Text>
+                            <Text style={styles.text2}>{user.DiaChi}</Text>
+                        </View>
+                        <View style={styles.info_item}>
+                            <Text style={styles.text1}>Điện thoại:</Text>
+                            <Text style={styles.text2}>{user.DienThoai}</Text>
+                        </View>
+                        <View style={styles.info_item}>
+                            <Text style={styles.text1}>Email:</Text>
+                            <Text style={styles.text2}>{user.Email}</Text>
+                        </View>
+                    </View>
 
-                <View style={styles.info}>
-                    <View style={styles.info_item}>
-                        <Text style={styles.text1}>Họ và tên:</Text>
-                        <Text style={styles.text2}>{user.HoTen}</Text>
+                      <TouchableOpacity
+                        style={[commonStyles.btn, {marginBottom:20}]}
+                        onPress={() => {
+                            Alert.alert(
+                                "Bạn chắc chắn muốn đăng xuất?",
+                                "",
+                                [
+                                    {text:"Đăng xuất", onPress:()=>{this._logout()}},
+                                    {text:"Hủy bỏ", onPress:()=>{}},
+                                ]
+                            );
+                        }}
+                        underlayColor={colors.backGray}
+                    >
+                        <Text style={[{color: colors.white, fontWeight: "bold",textAlign:"center"}]}> Đăng xuất </Text>
+                    </TouchableOpacity>
                     </View>
-                    <View style={styles.info_item}>
-                        <Text style={styles.text1}>CMND:</Text>
-                        <Text style={styles.text2}>{user.CMND}</Text>
-                    </View>
-                    <View style={styles.info_item}>
-                        <Text style={styles.text1}>Địa chỉ:</Text>
-                        <Text style={styles.text2}>{user.DiaChi}</Text>
-                    </View>
-                    <View style={styles.info_item}>
-                        <Text style={styles.text1}>Điện thoại:</Text>
-                        <Text style={styles.text2}>{user.DienThoai}</Text>
-                    </View>
-                    <View style={styles.info_item}>
-                        <Text style={styles.text1}>Email:</Text>
-                        <Text style={styles.text2}>{user.Email}</Text>
-                    </View>
-                </View>
+                    
+                :null
 
+                }
+
+               
+            {
+                !isLoggedIn?
+                <View style={styles.container}>
+                <HeadPadding/>
+                <TouchableOpacity
+                    style={[commonStyles.btn, {marginBottom:20}]}
+                    onPress={() => {
+                        dispatch({type:'RegisterScreen'});
+                    }}
+                    underlayColor={colors.backGray}
+                >
+                    <Text style={[{color: colors.white, fontWeight: "bold",textAlign:"center"}]}> Đăng ký </Text>
+                </TouchableOpacity>
 
                 <TouchableOpacity
                     style={[commonStyles.btn, {marginBottom:20}]}
                     onPress={() => {
-                        Alert.alert(
-                            "Bạn chắc chắn muốn đăng xuất?",
-                            "",
-                            [
-                                {text:"Đăng xuất", onPress:()=>{this._logout()}},
-                                {text:"Hủy bỏ", onPress:()=>{}},
-                            ]
-                        );
+                        dispatch({type:'LoginScreen'});
                     }}
                     underlayColor={colors.backGray}
                 >
-                    <Text style={[{color: colors.white, fontWeight: "bold",textAlign:"center"}]}> Đăng xuất </Text>
+                    <Text style={[{color: colors.white, fontWeight: "bold",textAlign:"center"}]}> Đăng nhập </Text>
                 </TouchableOpacity>
+            </View>
+            :null
+            }
+
+              
             </ScrollView>
         </View>
         );

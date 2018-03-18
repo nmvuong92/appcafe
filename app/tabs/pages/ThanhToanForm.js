@@ -24,7 +24,7 @@ class ThanhToanForm extends Component{
         let user=authReducer.user;
         console.log(user);
         this.state = {
-            HoTen:user.HoTen,
+            HoTen:"",
             DiaChiNhanHang:user.DiaChi,
             DienThoai: user.DienThoai,
             GhiChu:'',
@@ -74,6 +74,7 @@ class ThanhToanForm extends Component{
         let newStyle = {
             height:this.state.height
        }
+       
         return (
             <View style={styles.container}>
                 <Header

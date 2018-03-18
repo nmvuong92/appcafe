@@ -157,7 +157,13 @@ class GioHang extends Component{
         for(let i=0;i<cartReducer.cartItems.length;i++){
             tong_tien_gio_hang+=cartReducer.cartItems[i].SLSP*cartReducer.cartItems[i].Gia;
         }
+
+        const {authReducer} =this.props;
+        let isLoggedIn = authReducer.user!=null;
+        let slsp=cartReducer.cartItems.length;
+
         return (
+     
             sanPhamReducer.isFetching?<Loading/>:
             <View style={styles.container}>
                 <Header
@@ -245,11 +251,11 @@ class GioHang extends Component{
                  </View> */}
                  <View style={styles.footer}>
                                         <Button
-                                            disabled={cartReducer.cartItems.length==0}
+                                            disabled={slsp==0||isLoggedIn==false}
                                             backgroundColor="red"
                                             color="white"
                                             icon={{name: 'opencart', type: 'font-awesome'}}
-                                            title={'THANH TOÁN: '+vUtils.formatVND(tong_tien_gio_hang)}
+                                            title={'THANH TOÁN: '+(slsp>0&&isLoggedIn?vUtils.formatVND(tong_tien_gio_hang):" [Đăng nhập]")}
                                             onPress={()=>{
                                               
                                                 this.goThanhToan();
