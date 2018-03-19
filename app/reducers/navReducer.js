@@ -33,6 +33,19 @@ let navReducer  = (state,action)=>{
         break;
         NavigationActions
 
+     case 'DonHangTab':
+        nextState = MainScreenNavigator.router.getStateForAction(
+          NavigationActions.reset({
+             index:0,
+             actions:[NavigationActions.navigate({routeName:"DonHangTab"})]
+             routeName: 'DonHangTab'
+             }),
+          state
+        );
+      break;
+      NavigationActions
+
+
       case 'goBack':
           nextState = MainScreenNavigator.router.getStateForAction(
             NavigationActions.back(),
