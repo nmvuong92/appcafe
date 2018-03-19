@@ -43,10 +43,9 @@ import {initialSyncSetUser} from './actions/authAction';
 import {fetchDanhSachDonHang} from './actions/donHangAction';
 
 const opt_hide_tabbar={
-    tabBarVisible:false,
+    //tabBarVisible:false,
     header:null,
    // swipeEnabled:false
-
 }
 
 
@@ -199,7 +198,6 @@ export const MainScreenNavigator = TabNavigator({
                 header:null,
                 tabBarIcon:<MaterialIcons color="black" size={28} name="view-comfy"/>,
             },
-            
         },
         SanPham_NganhHang_Screen:{
             screen:NganhHang,
@@ -235,7 +233,10 @@ export const MainScreenNavigator = TabNavigator({
                 initialRouteName:"SanPham_ChitietSanPham_Screen",
                 headerStyle:{
                     //marginTop:24
-                }
+                },
+                tabBarLabel:'Sản phẩm',
+                tabBarIcon:<MaterialIcons color="black" size={28} name="view-comfy"/>,
+               
             }
         }),
     }), //end san pham stack
@@ -245,9 +246,9 @@ export const MainScreenNavigator = TabNavigator({
             navigationOptions: {
                 showLabel:true,
                 showIcon:true,
-                tabBarLabel:'Giỏ hàng',
-                
                 header:null,
+
+                tabBarLabel:'Giỏ hàng',
                 tabBarIcon: <CartBadgeIcon/>,
             }
         },
@@ -270,6 +271,8 @@ export const MainScreenNavigator = TabNavigator({
     },{
         navigationOptions:{
             initialRouteName:"GioHangScreen",
+           tabBarLabel:'Giỏ hàng',
+            tabBarIcon: <CartBadgeIcon/>,
         }
     }), //end ChiTietSanPham_GioHang_Screen
     DonHangTab:StackNavigator({
@@ -448,10 +451,6 @@ class MainScreenNavigatorState extends Component{
                 console.log("2.-----------------"+nextAppState);
                 this.setState({appState: nextAppState});
         }
-
-          
-
-     
         render(){
             const {dispatch,navReducer} = this.props;
             return(

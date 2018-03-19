@@ -328,7 +328,8 @@ const styles=StyleSheet.create({
         borderWidth:1,
         margin: 2,
         borderRadius:5,
-        width:'49%'
+        width:'49%',
+        overflow:"hidden",
     },
     itemImage:{
         width: "95%",

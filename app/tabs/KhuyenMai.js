@@ -1,5 +1,5 @@
 import React,{Component} from 'react';
-import {View,Text,TouchableOpacity,StyleSheet,FlatList} from 'react-native';
+import {View,Text,TouchableOpacity,StyleSheet,FlatList,SafeAreaView} from 'react-native';
 import Header from './../common/components/Header';
 import {fetchSanPhamKhuyenMai } from './../actions/khuyenMaiAction';
 import {connect} from 'react-redux';
@@ -115,7 +115,7 @@ class KhuyenMai extends Component{
                 isFetching?<LoadingActivityIndicator loading={isFetching}/>:sanPhamKhuyenMaiReducer.List.length==0?<View style={styles.container}><Text>0 sản phẩm</Text></View>:
                 
           
-                 <View style={{flex:1}}>
+                 <SafeAreaView style={{flex:1}}>
                         <FlatList
                             ref="FlatList"
                             data={sanPhamKhuyenMaiReducer.List}
@@ -226,7 +226,7 @@ class KhuyenMai extends Component{
                                 }
                                 </View>
                       
-                 </View>
+                 </SafeAreaView>
             
         }
             </View>
@@ -252,7 +252,8 @@ const styles=StyleSheet.create({
         borderWidth:1,
         margin: 2,
         borderRadius:5,
-        width:'49%'
+        width:'49%',
+        overflow:"hidden",
     },
     itemImage:{
         width: "95%",

@@ -30,6 +30,7 @@ import CartBadgeIcon from './../../common/components/cartBadgeIcon';
 
 import CornerLabel from './../../components/CornerLabel';
 import LoadingActivityIndicator from './../../common/components/LoadingActivityIndicator';
+
 let deviceWidth= Dimensions.get('window').width;
 
 class HomePage extends Component{
@@ -72,12 +73,12 @@ class HomePage extends Component{
         return (
             
             <View style={styles.container}>
-                
+                <HeadPadding/>
               
            
 
                 <ScrollView contentContainerStyle={styles.scroll_container}>
-
+                            
                             <Image style={{width:"100%",height:200}} source={require('./../../assets/images/banner.jpg')}/>
                         
                             <View style={styles.header_menu}>
@@ -204,7 +205,7 @@ class HomePage extends Component{
                                             <Text style={styles.panel_title}>SẢN PHẨM MỚI</Text>
                                     </View>      
                                     <View style={styles.panel_body}>
-
+                                            
                                         {
                                             dssp.HOT.map(function(item,index){
                                                 return (
@@ -358,8 +359,9 @@ const styles = StyleSheet.create({
         borderColor:VCOLOR.xam,
         borderWidth:1,
         margin: 2,
+        overflow:"hidden",
         borderRadius:5,
-        width:'49%',
+        width:'47%',
         padding:3,
     },
     product_item_header:{
