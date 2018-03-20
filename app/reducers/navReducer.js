@@ -44,13 +44,7 @@ let navReducer  = (state,action)=>{
           //console.log(nextState);
         break;
     
-      case 'Login':
-        nextState = MainScreenNavigator.router.getStateForAction(
-          NavigationActions.back(),
-          state
-        );
-        break;
-
+  
       case 'Logout':
         nextState = MainScreenNavigator.router.getStateForAction(
           NavigationActions.navigate({ routeName: 'ScreenNotOnTabbar' }),
@@ -191,20 +185,7 @@ let navReducer  = (state,action)=>{
 
 
  
-      case 'RegisterScreen':
-          nextState = MainScreenNavigator.router.getStateForAction(
-            NavigationActions.navigate({ routeName: 'RegisterScreen' }),
-            state
-          );
-          break;
-      case 'LoginScreen':
-           
-          nextState = MainScreenNavigator.router.getStateForAction(
-            NavigationActions.navigate({ routeName: 'LoginScreen' }),
-            state
-          );
-          break;
-
+   
 
       //-------san pham----------
       case 'SanPham_Screen':

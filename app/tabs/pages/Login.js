@@ -32,25 +32,31 @@ import * as authAction from './../../actions/authAction';
 class Login extends Component{
     constructor(props){
         super(props);
+
+        //
+       
+        let hide_header = this.props.hide_header!=undefined;
         this.state = {
             CMND: '',
             MatKhau: '',
+            hide_header:hide_header,
+            message:""
         };
+
     }
     
 
     goBack(){
-        const {dispatch,cartReducer} = this.props;
-        //const { navigate } = this.props.navigation;
-        //navigate('LogoutScreen', { name: 'Brent' });
-        dispatch(NavigationActions.back());
+        this.props.onLoginSuccess();
+       // const {dispatch,cartReducer} = this.props;
+       // dispatch(NavigationActions.back());
     }
   
     componentDidUpdate(){
-        const {authReducer} = this.props;
+        /*const {authReducer} = this.props;
         if(authReducer.user!=null){
             this.goBack();
-         }
+        }*/
     }
     render(){
         const {cartReducer,authReducer,dispatch} = this.props;
@@ -62,7 +68,8 @@ class Login extends Component{
 
         return (
                 <View style={styles.container}>
-                              
+                {
+                    !this.state.hide_header?
                     <Header
                         showBack={true}
                         //leftIcon='angle-left'
@@ -77,8 +84,8 @@ class Login extends Component{
                         //showCartBadgeIcon={true}
                         //CartBadgeIconAction={()=>this.goBack()}
                         title={"Đăng nhập"}
-                    />
-
+                    />:null
+                }      
                 <View style={[styles.formInput, styles.formInputSplit]}>
                     <Image source={require('./../../assets/images/user.png')} style={{width:25,height:25,resizeMode: 'contain'}}/>
                     <TextInput
@@ -97,11 +104,16 @@ class Login extends Component{
                         placeholder='Mật khẩu'/>
                 </View>
                 <TouchableOpacity style={styles.loginBtn} onPress={()=>{
-                    dispatch(authAction.postLogin(this.state.CMND,this.state.MatKhau));
+                    dispatch(authAction.postLogin(this.state.CMND,this.state.MatKhau ,(response)=>{
+                      
+                        this.goBack();
+                    },(response)=>{
+                      
+                    }));
                 }}>
                     <Text style={styles.loginText}>Đăng nhập</Text>
                 </TouchableOpacity>
-
+               
                 
                 <View style={styles.registerWrap}>
                     <TouchableOpacity style={{alignItems:'flex-start',flex:1}} onPress={()=>{

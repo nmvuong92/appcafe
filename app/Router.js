@@ -14,7 +14,6 @@ import TaiKhoan from './tabs/TaiKhoan';
 import TichDiem from './tabs/TichDiem';
 import NganhHang from './tabs/NganhHang';
 import GioHang from './tabs/GioHang';
-import Register from './tabs/pages/Register';
 import DonHang from './tabs/DonHang';
 import CTDonHang from './tabs/pages/CTDonHang';
 import ThanhToanForm from './tabs/pages/ThanhToanForm';
@@ -68,14 +67,8 @@ export const MainScreenNavigator = TabNavigator({
             screen:Detail,
             navigationOptions:opt_hide_tabbar
         },
-        RegisterScreen:{
-            screen:Register,
-            navigationOptions:opt_hide_tabbar
-        },
-        LoginScreen:{
-            screen:Login,
-            navigationOptions:opt_hide_tabbar
-        },
+     
+    
         ScreenNotOnTabbar:{
             screen:SanPham,
             navigationOptions:opt_hide_tabbar
@@ -349,7 +342,8 @@ export const MainScreenNavigator = TabNavigator({
         },
         
         activeTintColor: 'red',
-       // activeBackgroundColor :'yellow',  //Doesn't work
+        
+        //activeBackgroundColor :'yellow',  //Doesn't work
         inactiveTintColor:"gray",
         showIcon:true,
         showLabel:true,

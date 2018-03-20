@@ -88,7 +88,7 @@ class NganhHang extends Component{
             danhMucSanPhamReducer.isFetching?<Loading/>:
             <View>
                 <Header
-                    showBack={true}
+                    //showBack={true}
                     // leftIcon='angle-left'
                     // leftIconAction={()=>this.goBack()}
 

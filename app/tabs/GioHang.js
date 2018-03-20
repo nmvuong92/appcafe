@@ -1,5 +1,5 @@
 import React,{Component} from 'react';
-import {View,Text,TouchableOpacity,StyleSheet,FlatList,TextInput} from 'react-native';
+import {View,Text,TouchableOpacity,StyleSheet,FlatList,TextInput,Modal as ReactNativeModal} from 'react-native';
 import GioHangPage from './pages/GioHangPage';
 import DSSP from './pages/DSSP';
 import { SearchBar,Badge } from 'react-native-elements';
@@ -251,24 +251,26 @@ class GioHang extends Component{
                             
                
                  <View style={styles.footer}>
-                                        <View>
-                                            <Text>Tổng tiền: {vUtils.formatVND(tong_tien_gio_hang)}</Text>
-                                        </View>
-                                        <Button
-                                            backgroundColor="red"
-                                            color="white"
-                                            icon={{name: 'opencart', type: 'font-awesome'}}
-                                            title={'THANH TOÁN'}
-                                            onPress={()=>{
-                                                if(isLoggedIn){
-                                                    this.goThanhToan();
-                                                }else{
-                                                    Toast.show("Vui lòng đăng nhập!");
-                                                }
-                                                
-                                            }}
-                                        />
-
+                        <View style={{flex:1}}>
+                            <Text>Tổng tiền:</Text>
+                            <Text style={{fontSize:20,fontWeight:"bold",color:VCOLOR.do_dam}}>{vUtils.formatVND(tong_tien_gio_hang)}</Text>
+                        </View>
+                        <View style={{flex:1,alignItems:"flex-end"}}>
+                            <Button
+                                backgroundColor="red"
+                                color="white"
+                                icon={{name: 'opencart', type: 'font-awesome'}}
+                                title={'THANH TOÁN'}
+                                onPress={()=>{
+                                    if(isLoggedIn){
+                                        this.goThanhToan();
+                                    }else{
+                                        Toast.show("Vui lòng đăng nhập!", {position:Toast.positions.CENTER});
+                                    }
+                                    
+                                }}
+                            />
+                        </View>
                   </View>
          
                  <Modal style={[styles.modal, styles.modal3]} position={"center"} ref={"modal3"} isDisabled={this.state.isDisabled}>
@@ -341,16 +343,12 @@ class GioHang extends Component{
  <View style={{flexDirection:"row",justifyContent:"space-between"}}>
                     <Ionicons.Button name="md-arrow-round-back" backgroundColor={VCOLOR.xam} borderRadius={0} onPress={()=>{
                             this.refs.modal3.close();
-                    }}>
-                        <Text style={{fontFamily: 'Arial', fontSize: 15}}>Trở về</Text>
-                    </Ionicons.Button>
+                    }}/>
 
                     <MaterialIcons.Button name="delete-forever" backgroundColor={VCOLOR.red} borderRadius={0} onPress={()=>{
                             dispatch(cartCRUD("x",this.state.itemEdit,1));
                             this.refs.modal3.close();
-                    }}>
-                        <Text style={{fontFamily: 'Arial', fontSize: 15}}>Xoá</Text>
-                    </MaterialIcons.Button>
+                    }}/>
 
                     
                     <FontAwesome.Button name="check" backgroundColor={VCOLOR.green} borderRadius={0}  onPress={() => {
@@ -427,13 +425,15 @@ const styles=StyleSheet.create({
         alignItems: 'center',
     },
     footer:{
+        flexDirection:"row",
         position:'absolute',
         bottom:0,
         right:0,
         left:0,
-        backgroundColor:VCOLOR.green,
+        backgroundColor:VCOLOR.xam,
         alignContent:"center",
         alignItems: "center",
+        justifyContent:"space-between"
     },
 
     modal: {

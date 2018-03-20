@@ -12,7 +12,6 @@ import {
     InteractionManager,
     ImageBackground,
     FlatList
-
 } from 'react-native';
 import {Avatar,Card,Button,Divider} from 'react-native-elements';
 import Loading from './../common/components/Loading';
@@ -29,6 +28,12 @@ import donHangBadgeIcon from './../common/components/donHangBadgeIcon';
 import cartBadgeIcon from './../common/components/cartBadgeIcon';
 import {fetchArticles} from './../actions/articleAction';
 import Header from './../common/components/Header';
+import Register from './pages/Register';
+import Login from './pages/Login';
+
+
+import Modal from 'react-native-modalbox';
+
 class TaiKhoan extends Component{
     constructor(props){
         super(props);
@@ -36,6 +41,7 @@ class TaiKhoan extends Component{
             isloading:false,
             dssp:true,
             refreshing:false,
+            modalVisible: false,
         }
 
         //setTimeout(() => {this.setState({isloading: false})}, 1000)
@@ -220,7 +226,8 @@ class TaiKhoan extends Component{
                 <TouchableOpacity
                     style={[commonStyles.btn, {marginBottom:20}]}
                     onPress={() => {
-                        dispatch({type:'RegisterScreen'});
+                        this.refs.modal_register.open();
+                       // dispatch({type:'RegisterScreen'});
                     }}
                     underlayColor={colors.backGray}
                 >
@@ -230,7 +237,9 @@ class TaiKhoan extends Component{
                 <TouchableOpacity
                     style={[commonStyles.btn, {marginBottom:20}]}
                     onPress={() => {
-                        dispatch({type:'LoginScreen'});
+                        this.refs.modal_login.open();
+                       // this.setState({modalVisible: !this.state.modalVisible});
+                        //dispatch({type:'LoginScreen'});
                     }}
                     underlayColor={colors.backGray}
                 >
@@ -242,6 +251,44 @@ class TaiKhoan extends Component{
 
               
             </ScrollView>
+
+   
+
+
+            
+            <Modal
+                ref={"modal_login"}>
+                    <View style={{flex:1,}}>
+                        <Header
+                            leftIcon='angle-left'
+                            leftIconAction={()=>{
+                                this.refs.modal_login.close();
+                            }}
+                            title={"Đăng nhập"}
+                        />
+                        <Login hide_header={true} onLoginSuccess={()=>{
+                            this.refs.modal_login.close();
+                        }}/>
+                    </View>
+                </Modal>
+
+                <Modal
+                ref={"modal_register"}>
+                    <View style={{flex:1,}}>
+                        <Header
+                            leftIcon='angle-left'
+                            leftIconAction={()=>{
+                                this.refs.modal_register.close();
+                            }}
+                            title={"Đăng ký"}
+                        />
+                        <Register hide_header={true} onRegisterSuccess={()=>{
+                            this.refs.modal_register.close();
+                        }}/>
+                    </View>
+               </Modal>
+
+
         </View>
         );
     }
@@ -249,7 +296,9 @@ class TaiKhoan extends Component{
     _onPressHead() {
      
     }
-
+    _onLoginSuccess() {
+        this.setState({modalVisible: !this.state.modalVisible});
+    }
     _logout() {
         InteractionManager.runAfterInteractions(() => {
             const {authReducer,dispatch} = this.props;
@@ -258,7 +307,6 @@ class TaiKhoan extends Component{
     }
 
 }
-
 //khong can chia se nen connect rong
 //khi ma exprt connect ==> co 1 bien dispatch
 export default connect((state)=>{

@@ -35,7 +35,7 @@ class Header extends Component {
         }   
 
 
-        if (this.props.leftIcon != undefined&&this.props.leftIcon==true) {
+        if (this.props.leftIcon != undefined) {
             NavigationBar.push(
                 <TouchableOpacity
                     key={'leftIcon'}

@@ -9,6 +9,9 @@ import { HeadPadding,formatVND,vStyles } from '../common/vUtils';
 import Loading from './../common/components/Loading';
 
 import LoadingActivityIndicator from './../common/components/LoadingActivityIndicator';
+import Modal from 'react-native-modalbox';
+import Login from './pages/Login';
+import Register from './pages/Register';
 class DonHang extends Component{
     constructor(props){
         super(props); 
@@ -20,7 +23,6 @@ class DonHang extends Component{
             data:[],
             searchClearIcon: false,
             tukhoa:"",
-
             loading:false,
             seed:1,
             error:null,
@@ -112,7 +114,8 @@ class DonHang extends Component{
                 <TouchableOpacity
                     style={[commonStyles.btn, {marginBottom:20}]}
                     onPress={() => {
-                        dispatch({type:'RegisterScreen'});
+                        this.refs.modal_register.open();
+                        //dispatch({type:'RegisterScreen'});
                     }}
                     underlayColor={colors.backGray}
                 >
@@ -122,12 +125,44 @@ class DonHang extends Component{
                 <TouchableOpacity
                      style={[commonStyles.btn, {marginBottom:20}]}
                     onPress={() => {
-                        dispatch({type:'LoginScreen'});
+                        this.refs.modal_login.open();
+                        //dispatch({type:'LoginScreen'});
                     }}
                     underlayColor={colors.backGray}
                 >
                     <Text style={[{color: colors.white, fontWeight: "bold",textAlign:"center"}]}> Đăng nhập </Text>
                 </TouchableOpacity>
+
+                <Modal ref={"modal_login"}>
+                    <View style={{flex:1,}}>
+                        <Header
+                            leftIcon='angle-left'
+                            leftIconAction={()=>{
+                                this.refs.modal_login.close();
+                            }}
+                            title={"Đăng nhập"}
+                        />
+                        <Login hide_header={true} onLoginSuccess={()=>{
+                            this.refs.modal_login.close();
+                        }}/>
+                    </View>
+                </Modal>
+
+                <Modal ref={"modal_register"}>
+                    <View style={{flex:1,}}>
+                        <Header
+                            leftIcon='angle-left'
+                            leftIconAction={()=>{
+                                this.refs.modal_register.close();
+                            }}
+                            title={"Đăng ký"}
+                        />
+                        <Register hide_header={true} onRegisterSuccess={()=>{
+                            this.refs.modal_register.close();
+                        }}/>
+                    </View>
+               </Modal>
+
             </View>
             :
             <View style={styles.container}>
@@ -267,6 +302,11 @@ class DonHang extends Component{
                             null
                         }
                    </View>
+
+   
+             
+
+
 
             </View>
         );

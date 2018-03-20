@@ -4,7 +4,7 @@ import * as urls from  './../common/constants_url';
 import {setUser,getUser} from './../common/Storage';
 import Toast from 'react-native-root-toast';
 
-export let postLogin = (CMND,MatKhau)=> {
+export let postLogin = (CMND,MatKhau,fnSucc,fnErrr)=> {
     if(__DEV__){
             console.log("-----------------login----------------");
     }
@@ -20,11 +20,13 @@ export let postLogin = (CMND,MatKhau)=> {
             (response) => {
                 dispatch(fetchLogin(false));
                 if(response.r==true){
+                    fnSucc(response);
                     var user = response.v;
                     Toast.show(response.m, {position:Toast.positions.CENTER});
                     setUser(user);
                     dispatch(receiveLogin(user));
                 }else{
+                    fnErrr(response);
                     Toast.show(response.m, {position:Toast.positions.CENTER});
                 }
                 /*
@@ -52,7 +54,7 @@ export let postLogin = (CMND,MatKhau)=> {
 }
 
 
-export let postRegister = (formData)=> {
+export let postRegister = (formData,fnSucc,fnErr)=> {
     if(__DEV__){
             console.log("-----------------postRegister----------------");
     }
@@ -62,14 +64,15 @@ export let postRegister = (formData)=> {
         dispatch(fetchRegister(true));
         Util.postJson(url, formData,
             (response) => {
-                console.log(response);
                 dispatch(fetchRegister(false));
                 if(response.r==true){
-                    var user = response.v;
+                    fnSucc(response);
                     Toast.show(response.m, {position:Toast.positions.CENTER});
+                    var user = response.v;
                     setUser(user);
                     dispatch(receiveRegister(user));
                 }else{
+                    fnErr(response);
                     Toast.show(response.m, {position:Toast.positions.CENTER});
                 }
                 /*

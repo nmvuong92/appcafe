@@ -95,13 +95,13 @@ class ChiTietSanPham extends Component{
                     // rightIcon2='heart'
                     // rightIconAction2={()=>this.goBack()}
                 
-                   showCartBadgeIcon={!this.state.read_only}
+                   /*showCartBadgeIcon={!this.state.read_only}
                    CartBadgeIconAction={
                        
                         ()=>{
                             this.goCart();
                         }
-                    }
+                    }*/
                     title={sanpham.TenSanPham}
                 />
 

@@ -19,6 +19,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 class Register extends Component{
     constructor(props){
         super(props);
+        let hide_header = this.props.hide_header!=undefined;
         this.state = {
             CMND:'',
             HoTen:'',
@@ -33,6 +34,9 @@ class Register extends Component{
             code:'',
             verifyCodeText:"",
             user:{},
+
+            hide_header:hide_header,
+            message:"",
         };
         this.timer = null;
         this.timeHit = 0;
@@ -54,36 +58,47 @@ class Register extends Component{
         });
     }
     goBack(){
-        const {dispatch,cartReducer} = this.props;
-        //const { navigate } = this.props.navigation;
-        //navigate('LogoutScreen', { name: 'Brent' });
-        dispatch(NavigationActions.back());
+
+        this.props.onRegisterSuccess();
+        /*const {dispatch,cartReducer} = this.props;
+        dispatch(NavigationActions.back());*/
     }
   
     componentDidUpdate(){
+       
+        /*
         const {authReducer} = this.props;
         if(authReducer.user!=null){
             this.goBack();
-         }
+        }
+
+        */
     }
     render(){
         return (
             <View style={styles.container}>
-                <Header
-                        showBack={true}
-                        //leftIcon='angle-left'
-                        //leftIconAction={()=>this.goBack()}
-                    
-                        //rightIcon='trash'
-                        //rightIconAction={()=>{}}
 
-                        // rightIcon2='heart'
-                        // rightIconAction2={()=>this.goBack()}
+            {
+                    !this.state.hide_header?
 
-                        //showCartBadgeIcon={true}
-                        //CartBadgeIconAction={()=>this.goBack()}
-                        title={"Đăng ký thành viên"}
-                />
+                    <Header
+                    showBack={true}
+                    //leftIcon='angle-left'
+                    //leftIconAction={()=>this.goBack()}
+                
+                    //rightIcon='trash'
+                    //rightIconAction={()=>{}}
+
+                    // rightIcon2='heart'
+                    // rightIconAction2={()=>this.goBack()}
+
+                    //showCartBadgeIcon={true}
+                    //CartBadgeIconAction={()=>this.goBack()}
+                    title={"Đăng ký thành viên"}
+                    />
+                    :null
+            }
+              
 
 
                  <KeyboardAwareScrollView>
@@ -166,6 +181,7 @@ class Register extends Component{
                             <TouchableOpacity style={styles.registerBtn} onPress={this._register.bind(this)}>
                                 <Text style={styles.registerText}>Đăng ký</Text>
                             </TouchableOpacity>
+
                         </View>
                 </KeyboardAwareScrollView>
             </View>
@@ -221,6 +237,10 @@ class Register extends Component{
                 DienThoai:this.state.DienThoai,
                 MatKhau:this.state.MatKhau,
                 XacNhanMatKhau:this.state.XacNhanMatKhau,
+            },(response)=>{
+                this.goBack();
+            },(response)=>{
+
             }));
         });
     };
