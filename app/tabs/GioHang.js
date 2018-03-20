@@ -1,8 +1,8 @@
 import React,{Component} from 'react';
-import {View,Text,TouchableOpacity,StyleSheet,FlatList} from 'react-native';
+import {View,Text,TouchableOpacity,StyleSheet,FlatList,TextInput} from 'react-native';
 import GioHangPage from './pages/GioHangPage';
 import DSSP from './pages/DSSP';
-import { SearchBar } from 'react-native-elements';
+import { SearchBar,Badge } from 'react-native-elements';
 import {VCOLOR} from './../common/constants';
 import {connect} from 'react-redux';
 import {fetchSanPham} from './../actions/sanPhamAction';
@@ -28,7 +28,7 @@ import IconBadge from 'react-native-icon-badge';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Header from'./../common/components/Header';
 import * as vUtils  from './../common/vUtils';
-
+import Modal from 'react-native-modalbox';
 class GioHang extends Component{
     constructor(props){
        
@@ -53,7 +53,11 @@ class GioHang extends Component{
             error:null,
             refreshing:false,
             page:0,
-            page_size:10
+            page_size:10,
+            modalVisible: false,
+
+            itemEdit:null,
+            slspEdit:0,
         }
        
     }
@@ -145,6 +149,17 @@ class GioHang extends Component{
             //dispatch(fetchSanPham(sanPhamReducer.danhmuc,sanPhamReducer.tukhoa));
         });
     }
+
+    setModalVisible(visible) {
+        this.setState({modalVisible: visible});
+      }
+    showEditSLSP=(item)=>{
+        this.setState({
+            itemEdit:item,
+            slspEdit:item.SLSP,
+        });
+        this.refs.modal3.open();
+    }
     //
     render(){
         const {navReducer}=this.props;
@@ -189,7 +204,8 @@ class GioHang extends Component{
                             data={cartReducer.cartItems}
                             renderItem={({item}) =>
                                 <TouchableOpacity onPress={()=>{
-                                    this._goCTSP(item);
+                                    //this._goCTSP(item);
+                                    this.showEditSLSP(item);
                                 }}>
                                     <View key={item.ID} style={styles2.containerStyle}>
                                         <Image 
@@ -201,36 +217,23 @@ class GioHang extends Component{
                                                 <Text style={{ color: '#2e2f30' }}>{item.TenSanPham}</Text>
                                                 <View style={styles2.priceStyle}>
                                                 <Text style={{ color: '#2e2f30', fontSize: 12 }}>{vUtils.formatVND(item.Gia)}</Text>
+                                                {
+                                                    item.SLSP>1?
+                                                    <Text style={{ color:VCOLOR.blue, fontSize: 12 }}>{vUtils.formatVND(item.Gia*item.SLSP)}</Text>
+                                                    :null
+                                                }
+                                               
                                                 </View>
                                             </View>
 
                                             <View style={styles2.counterStyle}>
-                                                <Icon.Button 
-                                                name="ios-remove" 
-                                                size={25} 
-                                                color='#fff' 
-                                                backgroundColor='#fff' 
-                                                style={{ borderRadius: 15, backgroundColor: '#bbb', height: 30, width: 30 }} 
-                                                iconStyle={{ marginRight: 0 }}
-                                                onPress={()=>{
-                                                        dispatch(cartCRUD("-",item,1));
-                                                    }}
-                                                />
-
-                                                <Text>{item.SLSP}</Text>
-
-                                                <Icon.Button 
-                                                name="ios-add" 
-                                                size={25} 
-                                                color='#fff' 
-                                                backgroundColor='#fff' 
-                                                style={{ borderRadius: 15, backgroundColor: '#bbb', height: 30, width: 30 }} 
-                                                iconStyle={{ marginRight: 0 }}
-                                                onPress={()=>{
-                                                        dispatch(cartCRUD("+",item,1));
-                                                }}
-                                                />
-
+                                                <TouchableOpacity onPress={()=>{
+                                                    this.showEditSLSP(item);
+                                                }}>
+                                                        <Badge containerStyle={{ backgroundColor: 'violet'}}>
+                                                            <Text>{item.SLSP}</Text>
+                                                        </Badge>
+                                                </TouchableOpacity>
                                             </View>
                                     </View>
                                 </TouchableOpacity>
@@ -245,29 +248,149 @@ class GioHang extends Component{
                             contentContainerStyle={{paddingBottom:150}}
                         />
                  </View>
-
-                 {/* <View>
-                       <Text>Tổng tiền: {tong_tien_gio_hang}</Text>
-                 </View> */}
+                            
+               
                  <View style={styles.footer}>
+                                        <View>
+                                            <Text>Tổng tiền: {vUtils.formatVND(tong_tien_gio_hang)}</Text>
+                                        </View>
                                         <Button
-                                            disabled={slsp==0||isLoggedIn==false}
                                             backgroundColor="red"
                                             color="white"
                                             icon={{name: 'opencart', type: 'font-awesome'}}
-                                            title={'THANH TOÁN: '+(slsp>0&&isLoggedIn?vUtils.formatVND(tong_tien_gio_hang):" [Đăng nhập]")}
+                                            title={'THANH TOÁN'}
                                             onPress={()=>{
-                                              
-                                                this.goThanhToan();
-                                               
+                                                if(isLoggedIn){
+                                                    this.goThanhToan();
+                                                }else{
+                                                    Toast.show("Vui lòng đăng nhập!");
+                                                }
+                                                
                                             }}
-                                            />
+                                        />
 
                   </View>
-               
+         
+                 <Modal style={[styles.modal, styles.modal3]} position={"center"} ref={"modal3"} isDisabled={this.state.isDisabled}>
+                        {
+                            this.state.itemEdit!=null?
+                            <View style={{flex:1,alignContent:"center",alignItems:"center"}}>
+                                <Text>{this.state.itemEdit.TenSanPham}</Text>
+                              
+
+                                    <View style={styles2.counterStyle}>
+                                            <Icon.Button 
+                                            name="ios-remove" 
+                                            size={30} 
+                                            color='#fff' 
+                                            backgroundColor='#fff' 
+                                            style={{ borderRadius: 15, backgroundColor: '#bbb', height: 30, width: 30 }} 
+                                            iconStyle={{ marginRight: 0 }}
+                                            onPress={()=>{
+                                                if(this.state.slspEdit==""){
+                                                    this.setState({
+                                                        slspEdit:0,
+                                                    });
+                                                }
+                                                if(this.state.slspEdit-1>0){
+                                                   
+
+                                                    this.setState({
+                                                        slspEdit:this.state.slspEdit-1,
+                                                     });
+                                                }
+                                            }}
+                                            />
+                                            
+
+                                              <TextInput 
+                                                style={styles.vInput}
+                                                keyboardType='numeric'
+                                                onChangeText={(text)=>this.onChanged(text)}
+                                                placeholder='Nhập số lượng'   
+                                                value={isNaN(this.state.slspEdit)?"":this.state.slspEdit+""}
+                                                maxLength={10}  //setting limit of input
+                                                />
+
+
+                                            
+                                            <Icon.Button 
+                                                name="ios-add" 
+                                                size={30} 
+                                                color='#fff' 
+                                                backgroundColor='#fff' 
+                                                style={{ borderRadius: 15, backgroundColor: '#bbb', height: 30, width: 30 }} 
+                                                iconStyle={{ marginRight: 0 }}
+                                                onPress={()=>{
+                                                    if(this.state.slspEdit==""){
+                                                        this.setState({
+                                                            slspEdit:0,
+                                                        });
+                                                    }
+                                                    if(this.state.slspEdit+1<1000000){
+                                                        this.setState({
+                                                            slspEdit:this.state.slspEdit+1,
+                                                         });
+                                                    }
+                                                }}
+                                                />
+                                        </View>
+
+
+
+ <View style={{flexDirection:"row",justifyContent:"space-between"}}>
+                    <Ionicons.Button name="md-arrow-round-back" backgroundColor={VCOLOR.xam} borderRadius={0} onPress={()=>{
+                            this.refs.modal3.close();
+                    }}>
+                        <Text style={{fontFamily: 'Arial', fontSize: 15}}>Trở về</Text>
+                    </Ionicons.Button>
+
+                    <MaterialIcons.Button name="delete-forever" backgroundColor={VCOLOR.red} borderRadius={0} onPress={()=>{
+                            dispatch(cartCRUD("x",this.state.itemEdit,1));
+                            this.refs.modal3.close();
+                    }}>
+                        <Text style={{fontFamily: 'Arial', fontSize: 15}}>Xoá</Text>
+                    </MaterialIcons.Button>
+
+                    
+                    <FontAwesome.Button name="check" backgroundColor={VCOLOR.green} borderRadius={0}  onPress={() => {
+                        if(this.state.slspEdit!=NaN){
+                            dispatch(cartCRUD("=",this.state.itemEdit,this.state.slspEdit));
+                        }
+                        this.refs.modal3.close();
+                    }}>
+                        <Text style={{fontFamily: 'Arial', fontSize: 15}}>Cập nhật</Text>
+                    </FontAwesome.Button>
+                  
+ </View>
+                                
+
+                            </View>
+                            :null
+                        }
+                  </Modal>
+             
+
+                    
             </View>
         );
     };
+
+    onChanged(text){
+        let newText = '';
+        let numbers = '0123456789';
+    
+        for (var i=0; i < text.length; i++) {
+            if(numbers.indexOf(text[i]) > -1 ) {
+                newText = newText + text[i];
+            }
+        }
+        if(!isNaN(newText)&&parseInt(newText)>0){
+            this.setState({ slspEdit: parseInt(newText) });
+        }else{
+            this.setState({ slspEdit:"" });
+        }
+    }
 }
 
 const mapStateToProps = state => ({
@@ -282,6 +405,14 @@ const styles=StyleSheet.create({
     container:{
         flex:1,
         position:"relative",
+    },
+    vInput:{
+        height: 40,
+        paddingLeft: 10,
+        flex: 1,
+        fontSize: 16,
+        borderBottomWidth:1,
+        borderBottomColor: "gray",
     },
     productItem:{
         borderWidth:1,
@@ -300,7 +431,50 @@ const styles=StyleSheet.create({
         bottom:0,
         right:0,
         left:0,
-    }
+        backgroundColor:VCOLOR.green,
+        alignContent:"center",
+        alignItems: "center",
+    },
+
+    modal: {
+        justifyContent: 'center',
+        alignItems: 'center'
+      },
+    
+      modal2: {
+        height: 230,
+        backgroundColor: "#3B5998"
+      },
+    
+      modal3: {
+        height: 300,
+        width: 300
+      },
+    
+      modal4: {
+        height: 300
+      },
+    
+      btn: {
+        margin: 10,
+        backgroundColor: "#3B5998",
+      
+        padding: 10
+      },
+    
+      btnModal: {
+        position: "absolute",
+        top: 0,
+        right: 0,
+        width: 50,
+        height: 50,
+        backgroundColor: "transparent"
+      },
+    
+      text: {
+       
+        fontSize: 22
+      }
 });
 
 
@@ -344,4 +518,53 @@ const styles2 = StyleSheet.create({
       justifyContent: 'space-around',
       alignItems: 'center'
     }
+  });
+
+
+  const styleModals = StyleSheet.create({
+    wrapper: {
+      paddingTop: 50,
+      flex: 1
+    },
+  
+    modal: {
+      justifyContent: 'center',
+      alignItems: 'center'
+    },
+  
+    modal2: {
+      height: 230,
+      backgroundColor: "#3B5998"
+    },
+  
+    modal3: {
+      height: 300,
+      width: 300
+    },
+  
+    modal4: {
+      height: 300
+    },
+  
+    btn: {
+      margin: 10,
+      backgroundColor: "#3B5998",
+      color: "white",
+      padding: 10
+    },
+  
+    btnModal: {
+      position: "absolute",
+      top: 0,
+      right: 0,
+      width: 50,
+      height: 50,
+      backgroundColor: "transparent"
+    },
+  
+    text: {
+      color: "black",
+      fontSize: 22
+    }
+  
   });

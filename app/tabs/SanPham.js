@@ -12,7 +12,7 @@ import Image from 'react-native-image-progress';
 import ProgressBar from 'react-native-progress/CircleSnail';
 import { HeadPadding,formatVND,vStyles } from '../common/vUtils';
 import CornerLabel from './../components/CornerLabel';
-
+import Header from './../common/components/Header';
 
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
@@ -145,7 +145,23 @@ class SanPham extends Component{
             <View style={styles.container}>
            
             <View style={styles.container}>
-                <HeadPadding/>
+                
+
+                  <Header
+                    showBack={true}
+                    // leftIcon='angle-left'
+                    // leftIconAction={()=>this.goBack()}
+
+                    // rightIcon='address-book'
+                    // rightIconAction={()=>this.goBack()}
+
+                    // rightIcon2='heart'
+                    // rightIconAction2={()=>this.goBack()}
+
+                    title={sanPhamReducer.danhmuc!=null?sanPhamReducer.danhmuc.TenDanhMuc:"-Tất cả danh mục sản phẩm-"}
+                />
+
+                
                 <View>
                         <View>
                             <SearchBar
@@ -169,14 +185,7 @@ class SanPham extends Component{
                                             
                                             placeholder='Tìm kiếm...' />
                         </View>
-                        <View>
-                                 <FontAwesome.Button  name="th-list" style={{alignContent:"center",justifyContent:"center",alignItems:"center"}} alignItems="center" backgroundColor="#3b5998" borderRadius={0} onPress={()=>{
-                                        this.onPressSelectDM();
-                                    }}>
-                                       {sanPhamReducer.danhmuc!=null?sanPhamReducer.danhmuc.TenDanhMuc:"-Tất cả danh mục sản phẩm-"}
-                                 </FontAwesome.Button>
-                              {this._renderBtnTimKiem()}
-                        </View>
+                    
                  </View>
                  <View style={{flex:1}}>
                         {

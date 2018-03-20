@@ -95,7 +95,28 @@ export let cartCRUD = (type,product,quantity)=> { //loai, san pham, soluong
                         }
                     });
                 break;
-            case "x": //xoa
+            case "=": //=
+                AsyncStorage.getItem('cart')
+                .then(function (value) {
+                        if(value!=null){
+                            var current_cart = JSON.parse(value);
+                            //if exists
+                            for(var i=0;i<current_cart.length;i++){
+                                if(current_cart[i].ID==product.ID){
+                                    current_cart[i].SLSP=quantity;
+                                    break;
+                                }
+                            }
+                            //update save
+                            AsyncStorage.setItem('cart', JSON.stringify(current_cart));
+                            dispatch({type:types.CART_SET_SOLUONG,newCartItems:current_cart},()=>{
+                               // Toast.show("Đã 1 sản phẩm trong giỏ hàng", {position:Toast.positions.TOP});
+                            });
+                        }
+                    });
+                break;
+
+                case "x": //xoa
                 AsyncStorage.getItem('cart')
                 .then(function (value) {
                         if(value!=null){

@@ -36,6 +36,8 @@ export const CART_ADD = "CART_ADD";
 export const CART_CLEAR="CART_CLEAR";
 export const CART_REMOVE_ITEM="CART_REMOVE_ITEM";
 
+export const CART_SET_SOLUONG="CART_SET_SOLUONG";
+
 
 //AUTH
 export const AUTH_LOGIN_FETCH = "AUTH_LOGIN_FETCH";

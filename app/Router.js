@@ -187,8 +187,19 @@ export const MainScreenNavigator = TabNavigator({
             tabBarIcon:  <FontAwesome color="black" size={28} name="home"/>,
         }
     }), //end home stack
-    SanPhamTab:StackNavigator({
+    NganhHang:StackNavigator({
         SanPham:{
+            screen:NganhHang,
+            navigationOptions: {
+                showLabel:true,
+                showIcon:true,
+                tabBarLabel:'Sản phẩm',
+                
+                header:null,
+                tabBarIcon:<MaterialIcons color="black" size={28} name="view-comfy"/>,
+            },
+        },
+        SanPham_Screen:{
             screen:SanPham,
             navigationOptions: {
                 showLabel:true,
@@ -201,7 +212,11 @@ export const MainScreenNavigator = TabNavigator({
         },
         SanPham_NganhHang_Screen:{
             screen:NganhHang,
-            navigationOptions:opt_hide_tabbar
+            navigationOptions:{
+                header:null,
+                tabBarLabel:'Sản phẩm',
+                tabBarIcon:<MaterialIcons color="black" size={28} name="view-comfy"/>,
+            }
         },
         SanPham_ChitietSanPham_Wrap:StackNavigator({
             SanPham_ChitietSanPham_Screen:{
@@ -236,7 +251,6 @@ export const MainScreenNavigator = TabNavigator({
                 },
                 tabBarLabel:'Sản phẩm',
                 tabBarIcon:<MaterialIcons color="black" size={28} name="view-comfy"/>,
-               
             }
         }),
     }), //end san pham stack
@@ -333,9 +347,10 @@ export const MainScreenNavigator = TabNavigator({
         style:{
             backgroundColor:"white",
         },
-        activeTintColor: '#222',
-        activeBackgroundColor :'yellow',  //Doesn't work
-        inactiveTintColor:"blue",
+        
+        activeTintColor: 'red',
+       // activeBackgroundColor :'yellow',  //Doesn't work
+        inactiveTintColor:"gray",
         showIcon:true,
         showLabel:true,
         tabStyle: {
@@ -346,7 +361,7 @@ export const MainScreenNavigator = TabNavigator({
            
         },
         labelStyle:{
-            fontSize:12
+            fontSize:11
         },
       
 

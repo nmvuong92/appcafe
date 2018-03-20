@@ -45,8 +45,8 @@ class NganhHang extends Component{
           selectedCat2ID:-1,
           appIsReady: false,
           dataDMSP:[],
-          page:params.page,
-          pageSize:params.pageSize,
+          page:1,
+          pageSize:20,
         };
 
 
@@ -67,14 +67,16 @@ class NganhHang extends Component{
 
     onPressAllItem = ()=>{
         const {navReducer,dispatch,sanPhamReducer}  = this.props;
-        dispatch({type:"goBack",dataBack:"123"});
+        //dispatch({type:"goBack",dataBack:"123"});
+        dispatch({type:"SanPham_Screen"});
         //lay dssp
         dispatch(fetchSanPham(null,sanPhamReducer.tukhoa,1,this.state.pageSize));
     }
 
     onPressItem = (item)=>{
         const {navReducer,dispatch,sanPhamReducer}  = this.props;
-        dispatch({type:"goBack",dataBack:"123"});
+       // dispatch({type:"goBack",dataBack:"123"});
+        dispatch({type:"SanPham_Screen"});
         //lay dssp
         dispatch(fetchSanPham(item,sanPhamReducer.tukhoa,1,this.state.pageSize));
     }

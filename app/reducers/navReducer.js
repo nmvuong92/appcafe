@@ -33,18 +33,7 @@ let navReducer  = (state,action)=>{
         break;
         NavigationActions
 
-     case 'DonHangTab':
-        nextState = MainScreenNavigator.router.getStateForAction(
-          NavigationActions.reset({
-             index:0,
-             actions:[NavigationActions.navigate({routeName:"DonHangTab"})]
-             routeName: 'DonHangTab'
-             }),
-          state
-        );
-      break;
-      NavigationActions
-
+    
 
       case 'goBack':
           nextState = MainScreenNavigator.router.getStateForAction(
@@ -218,6 +207,21 @@ let navReducer  = (state,action)=>{
 
 
       //-------san pham----------
+      case 'SanPham_Screen':
+      nextState = MainScreenNavigator.router.getStateForAction(
+        NavigationActions.navigate({ 
+          routeName: 'SanPham_Screen',
+          params:{
+            
+          }
+         }),
+        state
+      );
+      break;
+
+
+
+
       case 'SanPham_NganhHang_Screen':
           nextState = MainScreenNavigator.router.getStateForAction(
             NavigationActions.navigate({ 

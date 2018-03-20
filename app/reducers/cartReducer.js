@@ -40,6 +40,11 @@ export default  cartReducer  = (state=initialState,action)=>{
                 ...state,
                 ...{cartItems:action.newCartItems}
             };
+       case types.CART_SET_SOLUONG:
+            return {
+                ...state,
+                ...{cartItems:action.newCartItems}
+            };    
        default:
             return state;
     }
