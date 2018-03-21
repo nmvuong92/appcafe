@@ -333,7 +333,7 @@ export const MainScreenNavigator = TabNavigator({
    
     initialRouteName: 'HomeTab',
     tabBarPosition:'bottom',
-    swipeEnabled:true,
+    //swipeEnabled:true,
     showIcon:true,
     showLabel:true,
     tabBarOptions:{

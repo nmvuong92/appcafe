@@ -12,6 +12,8 @@ import LoadingActivityIndicator from './../common/components/LoadingActivityIndi
 import Modal from 'react-native-modalbox';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { VCOLOR } from '../common/constants';
 class DonHang extends Component{
     constructor(props){
         super(props); 
@@ -180,7 +182,7 @@ class DonHang extends Component{
                         title={"Danh sách đơn đặt hàng"}
                     />
             
-                <View style={styles.item}>
+                <View style={styles.header}>
                     <View style={styles.cot1}>
                         <Text>Đơn hàng</Text>
                     </View>
@@ -207,13 +209,12 @@ class DonHang extends Component{
                                 <TouchableOpacity key={item.Id} onPress={()=>{
                                     this.onPressProductItem(item);
                                 }} style={styles.productItem}>
-                                    <View style={styles.item} >
+                                    <View style={item.Id%2==0?styles.item:styles.item2} >
                                         <View style={styles.cot1}>
-                                            <Text>Mã đơn hàng: {item.MaDonHang}</Text>
-                                            <Text>Họ tên: {item.HoTen+" "+item.Id}</Text>
-                                            <Text>Ngày đặt: {item.NgayDatHang}</Text>
-                                            <Text>Giá trị: {formatVND(item.TongTienHang)}</Text>
-                                            <Text>Số lượng sản phẩm: {item.CTDonHangs.length}</Text>
+                                            <Text style={{fontWeight:"bold"}}>{item.MaDonHang}</Text>
+                                            <Text>{item.NgayDatHang}</Text>
+                                            <Text>{formatVND(item.TongTienHang)}</Text>
+                                            <Text>{item.CTDonHangs.length} sản phẩm</Text>
                                         </View>
                                         <View style={styles.cot2}>
                                             <Text>{item.TrangThaiGiaoHang.Ten}</Text>
@@ -221,6 +222,11 @@ class DonHang extends Component{
                                         </View>
                                         <View style={styles.cot3}>
                                             <Text>{formatVND(item.DiemTichLuy,item.TrangThaiThanhToan.Ten)}</Text>
+                                            {
+                                                item.TrangThaiThanhToan.Id==2?
+                                                <FontAwesome color={VCOLOR.green} size={28} name="check"/>
+                                                :null
+                                            }
                                         </View>
                                     </View>
                                 </TouchableOpacity>
@@ -329,23 +335,37 @@ const styles = StyleSheet.create({
     },
     item:{
         width:'100%',
-        borderWidth:1,
-        borderColor:"red",
+        borderWidth:0.5,
+        borderColor:"#ffffff",
         flexDirection:"row",
     },
+    item2:{
+        width:'100%',
+        borderWidth:0.5,
+        borderColor:"#ffffff",
+        flexDirection:"row",
+        backgroundColor:"#e5e5e5"
+    },
+    header:{
+        width:'100%',
+        borderWidth:0.5,
+        borderColor:"#ffffff",
+        flexDirection:"row",
+        backgroundColor:"#00c6e5",
+    },
     cot1:{
-        borderWidth:1,
-        borderColor:"gray",
+        borderWidth:0.5,
+        borderColor:"#ffffff",
         width:'40%'
     },
     cot2:{
-        borderWidth:1,
-        borderColor:"gray",
+        borderWidth:0.5,
+        borderColor:"#ffffff",
         width:'30%'
     },
     cot3:{
         borderWidth:1,
-        borderColor:"gray",
+        borderColor:"#ffffff",
         width:'30%'
     },
     footerStyle:

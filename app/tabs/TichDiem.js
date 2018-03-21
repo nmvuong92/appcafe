@@ -5,11 +5,13 @@ import {NavigationActions} from 'react-navigation';
 import Header from './../common/components/Header';
 import {fetchDanhSachDonHangTichDiem} from './../actions/donHangAction';
 import commonStyles,{colors} from './../common/commonStyles';
-import { HeadPadding,formatVND,vStyles } from '../common/vUtils';
+import { HeadPadding,formatVND,vStyles} from '../common/vUtils';
 import Loading from './../common/components/Loading';
 import Modal from 'react-native-modalbox';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import {VCOLOR} from './../common/constants';
 class TichDiem extends Component{
     constructor(props){
         super(props); 
@@ -174,17 +176,17 @@ class TichDiem extends Component{
                         </View>
                         :
                     <View>
-                            <View style={styles.item}>
-                                    <View style={styles.cot1}>
-                                        <Text>Đơn hàng</Text>
-                                    </View>
-                                    <View style={styles.cot2}>
-                                        <Text>Trạng thái</Text>
-                                    </View>
-                                    <View style={styles.cot3}>
-                                        <Text>Điểm tích lũy</Text>
-                                    </View>    
+                            <View style={styles.header}>
+                                <View style={styles.cot1}>
+                                    <Text>Đơn hàng</Text>
                                 </View>
+                                <View style={styles.cot2}>
+                                    <Text>Trạng thái</Text>
+                                </View>
+                                <View style={styles.cot3}>
+                                    <Text>Điểm tích lũy</Text>
+                                </View>    
+                            </View>
                             {
                                 ListTichDiem!=undefined&&PagingTichDiem!=undefined&&ListTichDiem.length==0?
                                 <View style={{flex:1,alignContent:"center",alignItems:"center",alignSelf:"center"}}>
@@ -200,13 +202,12 @@ class TichDiem extends Component{
                                                 <TouchableOpacity key={item.Id} onPress={()=>{
                                                     this.onPressProductItem(item);
                                                 }} style={styles.productItem}>
-                                                    <View style={styles.item} >
+                                                     <View style={item.Id%2==0?styles.item:styles.item2} >
                                                         <View style={styles.cot1}>
-                                                            <Text>Mã đơn hàng: {item.MaDonHang}</Text>
-                                                            <Text>Họ tên: {item.HoTen+" "+item.Id}</Text>
-                                                            <Text>Ngày đặt: {item.NgayDatHang}</Text>
-                                                            <Text>Giá trị: {formatVND(item.TongTienHang)}</Text>
-                                                            <Text>Số lượng sản phẩm: {item.CTDonHangs.length}</Text>
+                                                            <Text style={{fontWeight:"bold"}}>{item.MaDonHang}</Text>
+                                                            <Text>{item.NgayDatHang}</Text>
+                                                            <Text>{formatVND(item.TongTienHang)}</Text>
+                                                            <Text>{item.CTDonHangs.length} sản phẩm</Text>
                                                         </View>
                                                         <View style={styles.cot2}>
                                                             <Text>{item.TrangThaiGiaoHang.Ten}</Text>
@@ -214,6 +215,7 @@ class TichDiem extends Component{
                                                         </View>
                                                         <View style={styles.cot3}>
                                                             <Text>{formatVND(item.DiemTichLuy,item.TrangThaiThanhToan.Ten)}</Text>
+                                                            <FontAwesome color={VCOLOR.green} size={28} name="check"/>
                                                         </View>
                                                     </View>
                                                 </TouchableOpacity>
@@ -225,6 +227,16 @@ class TichDiem extends Component{
                                             //onEndReachedThreshold={0.5}
                                             onMomentumScrollBegin={() => { this.onEndReachedCalledDuringMomentum = false; }}
                                             contentContainerStyle={{paddingBottom:150}}
+                                            ListFooterComponent={()=>{
+                                                return(
+                                                    <View style={styles.footer}>
+                                                        <View style={{flex:1,alignItems:"center"}}>
+                                                            <Text>Tổng điểm tích luỹ:</Text>
+                                                            <Text style={{fontSize:20,fontWeight:"bold",color:VCOLOR.do_dam}}>{formatVND(user.DiemTichLuy)}</Text>
+                                                        </View>
+                                                    </View>
+                                                )
+                                            }}
                                         
                                         />
                 
@@ -297,7 +309,7 @@ class TichDiem extends Component{
                     }
             
                
-
+                    
             </View>
         );
     };
@@ -319,23 +331,37 @@ const styles = StyleSheet.create({
     },
     item:{
         width:'100%',
-        borderWidth:1,
-        borderColor:"red",
+        borderWidth:0.5,
+        borderColor:"#ffffff",
         flexDirection:"row",
     },
+    item2:{
+        width:'100%',
+        borderWidth:0.5,
+        borderColor:"#ffffff",
+        flexDirection:"row",
+        backgroundColor:"#e5e5e5"
+    },
+    header:{
+        width:'100%',
+        borderWidth:0.5,
+        borderColor:"#ffffff",
+        flexDirection:"row",
+        backgroundColor:"#00c6e5",
+    },
     cot1:{
-        borderWidth:1,
-        borderColor:"gray",
+        borderWidth:0.5,
+        borderColor:"#ffffff",
         width:'40%'
     },
     cot2:{
-        borderWidth:1,
-        borderColor:"gray",
+        borderWidth:0.5,
+        borderColor:"#ffffff",
         width:'30%'
     },
     cot3:{
         borderWidth:1,
-        borderColor:"gray",
+        borderColor:"#ffffff",
         width:'30%'
     },
     footerStyle:

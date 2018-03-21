@@ -251,12 +251,20 @@ class GioHang extends Component{
                             
                
                  <View style={styles.footer}>
-                        <View style={{flex:1}}>
+                        <View style={{flex:1,alignItems:"center"}}>
                             <Text>Tổng tiền:</Text>
                             <Text style={{fontSize:20,fontWeight:"bold",color:VCOLOR.do_dam}}>{vUtils.formatVND(tong_tien_gio_hang)}</Text>
                         </View>
-                        <View style={{flex:1,alignItems:"flex-end"}}>
+                        <View style={{flex:1,width:"100%",padding:0}}>
                             <Button
+                                 buttonStyle={{
+                                    backgroundColor: VCOLOR.do_dam,
+                                    width: "100%",
+                                    borderColor: "transparent",
+                                    borderWidth: 0,
+                                    borderRadius: 10
+                                  }}
+                                
                                 backgroundColor="red"
                                 color="white"
                                 icon={{name: 'opencart', type: 'font-awesome'}}
@@ -267,7 +275,6 @@ class GioHang extends Component{
                                     }else{
                                         Toast.show("Vui lòng đăng nhập!", {position:Toast.positions.CENTER});
                                     }
-                                    
                                 }}
                             />
                         </View>
@@ -278,91 +285,74 @@ class GioHang extends Component{
                             this.state.itemEdit!=null?
                             <View style={{flex:1,alignContent:"center",alignItems:"center"}}>
                                 <Text>{this.state.itemEdit.TenSanPham}</Text>
-                              
+                                <View style={styles2.counterStyle}>
+                                        <Icon.Button 
+                                        name="ios-remove" 
+                                        size={30} 
+                                        color='#fff' 
+                                        backgroundColor='#fff' 
+                                        style={{ borderRadius: 15, backgroundColor: '#bbb', height: 30, width: 30 }} 
+                                        iconStyle={{ marginRight: 0 }}
+                                        onPress={()=>{
+                                            if(this.state.slspEdit==""){
+                                                this.setState({
+                                                    slspEdit:0,
+                                                });
+                                            }
+                                            if(this.state.slspEdit-1>0){
+                                                
 
-                                    <View style={styles2.counterStyle}>
-                                            <Icon.Button 
-                                            name="ios-remove" 
-                                            size={30} 
-                                            color='#fff' 
-                                            backgroundColor='#fff' 
-                                            style={{ borderRadius: 15, backgroundColor: '#bbb', height: 30, width: 30 }} 
-                                            iconStyle={{ marginRight: 0 }}
-                                            onPress={()=>{
-                                                if(this.state.slspEdit==""){
-                                                    this.setState({
-                                                        slspEdit:0,
+                                                this.setState({
+                                                    slspEdit:this.state.slspEdit-1,
                                                     });
+                                            }
+                                        }}
+                                        />
+                                        <TextInput 
+                                        style={styles.vInput}
+                                        keyboardType='numeric'
+                                        onChangeText={(text)=>this.onChanged(text)}
+                                        placeholder='Nhập số lượng'   
+                                        value={isNaN(this.state.slspEdit)?"":this.state.slspEdit+""}
+                                        maxLength={10}  //setting limit of input
+                                        />
+                                        <Icon.Button 
+                                        name="ios-add" 
+                                        size={30} 
+                                        color='#fff' 
+                                        backgroundColor='#fff' 
+                                        style={{ borderRadius: 15, backgroundColor: '#bbb', height: 30, width: 30 }} 
+                                        iconStyle={{ marginRight: 0 }}
+                                        onPress={()=>{
+                                            if(this.state.slspEdit==""){
+                                                this.setState({
+                                                    slspEdit:0,
+                                                });
+                                            }
+                                            if(this.state.slspEdit+1<1000000){
+                                                this.setState({
+                                                    slspEdit:this.state.slspEdit+1,
+                                                    });
+                                            }
+                                        }}/>
+                                    </View>
+                                    <View style={{flexDirection:"row",justifyContent:"space-between"}}>
+                                            <Ionicons.Button name="md-arrow-round-back" backgroundColor={VCOLOR.xam} borderRadius={0} onPress={()=>{
+                                                    this.refs.modal3.close();
+                                            }}/>
+                                            <MaterialIcons.Button name="delete-forever" backgroundColor={VCOLOR.red} borderRadius={0} onPress={()=>{
+                                                    dispatch(cartCRUD("x",this.state.itemEdit,1));
+                                                    this.refs.modal3.close();
+                                            }}/>
+                                            <FontAwesome.Button name="check" backgroundColor={VCOLOR.green} borderRadius={0}  onPress={() => {
+                                                if(this.state.slspEdit!=NaN){
+                                                    dispatch(cartCRUD("=",this.state.itemEdit,this.state.slspEdit));
                                                 }
-                                                if(this.state.slspEdit-1>0){
-                                                   
-
-                                                    this.setState({
-                                                        slspEdit:this.state.slspEdit-1,
-                                                     });
-                                                }
-                                            }}
-                                            />
-                                            
-
-                                              <TextInput 
-                                                style={styles.vInput}
-                                                keyboardType='numeric'
-                                                onChangeText={(text)=>this.onChanged(text)}
-                                                placeholder='Nhập số lượng'   
-                                                value={isNaN(this.state.slspEdit)?"":this.state.slspEdit+""}
-                                                maxLength={10}  //setting limit of input
-                                                />
-
-
-                                            
-                                            <Icon.Button 
-                                                name="ios-add" 
-                                                size={30} 
-                                                color='#fff' 
-                                                backgroundColor='#fff' 
-                                                style={{ borderRadius: 15, backgroundColor: '#bbb', height: 30, width: 30 }} 
-                                                iconStyle={{ marginRight: 0 }}
-                                                onPress={()=>{
-                                                    if(this.state.slspEdit==""){
-                                                        this.setState({
-                                                            slspEdit:0,
-                                                        });
-                                                    }
-                                                    if(this.state.slspEdit+1<1000000){
-                                                        this.setState({
-                                                            slspEdit:this.state.slspEdit+1,
-                                                         });
-                                                    }
-                                                }}
-                                                />
-                                        </View>
-
-
-
- <View style={{flexDirection:"row",justifyContent:"space-between"}}>
-                    <Ionicons.Button name="md-arrow-round-back" backgroundColor={VCOLOR.xam} borderRadius={0} onPress={()=>{
-                            this.refs.modal3.close();
-                    }}/>
-
-                    <MaterialIcons.Button name="delete-forever" backgroundColor={VCOLOR.red} borderRadius={0} onPress={()=>{
-                            dispatch(cartCRUD("x",this.state.itemEdit,1));
-                            this.refs.modal3.close();
-                    }}/>
-
-                    
-                    <FontAwesome.Button name="check" backgroundColor={VCOLOR.green} borderRadius={0}  onPress={() => {
-                        if(this.state.slspEdit!=NaN){
-                            dispatch(cartCRUD("=",this.state.itemEdit,this.state.slspEdit));
-                        }
-                        this.refs.modal3.close();
-                    }}>
-                        <Text style={{fontFamily: 'Arial', fontSize: 15}}>Cập nhật</Text>
-                    </FontAwesome.Button>
-                  
- </View>
-                                
-
+                                                this.refs.modal3.close();
+                                            }}>
+                                                <Text style={{fontFamily: 'Arial', fontSize: 15}}>Cập nhật</Text>
+                                            </FontAwesome.Button>
+                                    </View>
                             </View>
                             :null
                         }
@@ -427,13 +417,14 @@ const styles=StyleSheet.create({
     footer:{
         flexDirection:"row",
         position:'absolute',
-        bottom:0,
-        right:0,
+        bottom:3,
         left:0,
+        width:"100%",
         backgroundColor:VCOLOR.xam,
         alignContent:"center",
         alignItems: "center",
-        justifyContent:"space-between"
+        justifyContent:"center",
+        paddingTop:3,
     },
 
     modal: {

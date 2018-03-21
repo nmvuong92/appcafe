@@ -3,7 +3,7 @@ import Util from './../common/utils';
 import * as urls from  './../common/constants_url';
 import {setUser,getUser} from './../common/Storage';
 import Toast from 'react-native-root-toast';
-
+import {fetchDanhSachDonHang} from './donHangAction';
 export let postLogin = (CMND,MatKhau,fnSucc,fnErrr)=> {
     if(__DEV__){
             console.log("-----------------login----------------");
@@ -25,6 +25,9 @@ export let postLogin = (CMND,MatKhau,fnSucc,fnErrr)=> {
                     Toast.show(response.m, {position:Toast.positions.CENTER});
                     setUser(user);
                     dispatch(receiveLogin(user));
+
+                    dispatch(fetchDanhSachDonHang(user,1,10));
+                    
                 }else{
                     fnErrr(response);
                     Toast.show(response.m, {position:Toast.positions.CENTER});

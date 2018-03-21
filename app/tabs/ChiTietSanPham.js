@@ -28,7 +28,7 @@ const imageHeight = Math.round(window.width * 9 / 16);
 const imageWidth = window.width;
 
 import CartBadgeIcon from './../common/components/cartBadgeIcon';
-
+import {VCOLOR} from './../common/constants';
 
 class ChiTietSanPham extends Component{
     
@@ -48,8 +48,7 @@ class ChiTietSanPham extends Component{
             product_detail_id:params.id,
         };
      
-        const {dispatch}  = this.props;
-        dispatch(fetchSanPhamCT(product_detail_id));
+     
 
     }
 
@@ -69,6 +68,8 @@ class ChiTietSanPham extends Component{
     }
       
     componentWillMount = () => {
+        const {dispatch}  = this.props;
+        dispatch(fetchSanPhamCT(this.state.product_detail_id));
         //console.log(this.props.navigation);
     };
 
@@ -125,7 +126,7 @@ class ChiTietSanPham extends Component{
                 </Card>
 
 
-             
+
                 <Card title="Giá bán">
                     <View style={styles.center}>
                             <Text style={vUtils.vStyles.price}>{vUtils.formatVND(sanpham.Gia)}</Text>
@@ -148,7 +149,7 @@ class ChiTietSanPham extends Component{
                             <Text style={styles.name}>{sanpham.TenDanhMuc}</Text>
                     </View>
                 </Card>
-                <Card title="Mô tả">
+                <Card title="Mô tả" containerStyle={{margin:0,padding:0}}>
 
                     <WebView style={{height:200,}}
                         source={{html: "<!DOCTYPE html><head><meta charset='UTF-8'></head><body>"+sanpham.MoTa+"</body></html>",baseUrl:''}}
@@ -163,20 +164,28 @@ class ChiTietSanPham extends Component{
 
              
                 <View style={styles.footer}>
-                    <Button
-                        large
-                        backgroundColor="red"
-                        color="white"
-                        icon={{name: 'cart-plus', type: 'font-awesome'}}
-                        title='THÊM VÀO GIỎ HÀNG'
-                        onPress={()=>{
-                            dispatch(setNotificationCounter("+",1));
-                            dispatch(cartCRUD("+",sanpham,1));
-                           
-                            
-                            Toast.show("Đã thêm sản phẩm vào giỏ hàng", {position:Toast.positions.TOP});
-                        }}
-                        />
+
+                            <Button
+                                 buttonStyle={{
+                                    backgroundColor: VCOLOR.do_dam,
+                                    width: "100%",
+                                    borderColor: "transparent",
+                                    borderWidth: 0,
+                                    borderRadius: 10
+                                  }}
+                                
+                                backgroundColor="red"
+                                color="white"
+                                icon={{name: 'cart-plus', type: 'font-awesome'}}
+                                title='THÊM VÀO GIỎ HÀNG'
+                                onPress={()=>{
+                                    //dispatch(setNotificationCounter("+",1));
+                                    dispatch(cartCRUD("+",sanpham,1));
+                                    Toast.show("Đã thêm sản phẩm vào giỏ hàng", {position:Toast.positions.TOP});
+                                }}
+                            />
+
+                   
                 </View>
                
             </View>
@@ -196,6 +205,7 @@ const styles = StyleSheet.create({
     container:{
         flex: 1,
         position: 'relative',
+        paddingBottom: 30,
        
     },
     center:{
@@ -203,7 +213,18 @@ const styles = StyleSheet.create({
         alignItems:"center",
     },
    
-  
+    footer:{
+        flexDirection:"row",
+        position:'absolute',
+        bottom:3,
+        left:0,
+        width:"100%",
+     
+        alignContent:"center",
+        alignItems: "center",
+        justifyContent:"center",
+        padding:3
+    },
       canvas: {
             width:imageWidth,
             height:imageHeight
