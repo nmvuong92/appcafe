@@ -75,7 +75,7 @@ class TaiKhoan extends Component{
     //bam vao san pham item
     onPressProductItem = (item)=>{
         const {dispatch}  = this.props;
-        dispatch({type:"CTArticle_Screen",Article:item});
+        dispatch({type:"CTArticle_Screen",article_id:item.Id});
     }
 
     render(){

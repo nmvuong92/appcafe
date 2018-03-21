@@ -251,20 +251,19 @@ class GioHang extends Component{
                             
                
                  <View style={styles.footer}>
-                        <View style={{flex:1,alignItems:"center"}}>
+                        <View style={{flex:2,alignItems:"center"}}>
                             <Text>Tổng tiền:</Text>
                             <Text style={{fontSize:20,fontWeight:"bold",color:VCOLOR.do_dam}}>{vUtils.formatVND(tong_tien_gio_hang)}</Text>
                         </View>
-                        <View style={{flex:1,width:"100%",padding:0}}>
+                        <View style={{flex:3,width:"100%",padding:0}}>
                             <Button
-                                 buttonStyle={{
+                                buttonStyle={{
                                     backgroundColor: VCOLOR.do_dam,
                                     width: "100%",
                                     borderColor: "transparent",
                                     borderWidth: 0,
                                     borderRadius: 10
-                                  }}
-                                
+                                }}
                                 backgroundColor="red"
                                 color="white"
                                 icon={{name: 'opencart', type: 'font-awesome'}}

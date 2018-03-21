@@ -32,3 +32,30 @@ let receive = (food)=> {
         List: food,
     }
 }
+
+
+export let getById = (id)=> {
+   
+   
+    let URL =urls.api_article+"/get_by_id?id="+id;
+    if(__DEV__){
+        console.log(URL);
+    }
+
+    return dispatch => {
+        dispatch({
+            type:types.ARTICLE_FETCH,
+            isFetching:true,
+        });
+        Util.get(URL, (response) => {
+            console.log(response);
+            dispatch({
+                type:types.ARTICLE_DETAIL_RECEIVE,
+                Detail:response
+            });
+        }, (error) => {
+            alert(error);
+            console.log(`Fetch food info error: ${error}`);
+        })
+    }
+}

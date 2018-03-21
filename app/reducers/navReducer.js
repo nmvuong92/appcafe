@@ -385,7 +385,7 @@ let navReducer  = (state,action)=>{
           NavigationActions.navigate({
             routeName: 'CTArticle_Screen',
             params:{
-              Article:action.Article
+              article_id:action.article_id
             }
           }),
           state

@@ -19,8 +19,8 @@ import { addNavigationHelpers, NavigationActions } from "react-navigation";
 import { PricingCard,Card,Button } from 'react-native-elements'
 import Header from './../../common/components/Header';
 import * as vUtils from './../../common/vUtils';
-
-
+import {getById} from './../../actions/articleAction';
+import  LoadingActivityIndicator from './../../common/components/LoadingActivityIndicator';
 
 
 class CTArticle extends Component{
@@ -31,12 +31,15 @@ class CTArticle extends Component{
         super(props);
         //
         const { params } = this.props.navigation.state;
-        const product_detail_id =params.id;
         this.state = {
-            Article: params.Article,
+            article_id: params.article_id,
         };
     }
 
+    componentWillMount(){
+        const {dispatch}  = this.props;
+        dispatch(getById(this.state.article_id));
+    }
     goBack(){
         const {dispatch} = this.props;       
         dispatch(NavigationActions.back());
@@ -51,15 +54,11 @@ class CTArticle extends Component{
     onPressMuaHang = (sanpham)=>{
         alert(sanpham.TenSanPham);
     }
-      
-    componentWillMount = () => {
-        //console.log(this.props.navigation);
-    };
-
     render(){
         const { params } = this.props.navigation.state;
         const itemId = params ? params.id : null;
-        const {dispatch} = this.props;
+        const {dispatch,articleReducer} = this.props;
+        let Article = articleReducer.Detail;
         return (
             <View style={styles.container}>
 
@@ -76,15 +75,19 @@ class CTArticle extends Component{
                     // rightIconAction2={()=>this.goBack()}
                 
                 
-                    title={this.state.Article.Title}
+                    title={Article!=null?Article.Title:"..."}
                 />
-
-                    <WebView style={{height:200,}}
-                        source={{html: "<!DOCTYPE html><head><meta charset='UTF-8'></head><body>"+this.state.Article.Content+"</body></html>",baseUrl:''}}
-                        startInLoadingState={false}
-                        bounces={false}
-                        scalesPageToFit={Platform.OS==="ios"?false:true}
-                    />
+                    {
+                        Article!=null?
+                        <WebView style={{height:200,}}
+                            source={{html: "<!DOCTYPE html><head><meta charset='UTF-8'></head><body>"+Article.Content+"</body></html>",baseUrl:''}}
+                            startInLoadingState={false}
+                            bounces={false}
+                            scalesPageToFit={Platform.OS==="ios"?false:true}
+                        />
+                        :<LoadingActivityIndicator/>
+                    }
+                
              
                
             </View>
@@ -95,6 +98,7 @@ class CTArticle extends Component{
 }
 const mapStateToProps = state => ({
     navReducer:state.navReducer,
+    articleReducer:state.articleReducer,
 });
 export default connect(mapStateToProps)(CTArticle);
 const styles = StyleSheet.create({

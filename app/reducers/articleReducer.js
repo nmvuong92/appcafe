@@ -2,6 +2,7 @@ import * as types from './../actions/actionTypes';
 const initialState = {
     isFetching: false,
     List:null,
+    Detail:null,
 }
 
 export default donHangReducer  = (state=initialState,action)=>{
@@ -21,6 +22,14 @@ export default donHangReducer  = (state=initialState,action)=>{
                         isFetching: false,
                    } 
             };
+       case types.ARTICLE_DETAIL_RECEIVE:
+            return {
+                ...state,
+                ...{
+                    Detail:action.Detail,
+                    isFetching:false,
+                }
+            }
 
        default:
             return state;

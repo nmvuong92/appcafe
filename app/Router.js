@@ -334,6 +334,7 @@ export const MainScreenNavigator = TabNavigator({
     initialRouteName: 'HomeTab',
     tabBarPosition:'bottom',
     //swipeEnabled:true,
+    swipeEnabled:false,
     showIcon:true,
     showLabel:true,
     tabBarOptions:{
@@ -342,7 +343,6 @@ export const MainScreenNavigator = TabNavigator({
         },
         
         activeTintColor: 'red',
-        
         //activeBackgroundColor :'yellow',  //Doesn't work
         inactiveTintColor:"gray",
         showIcon:true,
