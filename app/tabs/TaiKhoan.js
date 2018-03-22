@@ -30,7 +30,7 @@ import {fetchArticles} from './../actions/articleAction';
 import Header from './../common/components/Header';
 import Register from './pages/Register';
 import Login from './pages/Login';
-
+import DoiMatKhau from './pages/DoiMatKhau';
 
 import Modal from 'react-native-modalbox';
 
@@ -124,15 +124,26 @@ class TaiKhoan extends Component{
                             />
                         </View> 
                         <TouchableOpacity style={styles.li}  activeOpacity={0.75}>
-                        <Image
-                            source={require('./../assets/images/ri.png') }
-                            style={{width: 30, height: 30, marginLeft: 20}}
-                        />
-                        <Text style={{marginLeft: 10}}>
-                            Cập nhật thông tin tài khoản
-                        </Text>
-                    
-                    </TouchableOpacity>
+                            <Image
+                                source={require('./../assets/images/ri.png') }
+                                style={{width: 30, height: 30, marginLeft: 20}}
+                            />
+                            <Text style={{marginLeft: 10}}>
+                                Cập nhật thông tin tài khoản
+                            </Text>
+                        </TouchableOpacity>
+
+                           <TouchableOpacity style={styles.li}  activeOpacity={0.75} onPress={()=>{
+                               this.refs.modal_doimatkhau.open();
+                           }}>
+                            <Image
+                                source={require('./../assets/images/ri.png') }
+                                style={{width: 30, height: 30, marginLeft: 20}}
+                            />
+                            <Text style={{marginLeft: 10}}>
+                                Đổi mật khẩu
+                            </Text>
+                        </TouchableOpacity>
                     </View>
 
                      :
@@ -284,6 +295,22 @@ class TaiKhoan extends Component{
                         />
                         <Register hide_header={true} onRegisterSuccess={()=>{
                             this.refs.modal_register.close();
+                        }}/>
+                    </View>
+               </Modal>
+
+               <Modal
+                ref={"modal_doimatkhau"}>
+                    <View style={{flex:1,}}>
+                        <Header
+                            leftIcon='angle-left'
+                            leftIconAction={()=>{
+                                this.refs.modal_doimatkhau.close();
+                            }}
+                            title={"Đổi mật khẩu"}
+                        />
+                        <DoiMatKhau hide_header={true} onDoiMatKhauThanhCong={()=>{
+                            this.refs.modal_doimatkhau.close();
                         }}/>
                     </View>
                </Modal>

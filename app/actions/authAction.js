@@ -102,6 +102,34 @@ export let postRegister = (formData,fnSucc,fnErr)=> {
 
 }
 
+export let postDoiMatKhau = (formData,fnSucc,fnErr)=> {
+    if(__DEV__){
+            console.log("-----------------postDoiMatKhau----------------");
+    }
+    let url = urls.api_auth+"/doi_mat_khau"; 
+    return (dispatch) => {
+
+        Util.postJson(url, formData,
+            (response) => {
+               
+                if(response.r==true){
+                    Toast.show(response.m, {position:Toast.positions.CENTER});
+                    var user = response.v;
+                    setUser(user);
+                    fnSucc(user);
+                }else{
+                    Toast.show(response.m, {position:Toast.positions.CENTER});
+                }
+            },
+            (error) => {
+                alert(error);
+                fnErr(error);
+                //dispatch({'type': types.kActionError});
+            });
+    }
+
+}
+
 
 export let updateAccount = (formData)=> {
     if(__DEV__){

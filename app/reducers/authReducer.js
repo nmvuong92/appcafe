@@ -20,8 +20,12 @@ let authReducer  = (state=initialState,action)=>{
           return {...state,isFetching:action.isFetching}
         case types.AUTH_REGISTER_RECEIVE:
           return {...state, isLoggedIn: true,user:action.user };
+        
+        case types.AUTH_CAPNHATTAIKHOAN_RECEIVE:
+          return {...state, user:action.user };
         default:
-          return state;
-      }
+        
+         return state;
+    }
 };
 export default authReducer;
