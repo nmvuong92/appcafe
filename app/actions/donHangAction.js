@@ -2,7 +2,7 @@ import * as types from './actionTypes';
 import Util from './../common/utils';
 import * as urls from  './../common/constants_url';
 import Toast from 'react-native-root-toast';
-
+import {cartCRUD} from './cartAction';
 export let fetchDanhSachDonHang = (user,page,pageSize)=> {
    
    
@@ -89,6 +89,8 @@ export let postThanhToanDatHang = (user,data)=> {
                 dispatch(fetchDatHang(false));
                 console.log(response);
                 if(response.r==true){
+                    //xoa gio hang
+                    dispatch(cartCRUD("0"));
                     //hien thi thong bao
                     Toast.show(response.m, {position:Toast.positions.CENTER});
                     //tai lai danh sach

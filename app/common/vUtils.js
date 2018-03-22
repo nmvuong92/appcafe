@@ -9,6 +9,13 @@ export const formatVND = (x,default0="Liên hệ") => {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")+" ₫";
 }
 
+export const defaultString = (str,defaultStr="...") => {
+    if(str==null || str == undefined || str.length==0){
+        return defaultStr;
+    }
+    return str;
+}
+
 export const vStyles = StyleSheet.create({
     h1:{
         fontSize: 20,

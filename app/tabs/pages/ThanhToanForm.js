@@ -24,7 +24,7 @@ class ThanhToanForm extends Component{
         let user=authReducer.user;
         console.log(user);
         this.state = {
-            HoTen:"",
+            HoTen:user.HoTen,
             DiaChiNhanHang:user.DiaChi,
             DienThoai: user.DienThoai,
             GhiChu:'',
@@ -187,7 +187,7 @@ class ThanhToanForm extends Component{
             return;
         }*/
 
-      
+        this._postThanhToanConfirmed();
         Alert.alert(
             "Bạn chắc gửi đơn đặt hàng?",
             "",

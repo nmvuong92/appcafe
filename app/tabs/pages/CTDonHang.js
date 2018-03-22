@@ -9,6 +9,7 @@ import Loading from './../../common/components/Loading';
 import Image from 'react-native-image-progress';
 import ProgressBar from 'react-native-progress/CircleSnail';
 import {Badge} from 'react-native-elements';
+import { VCOLOR } from '../../common/constants';
 
 class CTDonHang extends Component{
     constructor(props){
@@ -43,12 +44,12 @@ class CTDonHang extends Component{
                     //CartBadgeIconAction={()=>this.goBack()}
                     title={"Chi tiết đơn hàng: "+this.state.DonHang.MaDonHang}
                 />
-                <View style={styles.item}>
+                <View style={styles.header}>
                     <View style={styles.cot1}>
                         <Text>Sản phẩm</Text>
                     </View>
                     <View style={styles.cot2}>
-                        <Text> Đơn giá X Số lượng</Text>
+                        <Text> Đơn giá & SL</Text>
                     </View>
                     <View style={styles.cot3}>
                         <Text>Thành tiền</Text>
@@ -75,17 +76,17 @@ class CTDonHang extends Component{
                                     <Text>{item.SanPham.TenSanPham}</Text>
                                 </View>
                                 <View style={styles.cot2}>
-                                    <Text>{formatVND(item.DonGia)}</Text>
-                                    <Badge containerStyle={{ backgroundColor: 'violet',width:120}}>
-                                        <Text>{item.SoLuong+" cái"}</Text>
-                                    </Badge>
+                                    <Text style={{textAlign:"right"}}>{formatVND(item.DonGia)}</Text>
+                                   
+                                    <Text  style={{textAlign:"right"}}>{item.SoLuong+" cái"}</Text>
+                                
 
                                     
 
                                  
                                 </View>
                                 <View style={styles.cot3}>
-                                    <Text>{formatVND(item.ThanhTien)}</Text>
+                                    <Text style={{textAlign:"right"}}>{formatVND(item.ThanhTien)}</Text>
                                 </View>
                             </View>
                         )
@@ -100,7 +101,7 @@ class CTDonHang extends Component{
                                 
                             </View>
                             <View style={styles.cot3}>
-                                <Text>{formatVND(this.state.DonHang.TongTienHang)}</Text>
+                                <Text style={{textAlign:"right"}}>{formatVND(this.state.DonHang.TongTienHang)}</Text>
                             </View>
                 </View>
               
@@ -121,37 +122,80 @@ export default connect(mapStateToProps)(CTDonHang);
 
 
 const styles = StyleSheet.create({
+    container:{
+        flex:1,
+    },
     item:{
         width:'100%',
-        borderWidth:1,
-        borderColor:"red",
+        borderWidth:0.5,
+        borderColor:"#ffffff",
         flexDirection:"row",
     },
-    itemImage:{
-      
-        width:50,
-        height:50,
+    item2:{
+        width:'100%',
+        borderWidth:0.5,
+        borderColor:"#ffffff",
+        flexDirection:"row",
+        backgroundColor:"#e5e5e5"
+    },
+    header:{
+        width:'100%',
+        borderWidth:0.5,
+        borderColor:"#ffffff",
+        flexDirection:"row",
+        backgroundColor:"#00c6e5",
+    },
+    foot:{
+        backgroundColor:VCOLOR.orange
     },
     cot1:{
-        alignContent:"center",alignItems:"center",
-        borderWidth:1,
-        borderColor:"gray",
+        borderWidth:0.5,
+        borderColor:"#ffffff",
         width:'40%'
     },
     cot2:{
-        alignContent:"center",alignItems:"center",
-        borderWidth:1,
-        borderColor:"gray",
-        width:'40%',
-        
+        borderWidth:0.5,
+        borderColor:"#ffffff",
+        width:'30%'
     },
     cot3:{
-        alignContent:"center",alignItems:"center",
         borderWidth:1,
-        borderColor:"gray",
-        width:'20%'
+        borderColor:"#ffffff",
+        width:'30%'
     },
-    foot:{
-        backgroundColor:"yellow",
-    }
+    footerStyle:
+    {
+      padding: 7,
+      alignItems: 'center',
+      justifyContent: 'center',
+      borderTopWidth: 2,
+      borderTopColor: '#009688',
+      flexDirection:"row"
+    },
+    TouchableOpacity_style:
+    {
+      padding: 3,
+      flexDirection: 'row',
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: '#F44336',
+      borderRadius: 5,
+      margin:3
+    },
+    TouchableOpacity_style_disabled:
+    {
+      padding: 3,
+      flexDirection: 'row',
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: 'gray',
+      borderRadius: 5,
+      margin:3
+    },
+    TouchableOpacity_Inside_Text:
+    {
+      textAlign: 'center',
+      color: '#fff',
+      fontSize: 12
+    },
 });

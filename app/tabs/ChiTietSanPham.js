@@ -117,39 +117,21 @@ class ChiTietSanPham extends Component{
                         />
                     </View>
 
-                <Card title="Tên sản phẩm">
+                 <Card title="Thông tin" containerStyle={{margin:1,marginTop:10,padding:5}}>
                     <View style={styles.user}>
-                            <View style={{alignContent:"center",alignItems:"center"}}>
-                                <Text style={vUtils.vStyles.h1}>{sanpham.TenSanPham}</Text>
-                            </View>
+                            <Text style={styles.name}>Tên sản phẩm: <Text style={{fontWeight:"bold"}}>{sanpham.TenSanPham}</Text></Text>
+                            <Text style={styles.name}>Size: {vUtils.defaultString(sanpham.Size)}</Text>
+                            <Text style={styles.name}>Màu sắc: {vUtils.defaultString(sanpham.MauSac)}</Text>
+                            <Text style={styles.name}>Danh mục: {sanpham.TenDanhMuc}</Text>
+                            <Text style={styles.name}>Giá bán:  <Text style={vUtils.vStyles.price}>{vUtils.formatVND(sanpham.Gia)}</Text></Text>
+                      
                     </View>
                 </Card>
-
-
-
-                <Card title="Giá bán">
-                    <View style={styles.center}>
-                            <Text style={vUtils.vStyles.price}>{vUtils.formatVND(sanpham.Gia)}</Text>
-                    </View>
-                </Card>
-                <Card title="Size">
-                    <View style={styles.user}>
-                            <Text style={styles.name}>{sanpham.Size}</Text>
-                    </View>
-                </Card>
-                <Card title="Màu sắc">
-                    <View style={styles.user}>
-                            <Text style={styles.name}>{sanpham.MauSac}</Text>
-                    </View>
-                </Card>
+              
                
 
-                <Card title="Danh mục">
-                    <View style={styles.user}>
-                            <Text style={styles.name}>{sanpham.TenDanhMuc}</Text>
-                    </View>
-                </Card>
-                <Card title="Mô tả" containerStyle={{margin:0,padding:0}}>
+        
+                <Card title="Mô tả" containerStyle={{margin:1,marginTop:10,padding:5}}>
 
                     <WebView style={{height:200,}}
                         source={{html: "<!DOCTYPE html><head><meta charset='UTF-8'></head><body>"+sanpham.MoTa+"</body></html>",baseUrl:''}}

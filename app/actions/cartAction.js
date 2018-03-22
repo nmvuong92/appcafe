@@ -138,11 +138,9 @@ export let cartCRUD = (type,product,quantity)=> { //loai, san pham, soluong
                 break;
             case "0":
                 AsyncStorage.removeItem('cart',()=>{
-                    Toast.show("Đã xóa", {position:Toast.positions.TOP});
+                    dispatch({type:types.CART_CLEAR,newCartItems:[]});
                 });
-                dispatch({type:types.CART_CLEAR,newCartItems:[]});
                 break;        
-
             default:
                 break;
         }
