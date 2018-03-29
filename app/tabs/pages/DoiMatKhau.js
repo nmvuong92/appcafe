@@ -97,7 +97,7 @@ class DoiMatKhau extends Component{
               
 
 
-                 <KeyboardAwareScrollView>
+                
                         <View>
                             <View style={[styles.formInput, styles.formInputSplit]}>
                                 <Image source={require('./../../assets/images/passicon.png')} style={{width:25,height:25,resizeMode: 'contain'}}/>
@@ -133,7 +133,7 @@ class DoiMatKhau extends Component{
                             </TouchableOpacity>
 
                         </View>
-                </KeyboardAwareScrollView>
+               
             </View>
         );
     };
