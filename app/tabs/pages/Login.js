@@ -91,7 +91,7 @@ class Login extends Component{
                     <TextInput
                         onChangeText={(text) => this.setState({CMND:text})}
                         value={this.state.CMND}
-                        placeholder='CMND'
+                        placeholder='Số điện thoại (*)'
                         style={styles.loginInput}/>
                 </View>
                 <View style={[styles.formInput, styles.formInputSplit]}>
@@ -101,7 +101,7 @@ class Login extends Component{
                         value={this.state.MatKhau}
                         style={styles.loginInput}
                         secureTextEntry={true}
-                        placeholder='Mật khẩu'/>
+                        placeholder='Mật khẩu (*)'/>
                 </View>
                 <TouchableOpacity style={styles.loginBtn} onPress={()=>{
                     dispatch(authAction.postLogin(this.state.CMND,this.state.MatKhau ,(response)=>{

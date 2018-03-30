@@ -94,7 +94,7 @@ class Register extends Component{
 
                     //showCartBadgeIcon={true}
                     //CartBadgeIconAction={()=>this.goBack()}
-                    title={"Đăng ký thành viên"}
+                    title={"Đăng ký (register)"}
                     />
                     :null
             }
@@ -108,7 +108,7 @@ class Register extends Component{
                                 <TextInput
                                     onChangeText={(text) => this.setState({CMND:text})}
                                     value={this.state.CMND}
-                                    placeholder='Số CMND (dùng để đăng nhập)'
+                                    placeholder='Số điện thoại (*)'
                                     style={styles.loginInput} />
                             </View>
                             <View style={[styles.formInput, styles.formInputSplit]}>
@@ -118,7 +118,7 @@ class Register extends Component{
                                 value={this.state.MatKhau}
                                     style={styles.loginInput}
                                     secureTextEntry={true}
-                                    placeholder='Mật khẩu'/>
+                                    placeholder='Password (*)'/>
                             </View>
                             <View style={[styles.formInput, styles.formInputSplit]}>
                                 <Image source={require('./../../assets/images/passicon.png')} style={{width:25,height:25,resizeMode: 'contain'}}/>
@@ -127,7 +127,7 @@ class Register extends Component{
                                 value={this.state.XacNhanMatKhau}
                                     style={styles.loginInput}
                                     secureTextEntry={true}
-                                    placeholder='Mật khẩu'/>
+                                    placeholder='Password (*)'/>
                             </View>
                         
                             
@@ -137,18 +137,11 @@ class Register extends Component{
                                 <TextInput
                                     onChangeText={(text) => this.setState({HoTen:text})}
                                     value={this.state.HoTen}
-                                    placeholder='Họ tên'
+                                    placeholder='Họ tên (*)'
                                     style={styles.loginInput} />
                             </View>
                         
-                            <View style={[styles.formInput, styles.formInputSplit]}>
-                                <Image source={require('./../../assets/images/user.png')} style={{width:25,height:25,resizeMode: 'contain'}}/>
-                                <TextInput
-                                    onChangeText={(text) => this.setState({DienThoai:text})}
-                                    value={this.state.DienThoai}
-                                    placeholder='Số điện thoại'
-                                    style={styles.loginInput} />
-                            </View>
+                         
                             <View style={[styles.formInput, styles.formInputSplit]}>
                                 <Image source={require('./../../assets/images/user.png')} style={{width:25,height:25,resizeMode: 'contain'}}/>
                                 <TextInput
@@ -234,7 +227,7 @@ class Register extends Component{
                 HoTen:this.state.HoTen,
                 Email:this.state.Email,
                 DiaChi:this.state.DiaChi,
-                DienThoai:this.state.DienThoai,
+                DienThoai:this.state.CMND,
                 MatKhau:this.state.MatKhau,
                 XacNhanMatKhau:this.state.XacNhanMatKhau,
             },(response)=>{
