@@ -16,6 +16,8 @@ import Header from './../../common/components/Header';
 import Loading from './../../common/components/Loading';
 import {postRegister} from './../../actions/authAction';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+
+
 class Register extends Component{
     constructor(props){
         super(props);

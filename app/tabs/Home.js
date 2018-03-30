@@ -135,11 +135,8 @@ class Home extends Component{
                                        
 
                                          <TouchableOpacity style={styles.head_btn} onPress={()=>{
-                                               if(isLoggedIn){
                                                     dispatch({type:'TichDiem_Wrap'});
-                                               } else{
-                                                    this.refs.modal_login.open();
-                                               }
+                                              
                                             }}> 
                                             <Image style={{width:32,height:32}} source={require('./../assets/images/icons/icon5_32.png')}/>
                                             <Text style={{fontSize:12}}>Tích điểm</Text>

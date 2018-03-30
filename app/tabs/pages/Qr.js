@@ -7,21 +7,22 @@ import {
     TouchableOpacity,
     View
 } from 'react-native';
+import { addNavigationHelpers, NavigationActions } from "react-navigation";
 import Toast from 'react-native-root-toast';
+import {connect} from 'react-redux';
+import Header from './../../common/components/Header';
+import Loading from './../../common/components/Loading';
+import {postRegister} from './../../actions/authAction';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Camera from 'react-native-camera';
-export default class TichDiem extends Component{
+class Qr extends Component{
     constructor(props){
         super(props);
         this.state = {
             qrcode: ''
         }
     }
-    onBarCodeRead = (e) => {
-        Toast.show(e.data, {position:Toast.positions.CENTER});
-        this.setState(
-            {qrcode: e.data}
-        );
-    }
+    onBarCodeRead = (e) => this.setState({qrcode: e.data});
     goBack(){
 
         this.props.onRegisterSuccess();

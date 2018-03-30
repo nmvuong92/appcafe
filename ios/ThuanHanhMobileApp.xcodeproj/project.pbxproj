@@ -38,6 +38,7 @@
 		2DCD954D1E0B4F2C00145EB5 /* ThuanHanhMobileAppTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* ThuanHanhMobileAppTests.m */; };
 		5E9157361DD0AC6A00FF2AA8 /* libRCTAnimation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E9157331DD0AC6500FF2AA8 /* libRCTAnimation.a */; };
 		7FAB4B93205F56830057EE85 /* libART.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7FAB4B90205F56750057EE85 /* libART.a */; };
+		7FB85277206E08AC009ED54A /* libRNCamera.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7FB85272206E07D4009ED54A /* libRNCamera.a */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
 		840A09B005724A1BBE203D01 /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7DD0ED9D161443E28997FFEB /* MaterialIcons.ttf */; };
 		9E59EF6605CD4C198FE4C0BB /* Ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4AC71BE92F6F4FF2AFE99E05 /* Ionicons.ttf */; };
@@ -332,6 +333,13 @@
 			remoteGlobalIDString = 323A12871E5F266B004975B8;
 			remoteInfo = "ART-tvOS";
 		};
+		7FB85271206E07D4009ED54A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7FB85246206E07D4009ED54A /* RNCamera.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 4107012F1ACB723B00C6AA39;
+			remoteInfo = RNCamera;
+		};
 		832341B41AAA6A8300B99B32 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */;
@@ -384,6 +392,8 @@
 		78C398B01ACF4ADC00677621 /* RCTLinking.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTLinking.xcodeproj; path = "../node_modules/react-native/Libraries/LinkingIOS/RCTLinking.xcodeproj"; sourceTree = "<group>"; };
 		7DD0ED9D161443E28997FFEB /* MaterialIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialIcons.ttf"; sourceTree = "<group>"; };
 		7FAB4B8A205F56750057EE85 /* ART.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ART.xcodeproj; path = "../node_modules/react-native/Libraries/ART/ART.xcodeproj"; sourceTree = "<group>"; };
+		7FB85246206E07D4009ED54A /* RNCamera.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNCamera.xcodeproj; path = "../node_modules/react-native-camera/ios/RNCamera.xcodeproj"; sourceTree = "<group>"; };
+		7FB8527A206E144F009ED54A /* ThuanHanhMobileApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = ThuanHanhMobileApp.entitlements; path = ThuanHanhMobileApp/ThuanHanhMobileApp.entitlements; sourceTree = "<group>"; };
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
 		ADBDB91F1DFEBF0600ED6528 /* RCTBlob.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTBlob.xcodeproj; path = "../node_modules/react-native/Libraries/Blob/RCTBlob.xcodeproj"; sourceTree = "<group>"; };
 		E4A0D6AA29694AE9BB2E4F08 /* Zocial.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Zocial.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Zocial.ttf"; sourceTree = "<group>"; };
@@ -403,6 +413,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7FB85277206E08AC009ED54A /* libRNCamera.a in Frameworks */,
 				7FAB4B93205F56830057EE85 /* libART.a in Frameworks */,
 				ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */,
 				5E9157361DD0AC6A00FF2AA8 /* libRCTAnimation.a in Frameworks */,
@@ -527,6 +538,7 @@
 		13B07FAE1A68108700A75B9A /* ThuanHanhMobileApp */ = {
 			isa = PBXGroup;
 			children = (
+				7FB8527A206E144F009ED54A /* ThuanHanhMobileApp.entitlements */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
@@ -611,9 +623,18 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		7FB85247206E07D4009ED54A /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				7FB85272206E07D4009ED54A /* libRNCamera.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				7FB85246206E07D4009ED54A /* RNCamera.xcodeproj */,
 				7FAB4B8A205F56750057EE85 /* ART.xcodeproj */,
 				5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */,
 				146833FF1AC3E56700842450 /* React.xcodeproj */,
@@ -787,6 +808,11 @@
 					13B07F861A680F5B00A75B9A = {
 						DevelopmentTeam = ZR6AJPBTN7;
 						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.VPNLite = {
+								enabled = 0;
+							};
+						};
 					};
 					2D02E47A1E0B4A5D006451C7 = {
 						CreatedOnToolsVersion = 8.2.1;
@@ -864,6 +890,10 @@
 				{
 					ProductGroup = 146834001AC3E56700842450 /* Products */;
 					ProjectRef = 146833FF1AC3E56700842450 /* React.xcodeproj */;
+				},
+				{
+					ProductGroup = 7FB85247206E07D4009ED54A /* Products */;
+					ProjectRef = 7FB85246206E07D4009ED54A /* RNCamera.xcodeproj */;
 				},
 				{
 					ProductGroup = 7FAB4B7C205F4EBC0057EE85 /* Products */;
@@ -1147,6 +1177,13 @@
 			remoteRef = 7FAB4B91205F56750057EE85 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		7FB85272206E07D4009ED54A /* libRNCamera.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRNCamera.a;
+			remoteRef = 7FB85271206E07D4009ED54A /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		832341B51AAA6A8300B99B32 /* libRCTText.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -1393,7 +1430,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.vuondao.thuanhanh;
+				PRODUCT_BUNDLE_IDENTIFIER = com.vuondao.appcafe;
 				PRODUCT_NAME = ThuanHanhMobileApp;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				VERSIONING_SYSTEM = "apple-generic";
@@ -1423,7 +1460,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.vuondao.thuanhanh;
+				PRODUCT_BUNDLE_IDENTIFIER = com.vuondao.appcafe;
 				PRODUCT_NAME = ThuanHanhMobileApp;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				VERSIONING_SYSTEM = "apple-generic";
@@ -1654,7 +1691,7 @@
 				00E356F71AD99517003FC87E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "ThuanHanhMobileApp" */ = {
 			isa = XCConfigurationList;
@@ -1663,7 +1700,7 @@
 				13B07F951A680F5B00A75B9A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		2D02E4BA1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "ThuanHanhMobileApp-tvOS" */ = {
 			isa = XCConfigurationList;
@@ -1672,7 +1709,7 @@
 				2D02E4981E0B4A5E006451C7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		2D02E4BB1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "ThuanHanhMobileApp-tvOSTests" */ = {
 			isa = XCConfigurationList;
@@ -1681,7 +1718,7 @@
 				2D02E49A1E0B4A5E006451C7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "ThuanHanhMobileApp" */ = {
 			isa = XCConfigurationList;
@@ -1690,7 +1727,7 @@
 				83CBBA211A601CBA00E9B192 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
 	};

@@ -2,7 +2,7 @@ import React,{Component} from 'react';
 import {View,Text,TouchableOpacity,StyleSheet,FlatList,ImageBackground} from 'react-native';
 import GioHangPage from './pages/GioHangPage';
 import DSSP from './pages/DSSP';
-import { SearchBar } from 'react-native-elements';
+import { SearchBar,Button } from 'react-native-elements';
 import {VCOLOR} from './../common/constants';
 import {connect} from 'react-redux';
 import {fetchSanPham} from './../actions/sanPhamAction';
@@ -13,7 +13,7 @@ import ProgressBar from 'react-native-progress/CircleSnail';
 import { HeadPadding,formatVND,vStyles } from '../common/vUtils';
 import CornerLabel from './../components/CornerLabel';
 import Header from './../common/components/Header';
-
+import {setNotificationCounter,cartCRUD} from './../actions/cartAction';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 class SanPham extends Component{
@@ -220,7 +220,25 @@ class SanPham extends Component{
                                             KM
                                         </CornerLabel>:null}
 
-                                    
+                                    <Button
+                                            buttonStyle={{
+                                                width: "100%",
+                                                borderColor: "transparent",
+                                                borderWidth: 0,
+                                                borderRadius: 10
+                                            }}
+                                            
+                                            backgroundColor="red"
+                                            color="white"
+                                            icon={{name: 'cart-plus', type: 'font-awesome'}}
+                                            title='Thêm'
+                                            onPress={()=>{
+                                                //dispatch(setNotificationCounter("+",1));
+                                                dispatch(cartCRUD("+",item,1));
+                                               // Toast.show("Đã thêm sản phẩm vào giỏ hàng", {position:Toast.positions.TOP});
+                                            }}
+                                        />
+
 
                                         {item.Hot?<CornerLabel
                                             alignment={'left'}

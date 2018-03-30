@@ -33,6 +33,7 @@ import Login from './pages/Login';
 import DoiMatKhau from './pages/DoiMatKhau';
 
 import Modal from 'react-native-modalbox';
+import Qr from './pages/Qr';
 
 class TaiKhoan extends Component{
     constructor(props){
@@ -293,7 +294,7 @@ class TaiKhoan extends Component{
                             }}
                             title={"Đăng ký"}
                         />
-                        <Register hide_header={true} onRegisterSuccess={()=>{
+                        <Qr hide_header={true} onRegisterSuccess={()=>{
                             this.refs.modal_register.close();
                         }}/>
                     </View>

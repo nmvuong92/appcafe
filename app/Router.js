@@ -50,7 +50,7 @@ const opt_hide_tabbar={
 
 
 export const MainScreenNavigator = TabNavigator({
-    HomeTab:StackNavigator({
+    /*HomeTab:StackNavigator({
         Home:{
             screen:Home,
             
@@ -179,7 +179,7 @@ export const MainScreenNavigator = TabNavigator({
             tabBarLabel:'Trang chủ',
             tabBarIcon:  <FontAwesome color="black" size={28} name="home"/>,
         }
-    }), //end home stack
+    }), //end home stack* */
     NganhHang:StackNavigator({
         SanPham:{
             screen:NganhHang,
@@ -304,7 +304,7 @@ export const MainScreenNavigator = TabNavigator({
             tabBarIcon: <DonHangBadgeIcon/>,
         }
     }), //end don hang tab
-    TaiKhoanTab:StackNavigator({
+    /*TaiKhoanTab:StackNavigator({
         TaiKhoan_Screen:{
             screen:TaiKhoan,
             navigationOptions: {
@@ -328,10 +328,10 @@ export const MainScreenNavigator = TabNavigator({
             tabBarLabel: 'Tài khoản',
             tabBarIcon:  <FontAwesome color="black" size={28} name="user"/>
         }
-    }), //end don hang tab
+    })*/
 },{
    
-    initialRouteName: 'HomeTab',
+    initialRouteName: 'NganhHang',
     tabBarPosition:'bottom',
     //swipeEnabled:true,
     swipeEnabled:false,

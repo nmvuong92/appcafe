@@ -9,10 +9,10 @@ import { MainScreenNavigator } from './../Router';
 
 
 // Start with two routes: The Main screen, with the Login screen on top.
-const firstAction = MainScreenNavigator.router.getActionForPathAndParams('Home');
+const firstAction = MainScreenNavigator.router.getActionForPathAndParams('NganhHang');
 
 const tempNavState = MainScreenNavigator.router.getStateForAction(firstAction);
-const secondAction = MainScreenNavigator.router.getActionForPathAndParams('Home');
+const secondAction = MainScreenNavigator.router.getActionForPathAndParams('NganhHang');
 
 
 const initialState = MainScreenNavigator.router.getStateForAction(
