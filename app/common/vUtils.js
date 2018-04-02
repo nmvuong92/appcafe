@@ -16,6 +16,16 @@ export const defaultString = (str,defaultStr="...") => {
     return str;
 }
 
+export const isValidJson=(json)=>{
+    try {
+        var json_parsed=JSON.parse(json);
+        if(typeof(json_parsed.ban)=="string" && typeof(json_parsed.shop)=="string" && typeof(json_parsed.diachi)=="string"){
+            return json_parsed;
+        }
+    } catch (e) {
+        return false;
+    }
+}
 export const vStyles = StyleSheet.create({
     h1:{
         fontSize: 20,

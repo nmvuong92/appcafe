@@ -22,7 +22,10 @@ class Qr extends Component{
             qrcode: ''
         }
     }
-    onBarCodeRead = (e) => this.setState({qrcode: e.data});
+    onBarCodeRead = (e) => {
+        Toast.show(e.data, {position:Toast.positions.CENTER});
+        this.setState({qrcode: e.data})
+    };
     goBack(){
 
         this.props.onRegisterSuccess();

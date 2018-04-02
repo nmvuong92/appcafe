@@ -29,6 +29,9 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import Header from'./../common/components/Header';
 import * as vUtils  from './../common/vUtils';
 import Modal from 'react-native-modalbox';
+import Camera from 'react-native-camera';
+
+import {postThanhToanDatHang} from './../actions/donHangAction';
 class GioHang extends Component{
     constructor(props){
        
@@ -58,6 +61,8 @@ class GioHang extends Component{
 
             itemEdit:null,
             slspEdit:0,
+
+            qrcode: null
         }
        
     }
@@ -69,11 +74,12 @@ class GioHang extends Component{
         //dispatch(fetchSanPham(sanPhamReducer.danhmuc,sanPhamReducer.tukhoa));
     }
     goThanhToan(){
-        const {dispatch} =this.props;
-        
-        dispatch({
+        //const {dispatch} =this.props;
+        this.refs.modal_qr.open();
+        //dispatch({type:'tichDiem_Wrap'});
+        /*dispatch({
             type:this.state.thanhtoan_nav
-        });
+        });*/
     }
     
     //khi thay doi o tim kiem
@@ -152,13 +158,36 @@ class GioHang extends Component{
 
     setModalVisible(visible) {
         this.setState({modalVisible: visible});
-      }
+    }
     showEditSLSP=(item)=>{
         this.setState({
             itemEdit:item,
             slspEdit:item.SLSP,
         });
         this.refs.modal3.open();
+    }
+
+    postThanhToan = (item)=>{
+        const {dispatch,authReducer}  = this.props;
+        var cart = [];
+        for(var i=0;i<cartReducer.cartItems.length;i++){
+            cart.push({
+                SanPhamId:cartReducer.cartItems[i].ID,
+                SoLuong:cartReducer.cartItems[i].SLSP,
+            });
+        }
+
+
+
+        dispatch(postThanhToanDatHang(authReducer.user,{
+            Ban:this.state.qrcode.ban,
+            Shop:this.state.qrcode.shop,
+            DiaChi:this.state.qrcode.diachi,
+            ChiTietDonHang:cart
+        },()=>{
+            this.refs.modal_qr.close();
+        }));
+      
     }
     //
     render(){
@@ -173,7 +202,7 @@ class GioHang extends Component{
             tong_tien_gio_hang+=cartReducer.cartItems[i].SLSP*cartReducer.cartItems[i].Gia;
         }
 
-        const {authReducer} =this.props;
+        const {authReducer,donHangReducer} =this.props;
         let isLoggedIn = authReducer.user!=null;
         let slsp=cartReducer.cartItems.length;
 
@@ -269,11 +298,12 @@ class GioHang extends Component{
                                 icon={{name: 'opencart', type: 'font-awesome'}}
                                 title={'THANH TOÁN'}
                                 onPress={()=>{
-                                    if(isLoggedIn){
+                                    this.goThanhToan();
+                                    /* if(isLoggedIn){
                                         this.goThanhToan();
                                     }else{
                                         Toast.show("Vui lòng đăng nhập!", {position:Toast.positions.CENTER});
-                                    }
+                                    }*/
                                 }}
                             />
                         </View>
@@ -357,12 +387,58 @@ class GioHang extends Component{
                         }
                   </Modal>
              
+                  
+                <Modal
+                    ref={"modal_qr"}>
+                        <View style={{flex:1,}}>
+                            <Header
+                                leftIcon='angle-left'
+                                leftIconAction={()=>{
+                                    this.refs.modal_qr.close();
+                                }}
+                                title={"Quét QR"}
+                            />
 
+                            <Camera
+                                style={stylesc.preview}
+                                onBarCodeRead={this.onBarCodeRead}
+                                ref={cam => this.camera = cam}
+                                aspect={Camera.constants.Aspect.fill}
+                                >
+                                {
+                                     this.state.qrcode!=null?
+                                     <TouchableOpacity  disabled={donHangReducer.isFetching} style={{backgroundColor:"white",padding:10}} onPress={()=>{
+                                            this.postThanhToan();
+                                     }}>
+                                        <Text style={{fontWeight:"bold"}}>{donHangReducer.isFetching?"Đang gửi thông tin thanh toán...":"Thanh toán ngay"}</Text>
+                                        <Text>Shop: {this.state.qrcode.shop}</Text>
+                                        <Text>Bàn: {this.state.qrcode.ban}</Text>
+                                        <Text>Đ/c: {this.state.qrcode.diachi}</Text>
+                                    </TouchableOpacity>
+                                    :
+                                   null
+
+                                }
+                               
+                            </Camera>
+
+                            
+                        </View>
+                </Modal>          
                     
             </View>
         );
     };
-
+    onBarCodeRead = (e) => {
+        var json_parsed=vUtils.isValidJson(e.data);
+        if(json_parsed!=false){
+            Toast.show("Tìm thấy mã QR bàn số: "+json_parsed.ban, {position:Toast.positions.CENTER});
+            this.setState({qrcode: json_parsed})
+        }
+        else{
+            Toast.show("Mã QR không hợp lệ!", {position:Toast.positions.CENTER});
+        }
+    };
     onChanged(text){
         let newText = '';
         let numbers = '0123456789';
@@ -385,6 +461,7 @@ const mapStateToProps = state => ({
     authReducer:state.authReducer,
     sanPhamReducer:state.sanPhamReducer,
     cartReducer:state.cartReducer,
+    donHangReducer:state.donHangReducer
 });
 export default connect(mapStateToProps)(GioHang);
 
@@ -557,4 +634,16 @@ const styles2 = StyleSheet.create({
       fontSize: 22
     }
   
+  });
+
+  const stylesc = StyleSheet.create({
+    container: {
+      flex: 1,
+      flexDirection: 'row',
+    },
+    preview: {
+      flex: 1,
+      justifyContent: 'flex-end',
+      alignItems: 'center'
+    }
   });

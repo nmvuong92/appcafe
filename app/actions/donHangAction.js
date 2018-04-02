@@ -5,7 +5,6 @@ import Toast from 'react-native-root-toast';
 import {cartCRUD} from './cartAction';
 export let fetchDanhSachDonHang = (user,page,pageSize)=> {
    
-   
     let URL =urls.api_donhang+"/layds?userid="+user.UserId+"&token="+user.JWTToken+"&page="+page+"&pageSize="+pageSize;
     if(__DEV__){
         console.log(URL);
@@ -69,13 +68,13 @@ let receiveTichDiem = (food)=> {
 //dat hang
 
 
-export let postThanhToanDatHang = (user,data)=> {
+export let postThanhToanDatHang = (user,data,fnSuccess)=> {
    
-    data.UserId=user.UserId;
-    data.Token = user.JWTToken;
+    /*data.UserId=user.UserId;
+    data.Token = user.JWTToken;*/
 
 
-    let url = urls.api_donhang+"/dat_hang";
+    let url = urls.api_donhang+"/dat_hang_qr";
     if(__DEV__){
         console.log("-----------------postThanhToanDatHang----------------");
         console.log(url);
@@ -94,10 +93,11 @@ export let postThanhToanDatHang = (user,data)=> {
                     //hien thi thong bao
                     Toast.show(response.m, {position:Toast.positions.CENTER});
                     //tai lai danh sach
-                    dispatch(fetchDanhSachDonHang(user));
-                    dispatch({
+                    /*dispatch(fetchDanhSachDonHang(user));*/
+                    fnSuccess();
+                    /*dispatch({
                         type:"GioHang_ThanhToan_DonHang_Screen"
-                    });
+                    });*/
                 }else{
                     Toast.show(response.m, {position:Toast.positions.CENTER});
                 }
