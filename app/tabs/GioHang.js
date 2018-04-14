@@ -417,12 +417,8 @@ class GioHang extends Component{
                                     </TouchableOpacity>
                                     :
                                    null
-
                                 }
-                               
                             </Camera>
-
-                            
                         </View>
                 </Modal>          
                     

@@ -15,7 +15,7 @@ import CornerLabel from './../components/CornerLabel';
 import Header from './../common/components/Header';
 import {setNotificationCounter,cartCRUD} from './../actions/cartAction';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-
+import Toast from 'react-native-root-toast';
 class SanPham extends Component{
     constructor(props){
         super(props);
@@ -235,7 +235,7 @@ class SanPham extends Component{
                                             onPress={()=>{
                                                 //dispatch(setNotificationCounter("+",1));
                                                 dispatch(cartCRUD("+",item,1));
-                                               // Toast.show("Đã thêm sản phẩm vào giỏ hàng", {position:Toast.positions.TOP});
+                                                Toast.show("Đã thêm vào giỏ hàng", {position:Toast.positions.TOP});
                                             }}
                                         />
 

@@ -90,7 +90,7 @@ class ThanhToanForm extends Component{
 
                         //showCartBadgeIcon={true}
                         //CartBadgeIconAction={()=>this.goBack()}
-                        title={"THANH TOÁN ĐƠN HÀNG"}
+                        title={"toán ĐƠN HÀNG"}
                 />
 
 

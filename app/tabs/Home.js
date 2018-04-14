@@ -135,7 +135,7 @@ class Home extends Component{
                                        
 
                                          <TouchableOpacity style={styles.head_btn} onPress={()=>{
-                                                    dispatch({type:'TichDiem_Wrap'});
+                                                    dispatch({type:'tichDiem_Wrap'});
                                               
                                             }}> 
                                             <Image style={{width:32,height:32}} source={require('./../assets/images/icons/icon5_32.png')}/>
