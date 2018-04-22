@@ -8,10 +8,12 @@ import {
     Platform
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import CartBadgeIcon from './cartBadgeIcon';
 import{NavigationActions} from 'react-navigation';
 import {connect} from 'react-redux';
 import {isIphoneX} from './../../common/vUtils';
+
 class Header extends Component {
     goBack(){
         const {dispatch} = this.props;       
@@ -29,7 +31,7 @@ class Header extends Component {
                     style={styles.leftIcon}
                     onPress={()=>{this.goBack();}}
                 >
-                    <Icon color="black" size={30} name="angle-left"/>
+                    <Ionicons size={30} name="md-arrow-round-back"/>
                 </TouchableOpacity>
             )
         }   
@@ -43,7 +45,7 @@ class Header extends Component {
                     style={styles.leftIcon}
                     onPress={this.props.leftIconAction}
                 >
-                    <Icon color="black" size={30} name={this.props.leftIcon}/>
+                    <Icon size={30} name={this.props.leftIcon}/>
                 </TouchableOpacity>
             )
         }
@@ -82,7 +84,7 @@ class Header extends Component {
                     style={styles.rightIcon}
                     onPress={this.props.rightIconAction}
                 >
-                    <Icon color="gray" size={30} name={this.props.rightIcon}/>
+                    <Icon  size={30} name={this.props.rightIcon}/>
                 </TouchableOpacity>
             )
         }
@@ -95,7 +97,7 @@ class Header extends Component {
                     style={[styles.rightIcon2]}
                     onPress={this.props.rightIconAction2}
                 >
-                    <Icon color="gray" size={30} name={this.props.rightIcon2}/>
+                    <Icon size={30} name={this.props.rightIcon2}/>
                 </TouchableOpacity>
             )
         }

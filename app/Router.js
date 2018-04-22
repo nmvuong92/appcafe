@@ -37,10 +37,10 @@ import ChiTietSanPham from './tabs/ChiTietSanPham';
 
 import{cartCRUD} from './actions/cartAction';
 import {isIphoneX} from './common/vUtils';
-import {getUser} from './common/Storage';
+import {getUser,getQuan,getQR} from './common/Storage';
 import {initialSyncSetUser} from './actions/authAction';
 import {fetchDanhSachDonHang} from './actions/donHangAction';
-
+import {setSyncQuan} from './actions/quanAction';
 const opt_hide_tabbar={
     //tabBarVisible:false,
     header:null,
@@ -186,10 +186,10 @@ export const MainScreenNavigator = TabNavigator({
             navigationOptions: {
                 showLabel:true,
                 showIcon:true,
-                tabBarLabel:'Sản phẩm',
+                tabBarLabel:'Thực đơn',
                 
                 header:null,
-                tabBarIcon:<MaterialIcons color="black" size={28} name="view-comfy"/>,
+                tabBarIcon:<MaterialIcons color="black" size={28} name="local-cafe"/>,
             },
         },
         SanPham_Screen:{
@@ -197,18 +197,18 @@ export const MainScreenNavigator = TabNavigator({
             navigationOptions: {
                 showLabel:true,
                 showIcon:true,
-                tabBarLabel:'Sản phẩm',
+                tabBarLabel:'Thực đơn',
                 
                 header:null,
-                tabBarIcon:<MaterialIcons color="black" size={28} name="view-comfy"/>,
+                tabBarIcon:<MaterialIcons color="black" size={28} name="local-cafe"/>,
             },
         },
         SanPham_NganhHang_Screen:{
             screen:NganhHang,
             navigationOptions:{
                 header:null,
-                tabBarLabel:'Sản phẩm',
-                tabBarIcon:<MaterialIcons color="black" size={28} name="view-comfy"/>,
+                tabBarLabel:'Thực đơn',
+                tabBarIcon:<MaterialIcons color="black" size={28} name="local-cafe"/>,
             }
         },
         SanPham_ChitietSanPham_Wrap:StackNavigator({
@@ -282,7 +282,7 @@ export const MainScreenNavigator = TabNavigator({
             tabBarIcon: <CartBadgeIcon/>,
         }
     }), //end ChiTietSanPham_GioHang_Screen
-    DonHangTab:StackNavigator({
+    /*DonHangTab:StackNavigator({
         DonHangScreen:{
             screen:DonHang,
             navigationOptions: {
@@ -303,8 +303,8 @@ export const MainScreenNavigator = TabNavigator({
             tabBarLabel:'Đơn hàng',
             tabBarIcon: <DonHangBadgeIcon/>,
         }
-    }), //end don hang tab
-    /*TaiKhoanTab:StackNavigator({
+    }),*/ //end don hang tab
+    TaiKhoanTab:StackNavigator({
         TaiKhoan_Screen:{
             screen:TaiKhoan,
             navigationOptions: {
@@ -314,7 +314,7 @@ export const MainScreenNavigator = TabNavigator({
 
                 //
                 header:null,
-                tabBarLabel: 'Tài khoản',
+                tabBarLabel: 'Quán',
                 tabBarIcon:  <FontAwesome color="black" size={28} name="user"/>
             }
         },
@@ -325,10 +325,10 @@ export const MainScreenNavigator = TabNavigator({
     },{
         navigationOptions:{
             initialRouteName:"TaiKhoan_Screen",
-            tabBarLabel: 'Tài khoản',
+            tabBarLabel: 'Quán',
             tabBarIcon:  <FontAwesome color="black" size={28} name="user"/>
         }
-    })*/
+    })
 },{
    
     initialRouteName: 'NganhHang',
@@ -401,7 +401,9 @@ class MainScreenNavigatorState extends Component{
                     dispatch(fetchDanhSachDonHang(user,1,10));
                 }
             });
-
+            getQuan().then((quan)=>{
+                dispatch(setSyncQuan(quan));
+            });
 
            // BackHandler.addEventListener("hardwareBackPress", this.onBackPress);
 
@@ -479,6 +481,7 @@ const mapStateToProps = state => ({
     navReducer:state.navReducer,
     cardReducer:state.cardReducer,
     authReducer:state.authReducer,
+    quanReducer:state.quanReducer
 });
 
 export default connect(mapStateToProps)(MainScreenNavigatorState);

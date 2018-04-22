@@ -14,11 +14,12 @@ export let fetchSanPham = (danhmuc=null,tukhoa="",page,pageSize)=> {
     }
     console.log(URL);
    
-
+    
     return dispatch => {
         dispatch(fetchFood(true));
         dispatch(setFilter(danhmuc,tukhoa));
         Util.get(URL, (response) => {
+            console.log(response);
             dispatch(fetchFood(false));
             dispatch(receiveFood(response));
         }, (error) => {alert(error)

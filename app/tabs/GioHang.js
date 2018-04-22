@@ -1,5 +1,5 @@
 import React,{Component} from 'react';
-import {View,Text,TouchableOpacity,StyleSheet,FlatList,TextInput,Modal as ReactNativeModal} from 'react-native';
+import {View,Text,TouchableOpacity,StyleSheet,FlatList,TextInput,Modal as ReactNativeModal,SafeAreaView,Alert} from 'react-native';
 import GioHangPage from './pages/GioHangPage';
 import DSSP from './pages/DSSP';
 import { SearchBar,Badge } from 'react-native-elements';
@@ -55,6 +55,7 @@ class GioHang extends Component{
             seed:1,
             error:null,
             refreshing:false,
+            refreshing2:false,
             page:0,
             page_size:10,
             modalVisible: false,
@@ -62,7 +63,8 @@ class GioHang extends Component{
             itemEdit:null,
             slspEdit:0,
 
-            qrcode: null
+            qrcode: null,
+            chonbantype:1, //1: chon ban, 2: q2r
         }
        
     }
@@ -167,8 +169,9 @@ class GioHang extends Component{
         this.refs.modal3.open();
     }
 
-    postThanhToan = (item)=>{
-        const {dispatch,authReducer}  = this.props;
+    postThanhToan = (banid)=>{
+        const {dispatch,authReducer,quanReducer}  = this.props;
+       
         var cart = [];
         for(var i=0;i<cartReducer.cartItems.length;i++){
             cart.push({
@@ -176,18 +179,23 @@ class GioHang extends Component{
                 SoLuong:cartReducer.cartItems[i].SLSP,
             });
         }
-
-
-
         dispatch(postThanhToanDatHang(authReducer.user,{
-            Ban:this.state.qrcode.ban,
-            Shop:this.state.qrcode.shop,
-            DiaChi:this.state.qrcode.diachi,
+            BanId:banid,
+            QuanId:quanReducer.Quan.Id,
             ChiTietDonHang:cart
         },()=>{
             this.refs.modal_qr.close();
         }));
-      
+    }
+    hoiThanhtoan(ban){
+        Alert.alert(
+            "Thanh toán ("+ban.TenBan+")?",
+            "",
+            [
+                {text:"Hủy bỏ", onPress:()=>{}},
+                {text:"Thanh toán", onPress:()=>{this.postThanhToan(ban.Id)}},
+            ]
+        );
     }
     //
     render(){
@@ -202,10 +210,13 @@ class GioHang extends Component{
             tong_tien_gio_hang+=cartReducer.cartItems[i].SLSP*cartReducer.cartItems[i].Gia;
         }
 
-        const {authReducer,donHangReducer} =this.props;
+        const {authReducer,donHangReducer,quanReducer} =this.props;
         let isLoggedIn = authReducer.user!=null;
         let slsp=cartReducer.cartItems.length;
-
+        let Ban=null;
+        if(quanReducer.Quan!=null){
+            Ban=quanReducer.Quan.Ban;
+        }
         return (
      
             sanPhamReducer.isFetching?<Loading/>:
@@ -291,19 +302,18 @@ class GioHang extends Component{
                                     width: "100%",
                                     borderColor: "transparent",
                                     borderWidth: 0,
-                                    borderRadius: 10
+                                    borderRadius: 10,                                    
                                 }}
                                 backgroundColor="red"
                                 color="white"
                                 icon={{name: 'opencart', type: 'font-awesome'}}
-                                title={'THANH TOÁN'}
+                                title={'Chọn bàn'}
                                 onPress={()=>{
-                                    this.goThanhToan();
-                                    /* if(isLoggedIn){
+                                    if(cartReducer.cartItems.length>0){
                                         this.goThanhToan();
                                     }else{
-                                        Toast.show("Vui lòng đăng nhập!", {position:Toast.positions.CENTER});
-                                    }*/
+                                        Toast.show("Vui lòng thêm sản phẩm!", {position:Toast.positions.CENTER});
+                                    }
                                 }}
                             />
                         </View>
@@ -369,17 +379,17 @@ class GioHang extends Component{
                                             <Ionicons.Button name="md-arrow-round-back" backgroundColor={VCOLOR.xam} borderRadius={0} onPress={()=>{
                                                     this.refs.modal3.close();
                                             }}/>
-                                            <MaterialIcons.Button name="delete-forever" backgroundColor={VCOLOR.red} borderRadius={0} onPress={()=>{
+                                            <MaterialIcons.Button color={VCOLOR.red} name="delete-forever" backgroundColor={VCOLOR.xam} borderRadius={0} onPress={()=>{
                                                     dispatch(cartCRUD("x",this.state.itemEdit,1));
                                                     this.refs.modal3.close();
                                             }}/>
-                                            <FontAwesome.Button name="check" backgroundColor={VCOLOR.green} borderRadius={0}  onPress={() => {
+                                            <FontAwesome.Button color={VCOLOR.green} name="check" backgroundColor={VCOLOR.xam} borderRadius={0}  onPress={() => {
                                                 if(this.state.slspEdit!=NaN){
                                                     dispatch(cartCRUD("=",this.state.itemEdit,this.state.slspEdit));
                                                 }
                                                 this.refs.modal3.close();
                                             }}>
-                                                <Text style={{fontFamily: 'Arial', fontSize: 15}}>Cập nhật</Text>
+                                                <Text style={{fontFamily: 'Arial', fontSize: 15}}></Text>
                                             </FontAwesome.Button>
                                     </View>
                             </View>
@@ -396,29 +406,68 @@ class GioHang extends Component{
                                 leftIconAction={()=>{
                                     this.refs.modal_qr.close();
                                 }}
-                                title={"Quét QR"}
-                            />
+                                title={"Thanh toán "+(this.state.chonbantype==1?"(Chọn bàn)":"(Quét QR bàn)")}
 
-                            <Camera
-                                style={stylesc.preview}
-                                onBarCodeRead={this.onBarCodeRead}
-                                ref={cam => this.camera = cam}
-                                aspect={Camera.constants.Aspect.fill}
-                                >
-                                {
-                                     this.state.qrcode!=null?
-                                     <TouchableOpacity  disabled={donHangReducer.isFetching} style={{backgroundColor:"white",padding:10}} onPress={()=>{
-                                            this.postThanhToan();
-                                     }}>
-                                        <Text style={{fontWeight:"bold"}}>{donHangReducer.isFetching?"Đang gửi thông tin thanh toán...":"Thanh toán ngay"}</Text>
-                                        <Text>Shop: {this.state.qrcode.shop}</Text>
-                                        <Text>Bàn: {this.state.qrcode.ban}</Text>
-                                        <Text>Đ/c: {this.state.qrcode.diachi}</Text>
-                                    </TouchableOpacity>
-                                    :
-                                   null
-                                }
-                            </Camera>
+                                   
+                                rightIcon={this.state.chonbantype==1?"qrcode":"undo"}
+                                rightIconAction={()=>{
+                                    this.setState({
+                                        chonbantype:this.state.chonbantype==1?2:1
+                                    });
+                                }}
+                            />
+                            {
+                                this.state.chonbantype==2?
+                                <Camera
+                                    style={stylesc.preview}
+                                    onBarCodeRead={this.onBarCodeRead}
+                                    ref={cam => this.camera = cam}
+                                    aspect={Camera.constants.Aspect.fill}
+                                    >
+                                    {
+                                        this.state.qrcode!=null?
+                                        <TouchableOpacity  disabled={donHangReducer.isFetching} style={{backgroundColor:"white",padding:10}} onPress={()=>{
+                                                this.postThanhToan();
+                                        }}>
+                                            <Text style={{fontWeight:"bold"}}>{donHangReducer.isFetching?"Đang gửi thông tin thanh toán...":"Thanh toán ngay"}</Text>
+                                            <Text>Shop: {this.state.qrcode.shop}</Text>
+                                            <Text>Bàn: {this.state.qrcode.ban}</Text>
+                                            <Text>Đ/c: {this.state.qrcode.diachi}</Text>
+                                        </TouchableOpacity>
+                                        :
+                                    null
+                                    }
+                                </Camera>
+                                :
+                                    Ban!=null?
+                                    <View style={stylesc.preview2}>
+                                      <SafeAreaView style={{flex:1}}>
+                                            <FlatList
+                                                ref="FlatList2"
+                                                data={Ban}
+                                                renderItem={({item}) =>
+                                                    <TouchableOpacity key={item.ID} onPress={()=>{
+                                                        this.hoiThanhtoan(item);
+                                                    }} style={styles.productItem2}>
+                                                        <Text>{item.MaBan}</Text>
+                                                        <Text>{item.TenBan}</Text>
+                                                    </TouchableOpacity>
+                                                }
+                                                keyExtractor={(item,index) => item.Id+""}
+
+                                                numColumns={2}
+                                                //onEndReached={this.onEndReached} 
+                                                //onEndReachedThreshold={0.5}
+                                                onMomentumScrollBegin={() => { this.onEndReachedCalledDuringMomentum = false; }}
+                                                contentContainerStyle={{paddingBottom:150}}
+                                            />
+                                    </SafeAreaView>
+                                </View>
+                                :
+                                <View style={stylesc.preview2}>
+                                    <Text>Chưa quét QR quán!</Text>
+                                </View>
+                            }
                         </View>
                 </Modal>          
                     
@@ -428,7 +477,12 @@ class GioHang extends Component{
     onBarCodeRead = (e) => {
         var json_parsed=vUtils.isValidJson(e.data);
         if(json_parsed!=false){
-            Toast.show("Tìm thấy mã QR bàn số: "+json_parsed.ban, {position:Toast.positions.CENTER});
+            this.refs.modal_qr.close();
+            this.hoiThanhtoan({
+                Id:json_parsed.ban,
+                TenBan:json_parsed.tenban,
+                MaBan:json_parsed.maban,
+            }); 
             this.setState({qrcode: json_parsed})
         }
         else{
@@ -457,7 +511,8 @@ const mapStateToProps = state => ({
     authReducer:state.authReducer,
     sanPhamReducer:state.sanPhamReducer,
     cartReducer:state.cartReducer,
-    donHangReducer:state.donHangReducer
+    donHangReducer:state.donHangReducer,
+    quanReducer:state.quanReducer
 });
 export default connect(mapStateToProps)(GioHang);
 
@@ -477,8 +532,15 @@ const styles=StyleSheet.create({
     productItem:{
         borderWidth:1,
         marginBottom:2,
-       
-        
+    },
+    productItem2:{
+        borderWidth:1,
+        marginBottom:2,
+        width:"48%",
+        height:50,
+        marginRight:3,
+
+
     },
     itemImage:{
         width: 50,
@@ -510,8 +572,8 @@ const styles=StyleSheet.create({
       },
     
       modal3: {
-        height: 300,
-        width: 300
+        height: 180,
+        width: 150
       },
     
       modal4: {
@@ -641,5 +703,10 @@ const styles2 = StyleSheet.create({
       flex: 1,
       justifyContent: 'flex-end',
       alignItems: 'center'
+    },
+    preview2: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center'
     }
   });

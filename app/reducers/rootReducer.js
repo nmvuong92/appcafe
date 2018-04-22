@@ -12,6 +12,7 @@ import danhMucSanPhamReducer from './danhMucSanPhamReducer';
 import sanPhamKhuyenMaiReducer from './sanPhamKhuyenMaiReducer';
 import donHangReducer from './donHangReducer';
 import articleReducer from './articleReducer';
+import quanReducer from './quanReducer';
 export default rootReducer = combineReducers({  
     ProductReducer,
     navReducer,
@@ -22,5 +23,6 @@ export default rootReducer = combineReducers({
     sanPhamTrangChuReducer,
     sanPhamKhuyenMaiReducer,
     donHangReducer,
-    articleReducer
+    articleReducer,
+    quanReducer
 });

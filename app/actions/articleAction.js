@@ -4,8 +4,6 @@ import * as urls from  './../common/constants_url';
 import Toast from 'react-native-root-toast';
 
 export let fetchArticles = ()=> {
-   
-   
     let URL =urls.api_article+"/layds";
     if(__DEV__){
         console.log(URL);

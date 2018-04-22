@@ -15,11 +15,17 @@ export const defaultString = (str,defaultStr="...") => {
     }
     return str;
 }
+export const isNum=(data)=>{
+   return data === parseInt(data, 10)
+}
 
 export const isValidJson=(json)=>{
     try {
         var json_parsed=JSON.parse(json);
-        if(typeof(json_parsed.ban)=="string" && typeof(json_parsed.shop)=="string" && typeof(json_parsed.diachi)=="string"){
+        if(typeof(json_parsed.quan)=="string" 
+        && typeof(json_parsed.ban)=="string"
+        && typeof(json_parsed.tenban)=="string"
+        && typeof(json_parsed.maban)=="string"){
             return json_parsed;
         }
     } catch (e) {

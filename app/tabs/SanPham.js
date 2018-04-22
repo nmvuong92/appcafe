@@ -32,7 +32,7 @@ class SanPham extends Component{
             error:null,
             refreshing:false,
             page:1,
-            page_size:20
+            page_size:100
         }
     }
 
@@ -173,6 +173,8 @@ class SanPham extends Component{
                                                 backgroundColor:VCOLOR.do_dam,
                                                 borderBottomColor: VCOLOR.do_dam,
                                                 borderTopColor: VCOLOR.do_dam,
+                                                height: 0,
+                                                opacity: 0
                                             }}
                                         
                                             icon={{ type: 'font-awesome', name: 'search' }}

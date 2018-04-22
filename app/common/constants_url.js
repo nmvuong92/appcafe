@@ -8,3 +8,5 @@ export const api_auth= api+"/Auth";
 
 export const api_donhang = api+"/DonHang";
 export const api_article = api+"/Article";
+
+export const api_quan = api+"/Quan";

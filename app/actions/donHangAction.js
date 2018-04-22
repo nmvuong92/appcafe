@@ -3,6 +3,9 @@ import Util from './../common/utils';
 import * as urls from  './../common/constants_url';
 import Toast from 'react-native-root-toast';
 import {cartCRUD} from './cartAction';
+
+var DeviceInfo = require('react-native-device-info');
+
 export let fetchDanhSachDonHang = (user,page,pageSize)=> {
    
     let URL =urls.api_donhang+"/layds?userid="+user.UserId+"&token="+user.JWTToken+"&page="+page+"&pageSize="+pageSize;
@@ -73,14 +76,14 @@ export let postThanhToanDatHang = (user,data,fnSuccess)=> {
     /*data.UserId=user.UserId;
     data.Token = user.JWTToken;*/
 
-
     let url = urls.api_donhang+"/dat_hang_qr";
-    if(__DEV__){
-        console.log("-----------------postThanhToanDatHang----------------");
-        console.log(url);
-    
-        console.log(data);
-    }
+
+    var _deviceName = DeviceInfo.getDeviceId();
+    var _uniqueID=DeviceInfo.getUniqueID();
+    var _ModelNumber=DeviceInfo.getModel();
+
+    data.ModelNumber=_ModelNumber;
+    data.UniqueID=_uniqueID;
     return (dispatch) => {
         dispatch(fetchDatHang(true));
         Util.postJson(url, data,

@@ -34,7 +34,9 @@ import DoiMatKhau from './pages/DoiMatKhau';
 
 import Modal from 'react-native-modalbox';
 import Qr from './pages/Qr';
-
+import * as save from './../common/Storage';
+import {logoutQuan} from './../actions/quanAction';
+var DeviceInfo = require('react-native-device-info');
 class TaiKhoan extends Component{
     constructor(props){
         super(props);
@@ -43,7 +45,11 @@ class TaiKhoan extends Component{
             dssp:true,
             refreshing:false,
             modalVisible: false,
+            DeviceName:"-",
+            UniqueID:"-",
+            ModelNumber:"-",
         }
+      
 
         //setTimeout(() => {this.setState({isloading: false})}, 1000)
     }
@@ -69,8 +75,17 @@ class TaiKhoan extends Component{
         
     }
     componentDidMount(){
-        const {dispatch} = this.props; 
+       const {dispatch} = this.props; 
        dispatch(fetchArticles());
+
+       var _deviceName = DeviceInfo.getDeviceId();
+       var _uniqueID=DeviceInfo.getUniqueID();
+       var _ModelNumber=DeviceInfo.getModel();
+       this.setState({
+           DeviceName:_deviceName,
+           UniqueID:_uniqueID,
+           ModelNumber:_ModelNumber
+       });
     }
 
     //bam vao san pham item
@@ -84,6 +99,7 @@ class TaiKhoan extends Component{
         let isLoggedIn = authReducer.user!=null;//authReducer.isLoggedIn;
         let user = authReducer.user;
         let List = articleReducer.List;
+        let Quan = quanReducer.Quan;
         return (
          
             <View style={styles.container}>
@@ -98,11 +114,13 @@ class TaiKhoan extends Component{
 
                     //showCartBadgeIcon={true}
                     //CartBadgeIconAction={()=>this.goBack()}
-                    title={"Tài khoản"}
+                    title={Quan!=null?Quan.TenQuan:"Chưa quét QR"}
                 />
             <ScrollView style={{
                 backgroundColor: 'rgba(240,240,240,0.9)'
             }}>
+
+
                 {
                     isLoggedIn?   
                     <View>
@@ -152,61 +170,89 @@ class TaiKhoan extends Component{
 
                 }
             
-                
+                {
+                    Quan!=null?
+                    <View style={styles.info}>
+                         <TouchableOpacity
+                            style={styles.loginWrap}
+                            onPress={this._onPressHead.bind(this)}
+                            >
+                    
+                            <Image style={styles.headIcon}
+                                    source={{uri:Quan.ImageThumbnail}}
+                            />     
+                        </TouchableOpacity>
+                        <View style={styles.info_item}>
+                            <Text style={styles.text1}>Tên quán:</Text>
+                            <Text style={styles.text2}>{Quan.TenQuan}</Text>
+                        </View>
+                        
+                        <View style={styles.info_item}>
+                            <Text style={styles.text1}>Mã quán:</Text>
+                            <Text style={styles.text2}>{Quan.MaQuan}</Text>
+                        </View>
+                        
+                        <View style={styles.info_item}>
+                            <Text style={styles.text1}>Địa chỉ:</Text>
+                            <Text style={styles.text2}>{Quan.DiaChi}</Text>
+                        </View>
+                        <View style={styles.info_item}>
+                            <Text style={styles.text1}>Tên thiết bị:</Text>
+                            <Text style={styles.text2}>{this.state.DeviceName}</Text>
+                        </View>
+                        <View style={styles.info_item}>
+                            <Text style={styles.text1}>Model Number:</Text>
+                            <Text style={styles.text2}>{this.state.ModelNumber}</Text>
+                        </View>
+                        <View style={styles.info_item}>
+                            <Text style={styles.text1}>Unique ID:</Text>
+                            <Text style={styles.text2}>{this.state.UniqueID}</Text>
+                        </View>
+                     
+                        
+                         <TouchableOpacity
+                            style={[commonStyles.btn, {marginBottom:20}]}
+                            onPress={() => {
+                                this._logoutQR();
+                            }}
+                            underlayColor={colors.backGray}
+                        >
+                            <Text style={[{color: colors.white, fontWeight: "bold",textAlign:"center"}]}> Thoát QR </Text>
+                        </TouchableOpacity>               
+                    </View> 
 
-
-              
-
-              
-             
+                    
+                    :null
+                }
+                  
                  
-
-                 {
-                     List!=null?
-                     List.map((item,index)=>{
-                         return (
-                            <TouchableOpacity style={styles.li}  activeOpacity={0.75} key={item.Id} onPress={()=>{
-                                this.onPressProductItem(item);
-                            }}>
-                                <Image
-                                    source={{uri:item.ImageThumbnail}}
-                                    style={{width: 30, height: 30, marginLeft: 20}}
-                                />
-                                <Text style={{marginLeft: 10}}>
-                                    {item.Title}
-                                </Text>
-                            </TouchableOpacity>
-                         )
-                     })
-                     :null
-                 }
                 
 
                 {
                     isLoggedIn?
                     <View>
                         <View style={styles.info}>
-                        <View style={styles.info_item}>
-                            <Text style={styles.text1}>Họ và tên:</Text>
-                            <Text style={styles.text2}>{user.HoTen}</Text>
+                            <View style={styles.info_item}>
+                                <Text style={styles.text1}>Họ và tên:</Text>
+                                <Text style={styles.text2}>{user.HoTen}</Text>
+                            </View>
+                            <View style={styles.info_item}>
+                                <Text style={styles.text1}>CMND:</Text>
+                                <Text style={styles.text2}>{user.CMND}</Text>
+                            </View>
+                            <View style={styles.info_item}>
+                                <Text style={styles.text1}>Địa chỉ:</Text>
+                                <Text style={styles.text2}>{user.DiaChi}</Text>
+                            </View>
+                            <View style={styles.info_item}>
+                                <Text style={styles.text1}>Điện thoại:</Text>
+                                <Text style={styles.text2}>{user.DienThoai}</Text>
+                            </View>
+                            <View style={styles.info_item}>
+                                <Text style={styles.text1}>Email:</Text>
+                                <Text style={styles.text2}>{user.Email}</Text>
+                            </View>
                         </View>
-                        <View style={styles.info_item}>
-                            <Text style={styles.text1}>CMND:</Text>
-                            <Text style={styles.text2}>{user.CMND}</Text>
-                        </View>
-                        <View style={styles.info_item}>
-                            <Text style={styles.text1}>Địa chỉ:</Text>
-                            <Text style={styles.text2}>{user.DiaChi}</Text>
-                        </View>
-                        <View style={styles.info_item}>
-                            <Text style={styles.text1}>Điện thoại:</Text>
-                            <Text style={styles.text2}>{user.DienThoai}</Text>
-                        </View>
-                        <View style={styles.info_item}>
-                            <Text style={styles.text1}>Email:</Text>
-                            <Text style={styles.text2}>{user.Email}</Text>
-                        </View>
-                    </View>
 
                       <TouchableOpacity
                         style={[commonStyles.btn, {marginBottom:20}]}
@@ -235,7 +281,7 @@ class TaiKhoan extends Component{
                 !isLoggedIn?
                 <View style={styles.container}>
                 <HeadPadding/>
-                <TouchableOpacity
+                {/* <TouchableOpacity
                     style={[commonStyles.btn, {marginBottom:20}]}
                     onPress={() => {
                         this.refs.modal_register.open();
@@ -244,9 +290,9 @@ class TaiKhoan extends Component{
                     underlayColor={colors.backGray}
                 >
                     <Text style={[{color: colors.white, fontWeight: "bold",textAlign:"center"}]}> Đăng ký </Text>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
 
-                <TouchableOpacity
+                {/* <TouchableOpacity
                     style={[commonStyles.btn, {marginBottom:20}]}
                     onPress={() => {
                         this.refs.modal_login.open();
@@ -256,12 +302,32 @@ class TaiKhoan extends Component{
                     underlayColor={colors.backGray}
                 >
                     <Text style={[{color: colors.white, fontWeight: "bold",textAlign:"center"}]}> Đăng nhập </Text>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
             </View>
             :null
             }
 
-              
+            {/* {
+                    List!=null?
+                    List.map((item,index)=>{
+                        return (
+                        <TouchableOpacity style={styles.li}  activeOpacity={0.75} key={item.Id} onPress={()=>{
+                            this.onPressProductItem(item);
+                        }}>
+                            <Image
+                                source={{uri:item.ImageThumbnail}}
+                                style={{width: 30, height: 30, marginLeft: 20}}
+                            />
+                            <Text style={{marginLeft: 10}}>
+                                {item.Title}
+                            </Text>
+                        </TouchableOpacity>
+                        )
+                    })
+                    :null
+             } */}
+
+
             </ScrollView>
 
    
@@ -284,21 +350,7 @@ class TaiKhoan extends Component{
                     </View>
                 </Modal>
 
-                <Modal
-                ref={"modal_register"}>
-                    <View style={{flex:1,}}>
-                        <Header
-                            leftIcon='angle-left'
-                            leftIconAction={()=>{
-                                this.refs.modal_register.close();
-                            }}
-                            title={"Đăng ký"}
-                        />
-                        <Qr hide_header={true} onRegisterSuccess={()=>{
-                            this.refs.modal_register.close();
-                        }}/>
-                    </View>
-               </Modal>
+               
 
                <Modal
                 ref={"modal_doimatkhau"}>
@@ -333,12 +385,17 @@ class TaiKhoan extends Component{
             dispatch(logout());
         });
     }
-
+    _logoutQR() {
+        InteractionManager.runAfterInteractions(() => {
+            const {dispatch} = this.props;
+            dispatch(logoutQuan());
+        });
+    }
 }
 //khong can chia se nen connect rong
 //khi ma exprt connect ==> co 1 bien dispatch
 export default connect((state)=>{
-    return {authReducer,navReducer,articleReducer} = state;
+    return {authReducer,navReducer,articleReducer,quanReducer} = state;
 })(TaiKhoan);
 
 

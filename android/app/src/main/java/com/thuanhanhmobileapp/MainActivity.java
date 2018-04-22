@@ -1,4 +1,4 @@
-package com.thuanhanhmobileapp;
+package com.vuondao.qcafe;
 
 import com.facebook.react.ReactActivity;
 
