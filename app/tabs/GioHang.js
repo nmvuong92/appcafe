@@ -65,6 +65,7 @@ class GioHang extends Component{
 
             qrcode: null,
             chonbantype:1, //1: chon ban, 2: q2r
+            askQR:false,
         }
        
     }
@@ -310,6 +311,9 @@ class GioHang extends Component{
                                 title={'Chọn bàn'}
                                 onPress={()=>{
                                     if(cartReducer.cartItems.length>0){
+                                        this.setState({
+                                            askQR:true
+                                        });
                                         this.goThanhToan();
                                     }else{
                                         Toast.show("Vui lòng thêm sản phẩm!", {position:Toast.positions.CENTER});
@@ -478,18 +482,23 @@ class GioHang extends Component{
         );
     };
     onBarCodeRead = (e) => {
-        var json_parsed=vUtils.isValidJson(e.data);
-        if(json_parsed!=false){
+        if(this.state.askQR){
             this.refs.modal_qr.close();
-            this.hoiThanhtoan({
-                Id:json_parsed.ban,
-                TenBan:json_parsed.tenban,
-                MaBan:json_parsed.maban,
-            }); 
-            this.setState({qrcode: json_parsed})
-        }
-        else{
-            Toast.show("Mã QR không hợp lệ!", {position:Toast.positions.CENTER});
+            var json_parsed=vUtils.isValidJson(e.data);
+            if(json_parsed!=false){
+                this.hoiThanhtoan({
+                    Id:json_parsed.ban,
+                    TenBan:json_parsed.tenban,
+                    MaBan:json_parsed.maban,
+                }); 
+                this.setState({qrcode: json_parsed})
+            }
+            else{
+                Toast.show("Mã QR không hợp lệ!", {position:Toast.positions.CENTER});
+            }
+            this.setState({
+                askQR:false
+            });
         }
     };
     onChanged(text){

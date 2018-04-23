@@ -1,5 +1,5 @@
 //link api 
-export const website = 'http://webcafe.thietkevuondao.com'; 
+export const website = 'http://cafequan.vn'; 
 export const api = website+"/api";
 
 export const api_sp = api+"/SanPham";
