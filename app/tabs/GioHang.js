@@ -425,6 +425,7 @@ class GioHang extends Component{
                                     aspect={Camera.constants.Aspect.fill}
                                     >
                                     {
+                                        /*
                                         this.state.qrcode!=null?
                                         <TouchableOpacity  disabled={donHangReducer.isFetching} style={{backgroundColor:"white",padding:10}} onPress={()=>{
                                                 this.postThanhToan();
@@ -435,8 +436,10 @@ class GioHang extends Component{
                                             <Text>Đ/c: {this.state.qrcode.diachi}</Text>
                                         </TouchableOpacity>
                                         :
-                                    null
+                                        <Text>Shop: {this.state.qrcode.shop}</Text>
+                                        */
                                     }
+                                    <Text>Quét mã QR bàn</Text>
                                 </Camera>
                                 :
                                     Ban!=null?
