@@ -16,28 +16,28 @@
             <rect key="frame" x="0.0" y="0.0" width="480" height="480"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="qcafe" textAlignment="center" lineBreakMode="middleTruncation" baselineAdjustment="alignBaselines" minimumFontSize="18" translatesAutoresizingMaskIntoConstraints="NO" id="kId-c2-rCX">
-                    <rect key="frame" x="20" y="410" width="440" height="43"/>
+                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="app qcafe" textAlignment="center" lineBreakMode="middleTruncation" baselineAdjustment="alignBaselines" minimumFontSize="18" translatesAutoresizingMaskIntoConstraints="NO" id="kId-c2-rCX">
+                    <rect key="frame" x="20" y="410" width="441" height="43"/>
                     <fontDescription key="fontDescription" type="boldSystem" pointSize="22"/>
                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="app256trans" translatesAutoresizingMaskIntoConstraints="NO" id="O7N-kR-o5Q">
-                    <rect key="frame" x="176" y="136" width="128" height="128"/>
+                    <rect key="frame" x="176" y="176" width="128" height="128"/>
                     <constraints>
-                        <constraint firstAttribute="height" constant="128" id="Met-Mu-pTM"/>
-                        <constraint firstAttribute="width" constant="128" id="UxS-pm-bt5"/>
+                        <constraint firstAttribute="height" constant="128" id="MWM-Hb-vDv"/>
+                        <constraint firstAttribute="width" constant="128" id="j1A-G6-zhU"/>
                     </constraints>
                 </imageView>
             </subviews>
             <color key="backgroundColor" red="0.97933279418583319" green="0.97807776492647269" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
                 <constraint firstAttribute="bottom" secondItem="kId-c2-rCX" secondAttribute="bottom" constant="27" id="0xv-4w-9dK"/>
-                <constraint firstItem="O7N-kR-o5Q" firstAttribute="centerX" secondItem="kId-c2-rCX" secondAttribute="centerX" id="4fG-IW-NbR"/>
+                <constraint firstItem="O7N-kR-o5Q" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="4B3-y7-0mx"/>
                 <constraint firstItem="kId-c2-rCX" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="bottom" multiplier="1/3" constant="271.5" id="5cJ-9S-tgC"/>
-                <constraint firstItem="O7N-kR-o5Q" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="136" id="A4r-Id-7bV"/>
                 <constraint firstAttribute="centerX" secondItem="kId-c2-rCX" secondAttribute="centerX" id="Koa-jz-hwk"/>
                 <constraint firstItem="kId-c2-rCX" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="20" symbolic="YES" id="fvb-Df-36g"/>
+                <constraint firstItem="O7N-kR-o5Q" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="oL3-ci-xat"/>
             </constraints>
             <nil key="simulatedStatusBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
