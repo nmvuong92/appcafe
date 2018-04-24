@@ -22,10 +22,7 @@ export const isNum=(data)=>{
 export const isValidJson=(json)=>{
     try {
         var json_parsed=JSON.parse(json);
-        if(typeof(json_parsed.quan)=="string" 
-        && typeof(json_parsed.ban)=="string"
-        && typeof(json_parsed.tenban)=="string"
-        && typeof(json_parsed.maban)=="string"){
+        if(typeof(json_parsed.quan)=="string"){
             return json_parsed;
         }
     } catch (e) {

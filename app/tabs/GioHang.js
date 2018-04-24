@@ -66,6 +66,7 @@ class GioHang extends Component{
             qrcode: null,
             chonbantype:1, //1: chon ban, 2: q2r
             askQR:false,
+            Ban:0,//nhập bàn
         }
        
     }
@@ -170,7 +171,7 @@ class GioHang extends Component{
         this.refs.modal3.open();
     }
 
-    postThanhToan = (banid)=>{
+    postThanhToan = (Ban)=>{
         const {dispatch,authReducer,quanReducer}  = this.props;
        
         var cart = [];
@@ -181,20 +182,20 @@ class GioHang extends Component{
             });
         }
         dispatch(postThanhToanDatHang(authReducer.user,{
-            BanId:banid,
+            Ban:Ban,
             QuanId:quanReducer.Quan.Id,
             ChiTietDonHang:cart
         },()=>{
             this.refs.modal_qr.close();
         }));
     }
-    hoiThanhtoan(ban){
+    hoiThanhtoan(){
         Alert.alert(
-            "Thanh toán ("+ban.TenBan+")?",
+            "Thanh toán (bàn: "+this.state.Ban+")?",
             "",
             [
                 {text:"Hủy bỏ", onPress:()=>{}},
-                {text:"Thanh toán", onPress:()=>{this.postThanhToan(ban.Id)}},
+                {text:"Thanh toán", onPress:()=>{this.postThanhToan(this.state.Ban)}},
             ]
         );
     }
@@ -214,10 +215,6 @@ class GioHang extends Component{
         const {authReducer,donHangReducer,quanReducer} =this.props;
         let isLoggedIn = authReducer.user!=null;
         let slsp=cartReducer.cartItems.length;
-        let Ban=null;
-        if(quanReducer.Quan!=null){
-            Ban=quanReducer.Quan.Ban;
-        }
         return (
      
             sanPhamReducer.isFetching?<Loading/>:
@@ -420,67 +417,30 @@ class GioHang extends Component{
                                     });
                                 }}
                             />
-                            {
-                                this.state.chonbantype==2?
-                                <Camera
-                                    style={stylesc.preview}
-                                    onBarCodeRead={this.onBarCodeRead}
-                                    ref={cam => this.camera = cam}
-                                    aspect={Camera.constants.Aspect.fill}
-                                    >
-                                    {
-                                        /*
-                                        this.state.qrcode!=null?
-                                        <TouchableOpacity  disabled={donHangReducer.isFetching} style={{backgroundColor:"white",padding:10}} onPress={()=>{
-                                                this.postThanhToan();
-                                        }}>
-                                            <Text style={{fontWeight:"bold"}}>{donHangReducer.isFetching?"Đang gửi thông tin thanh toán...":"Thanh toán ngay"}</Text>
-                                            <Text>Shop: {this.state.qrcode.shop}</Text>
-                                            <Text>Bàn: {this.state.qrcode.ban}</Text>
-                                            <Text>Đ/c: {this.state.qrcode.diachi}</Text>
-                                        </TouchableOpacity>
-                                        :
-                                        <Text>Shop: {this.state.qrcode.shop}</Text>
-                                        */
-                                    }
-                                    <Text>Quét mã QR bàn</Text>
-                                </Camera>
-                                :
-                                    Ban!=null?
-                                    <View style={stylesc.preview2}>
-                                      <SafeAreaView style={{flex:1}}>
-                                            <FlatList
-                                                ref="FlatList2"
-                                                data={Ban}
-                                                renderItem={({item}) =>
-                                                    <TouchableOpacity key={item.ID} onPress={()=>{
-                                                        this.hoiThanhtoan(item);
-                                                    }} style={styles.productItem2}>
-                                                        <Text>{item.MaBan}</Text>
-                                                        <Text>{item.TenBan}</Text>
-                                                    </TouchableOpacity>
-                                                }
-                                                keyExtractor={(item,index) => item.Id+""}
 
-                                                numColumns={2}
-                                                //onEndReached={this.onEndReached} 
-                                                //onEndReachedThreshold={0.5}
-                                                onMomentumScrollBegin={() => { this.onEndReachedCalledDuringMomentum = false; }}
-                                                contentContainerStyle={{paddingBottom:150}}
-                                            />
-                                    </SafeAreaView>
-                                </View>
-                                :
-                                <View style={stylesc.preview2}>
-                                    <Text>Chưa quét QR quán!</Text>
-                                </View>
-                            }
+                            <TextInput 
+                                style={styles.vInput}
+                                keyboardType='numeric'
+                                onChangeText={(text) => this.setState({Ban:text})}
+                                placeholder='Nhập số bàn'   
+                                value={this.state.Ban}
+                                maxLength={10}  //setting limit of input
+                            />
+
+                            <View style={stylesc.preview2}>
+                                <TouchableOpacity onPress={()=>{
+                                    this.hoiThanhtoan();
+                                }} style={styles.productItem2}>
+                                    <Text>THANH TOÁN</Text>
+                                </TouchableOpacity>
+                            </View>
                         </View>
                 </Modal>          
                     
             </View>
         );
     };
+    /*
     onBarCodeRead = (e) => {
         if(this.state.askQR){
             this.refs.modal_qr.close();
@@ -500,7 +460,7 @@ class GioHang extends Component{
                 askQR:false
             });
         }
-    };
+    };*/
     onChanged(text){
         let newText = '';
         let numbers = '0123456789';
@@ -515,6 +475,10 @@ class GioHang extends Component{
         }else{
             this.setState({ slspEdit:"" });
         }
+    }
+
+    onChangedBan(text){
+        this.setState({ Ban:text});
     }
 }
 
