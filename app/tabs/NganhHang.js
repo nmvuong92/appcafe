@@ -100,12 +100,9 @@ class NganhHang extends Component{
 
     onBarCodeRead = (e) => {
         var json_parsed=vUtils.isValidJson(e.data);
-        console.log(json_parsed);
+        this.refs.modal_qr.close();
         if(json_parsed!=false){
-            this.refs.modal_qr.close();
-          
             const {dispatch} =this.props;
-            //this.setState({qrcode: json_parsed})
             dispatch(quanAction.getById(json_parsed.quan,json_parsed,()=>{
                 dispatch(fetchListDMSP());
             },()=>{
@@ -169,7 +166,9 @@ class NganhHang extends Component{
 
 
     _renderQR(){
+        const {quanReducer} = this.props;
         return(
+            quanReducer.isFetching?<Loading/>:
             <View style={styles.container}>
                 <Header
                     //showBack={true}

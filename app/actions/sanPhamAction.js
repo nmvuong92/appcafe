@@ -31,13 +31,10 @@ export let fetchSanPhamCT = (idsp)=> {
     if(__DEV__){
             console.log("-----------------fetchSanPhamCT----------------");
     }
-   
     let URL =urls.api_sp+"/laysp?id="+idsp;
     if(__DEV__){
             console.log("url: "+URL);
     }
-   
-
     return dispatch => {
         dispatch(receiveFoodCT(null))
         dispatch(fetchFood(true));

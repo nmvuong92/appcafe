@@ -29,6 +29,12 @@ export const isValidJson=(json)=>{
         return false;
     }
 }
+
+export const isInt=(value) => {
+    return !isNaN(value) && 
+           parseInt(Number(value)) == value && 
+           !isNaN(parseInt(value, 10));
+}
 export const vStyles = StyleSheet.create({
     h1:{
         fontSize: 20,

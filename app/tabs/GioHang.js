@@ -66,7 +66,7 @@ class GioHang extends Component{
             qrcode: null,
             chonbantype:1, //1: chon ban, 2: q2r
             askQR:false,
-            Ban:0,//nhập bàn
+            Ban:"",//nhập bàn
         }
        
     }
@@ -190,14 +190,21 @@ class GioHang extends Component{
         }));
     }
     hoiThanhtoan(){
-        Alert.alert(
-            "Thanh toán (bàn: "+this.state.Ban+")?",
-            "",
-            [
-                {text:"Hủy bỏ", onPress:()=>{}},
-                {text:"Thanh toán", onPress:()=>{this.postThanhToan(this.state.Ban)}},
-            ]
-        );
+        
+        if (vUtils.isInt(this.state.Ban)){
+            Alert.alert(
+                "Thanh toán (bàn: "+this.state.Ban+")?",
+                "",
+                [
+                    {text:"Hủy bỏ", onPress:()=>{}},
+                    {text:"Thanh toán", onPress:()=>{this.postThanhToan(this.state.Ban)}},
+                ]
+            );
+            
+        }
+        else{
+            Toast.show("Vui lòng nhập bàn!", {position:Toast.positions.TOP});
+        }
     }
     //
     render(){
@@ -307,14 +314,18 @@ class GioHang extends Component{
                                 icon={{name: 'opencart', type: 'font-awesome'}}
                                 title={'Chọn bàn'}
                                 onPress={()=>{
-                                    if(cartReducer.cartItems.length>0){
-                                        this.setState({
-                                            askQR:true
-                                        });
-                                        this.goThanhToan();
-                                    }else{
-                                        Toast.show("Vui lòng thêm sản phẩm!", {position:Toast.positions.CENTER});
+                                    if(quanReducer.Quan==null){
+                                        Toast.show("Chưa đăng nhập quán bằng QR!", {position:Toast.positions.CENTER});
+                                        return;
                                     }
+                                    if(cartReducer.cartItems.length==0){
+                                        Toast.show("Vui lòng thêm sản phẩm!", {position:Toast.positions.CENTER});
+                                        return;
+                                    }
+                                    this.setState({
+                                        askQR:true
+                                    });
+                                    this.goThanhToan();
                                 }}
                             />
                         </View>
@@ -400,6 +411,7 @@ class GioHang extends Component{
              
                   
                 <Modal
+                    style={[styles.modal, styles.modal_qr]} position={"center"} 
                     ref={"modal_qr"}>
                         <View style={{flex:1,}}>
                             <Header
@@ -407,33 +419,44 @@ class GioHang extends Component{
                                 leftIconAction={()=>{
                                     this.refs.modal_qr.close();
                                 }}
-                                title={"Thanh toán "+(this.state.chonbantype==1?"(Chọn bàn)":"(Quét QR bàn)")}
+                                title={(this.state.chonbantype==1?"Chọn bàn":"Quét QR bàn")}
 
                                    
-                                rightIcon={this.state.chonbantype==1?"qrcode":"undo"}
-                                rightIconAction={()=>{
+                               // rightIcon={this.state.chonbantype==1?"qrcode":"undo"}
+                                /*rightIconAction={()=>{
                                     this.setState({
                                         chonbantype:this.state.chonbantype==1?2:1
                                     });
-                                }}
+                                }}*/
                             />
-
-                            <TextInput 
-                                style={styles.vInput}
-                                keyboardType='numeric'
-                                onChangeText={(text) => this.setState({Ban:text})}
-                                placeholder='Nhập số bàn'   
-                                value={this.state.Ban}
-                                maxLength={10}  //setting limit of input
-                            />
-
-                            <View style={stylesc.preview2}>
-                                <TouchableOpacity onPress={()=>{
-                                    this.hoiThanhtoan();
-                                }} style={styles.productItem2}>
-                                    <Text>THANH TOÁN</Text>
-                                </TouchableOpacity>
-                            </View>
+                                <View style={{height:40}}>
+                                    <TextInput 
+                                        style={styles.vInput2}
+                                        autoFocus={true}
+                                        keyboardType='numeric'
+                                        onChangeText={(text) => this.setState({Ban:text})}
+                                        placeholder='Nhập số bàn'
+                                        value={this.state.Ban}
+                                        maxLength={10}  //setting limit of input
+                                    />
+                                </View>
+                             
+                                 <Button
+                                    buttonStyle={{
+                                        backgroundColor: VCOLOR.do_dam,
+                                        width: "100%",
+                                        borderColor: "transparent",
+                                        borderWidth: 0,
+                                        borderRadius: 10,                                    
+                                    }}
+                                    backgroundColor="red"
+                                    color="white"
+                                    icon={{name: 'opencart', type: 'font-awesome'}}
+                                    title={'TẠO ĐƠN HÀNG'}
+                                    onPress={()=>{
+                                        this.hoiThanhtoan();
+                                    }}
+                                />
                         </View>
                 </Modal>          
                     
@@ -493,51 +516,55 @@ const mapStateToProps = state => ({
 export default connect(mapStateToProps)(GioHang);
 
 const styles=StyleSheet.create({
-    container:{
-        flex:1,
-        position:"relative",
-    },
-    vInput:{
-        height: 40,
-        paddingLeft: 10,
-        flex: 1,
-        fontSize: 16,
-        borderBottomWidth:1,
-        borderBottomColor: "gray",
-    },
-    productItem:{
-        borderWidth:1,
-        marginBottom:2,
-    },
-    productItem2:{
-        borderWidth:1,
-        marginBottom:2,
-        width:"48%",
-        height:50,
-        marginRight:3,
+        container:{
+            flex:1,
+            position:"relative",
+        },
+        vInput:{
+            height: 40,
+            paddingLeft: 10,
+            flex: 1,
+            fontSize: 16,
+            borderBottomWidth:1,
+            borderBottomColor: "gray",
+        },
+        vInput2:{
+            height: 40,
+            paddingLeft: 10,
+            flex: 1,
+            fontSize: 16,
+        },
+        productItem:{
+            borderWidth:1,
+            marginBottom:2,
+        },
+        productItem2:{
+            borderWidth:1,
+            marginBottom:2,
+            width:"48%",
+            height:50,
+            marginRight:3,
+        },
+        itemImage:{
+            width: 50,
+            height: 50,
+            justifyContent: 'center',
+            alignItems: 'center',
+        },
+        footer:{
+            flexDirection:"row",
+            position:'absolute',
+            bottom:3,
+            left:0,
+            width:"100%",
+            backgroundColor:VCOLOR.xam,
+            alignContent:"center",
+            alignItems: "center",
+            justifyContent:"center",
+            paddingTop:3,
+        },
 
-
-    },
-    itemImage:{
-        width: 50,
-        height: 50,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    footer:{
-        flexDirection:"row",
-        position:'absolute',
-        bottom:3,
-        left:0,
-        width:"100%",
-        backgroundColor:VCOLOR.xam,
-        alignContent:"center",
-        alignItems: "center",
-        justifyContent:"center",
-        paddingTop:3,
-    },
-
-    modal: {
+      modal: {
         justifyContent: 'center',
         alignItems: 'center'
       },
@@ -551,7 +578,10 @@ const styles=StyleSheet.create({
         height: 180,
         width: 150
       },
-    
+      modal_qr: {
+        height: 150,
+        width: 200
+      },
       modal4: {
         height: 300
       },
@@ -562,7 +592,6 @@ const styles=StyleSheet.create({
       
         padding: 10
       },
-    
       btnModal: {
         position: "absolute",
         top: 0,
@@ -571,7 +600,6 @@ const styles=StyleSheet.create({
         height: 50,
         backgroundColor: "transparent"
       },
-    
       text: {
        
         fontSize: 22

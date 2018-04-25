@@ -132,16 +132,47 @@ class SanPham extends Component{
     }
     //
     render(){
-        const {navReducer}=this.props;
-       // console.log(navReducer);
-        var data_id = 0;
-        if(navReducer.dataBack!=null&&navReducer.dataBack.type=="chon_danh_muc"){
-            data_id = navReducer.dataBack.data.id;
+        const {quanReducer} = this.props;
+        if( quanReducer.Quan==null){
+            return this._renderRequestQR();
+        }else{
+            return this._renderMain();
         }
-        const {dispatch,sanPhamReducer} = this.props;
-        let isFetching = sanPhamReducer.isFetching;
-        let Paging=sanPhamReducer.Paging;
-        return (
+    };
+    _renderRequestQR(){
+       return (
+        <View style={styles.container}>
+            <Header
+            showBack={true}
+            // leftIcon='angle-left'
+            // leftIconAction={()=>this.goBack()}
+
+            // rightIcon='address-book'
+            // rightIconAction={()=>this.goBack()}
+
+            // rightIcon2='heart'
+            // rightIconAction2={()=>this.goBack()}
+
+            title={sanPhamReducer.danhmuc!=null?sanPhamReducer.danhmuc.TenDanhMuc:"-Tất cả danh mục sản phẩm-"}
+        />
+        <Text>Chưa nhập mã QR</Text>
+    </View>
+       );
+    }
+    _renderMain(){
+
+        const {navReducer}=this.props;
+        // console.log(navReducer);
+         var data_id = 0;
+         if(navReducer.dataBack!=null&&navReducer.dataBack.type=="chon_danh_muc"){
+             data_id = navReducer.dataBack.data.id;
+         }
+         const {dispatch,sanPhamReducer} = this.props;
+         let isFetching = sanPhamReducer.isFetching;
+         let Paging=sanPhamReducer.Paging;
+         const {quanReducer} = this.props;
+
+        return(
             <View style={styles.container}>
            
             <View style={styles.container}>
@@ -260,12 +291,7 @@ class SanPham extends Component{
                             //onEndReachedThreshold={0.5}
                             onMomentumScrollBegin={() => { this.onEndReachedCalledDuringMomentum = false; }}
                             contentContainerStyle={{paddingBottom:150}}
-
-
-                          
                         />
-
-
                          <View style = { styles.footerStyle }>
                                 <TouchableOpacity 
                                     activeOpacity = { 0.7 } 
@@ -335,14 +361,16 @@ class SanPham extends Component{
                 </View>
             
             </View>
+
         );
-    };
+    }
 }
 
 const mapStateToProps = state => ({
     navReducer:state.navReducer,
     authReducer:state.authReducer,
     sanPhamReducer:state.sanPhamReducer,
+    quanReducer:state.quanReducer
 });
 export default connect(mapStateToProps)(SanPham);
 
