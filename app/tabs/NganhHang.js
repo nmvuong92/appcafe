@@ -35,7 +35,8 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import Feather from 'react-native-vector-icons/Feather';
 import IconBadge from 'react-native-icon-badge';
 import Modal from 'react-native-modalbox';
-import {getQR,setQR} from './../common/Storage';
+
+import {getQR,setQR,getQuan} from './../common/Storage';
 import { Button } from 'react-native-elements'
 import Camera from 'react-native-camera';
 import * as vUtils  from './../common/vUtils';
@@ -80,7 +81,7 @@ class NganhHang extends Component{
         const {navReducer,dispatch,sanPhamReducer}  = this.props;
         //dispatch({type:"goBack",dataBack:"123"});
         dispatch({type:"SanPham_Screen"});
-        //lay dssp
+        //lay dsspxx
         dispatch(fetchSanPham(null,sanPhamReducer.tukhoa,1,this.state.pageSize));
     }
 
@@ -117,6 +118,7 @@ class NganhHang extends Component{
 
     refresh(){
         const {dispatch} =this.props;
+       
         dispatch(fetchListDMSP());
         
     }

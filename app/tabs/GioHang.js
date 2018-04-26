@@ -414,21 +414,16 @@ class GioHang extends Component{
                     style={[styles.modal, styles.modal_qr]} position={"center"} 
                     ref={"modal_qr"}>
                         <View style={{flex:1,}}>
-                            <Header
+                            {/* <Header
                                 leftIcon='angle-left'
                                 leftIconAction={()=>{
                                     this.refs.modal_qr.close();
                                 }}
                                 title={(this.state.chonbantype==1?"Chọn bàn":"Quét QR bàn")}
-
-                                   
-                               // rightIcon={this.state.chonbantype==1?"qrcode":"undo"}
-                                /*rightIconAction={()=>{
-                                    this.setState({
-                                        chonbantype:this.state.chonbantype==1?2:1
-                                    });
-                                }}*/
-                            />
+                            /> */}
+                                <View style={{alignContent:"center",alignItems:"center",height:40}}>
+                                    <Text>Nhập số bàn</Text>
+                                </View>
                                 <View style={{height:40}}>
                                     <TextInput 
                                         style={styles.vInput2}
@@ -579,8 +574,8 @@ const styles=StyleSheet.create({
         width: 150
       },
       modal_qr: {
-        height: 150,
-        width: 200
+        height: 160,
+        width: 220
       },
       modal4: {
         height: 300

@@ -22,6 +22,10 @@ export let getById = (id,qr,fnSucc,fnErr)=> {
                 });
                 fnSucc();
             }else{
+                dispatch({
+                    type:types.QUAN_RECEIVE,
+                    data:null
+                });
                 Toast.show(response.m, {position:Toast.positions.CENTER});
                 fnErr();
             }

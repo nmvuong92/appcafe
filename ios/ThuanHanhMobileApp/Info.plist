@@ -21,7 +21,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1</string>
+	<string>5</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
@@ -43,6 +43,10 @@
 	</dict>
 	<key>NSCameraUsageDescription</key>
 	<string>Ứng dụng $(PRODUCT_NAME) cần sử dụng camera của bạn để quét mã QR tạo đơn hàng</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Ứng dụng $(PRODUCT_NAME) cần xác định vị trí của bạn để cung cấp thông tin tạo đơn hàng</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Ứng dụng $(PRODUCT_NAME) cần xác định vị trí của bạn để cung cấp thông tin tạo đơn hàng</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Ứng dụng $(PRODUCT_NAME) cần sử dụng microphone để quét mã QR tạo đơn hàng</string>
 	<key>NSPhotoLibraryUsageDescription</key>
