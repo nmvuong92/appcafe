@@ -43,6 +43,7 @@ import * as vUtils  from './../common/vUtils';
 import Toast from 'react-native-root-toast';
 import * as quanAction from './../actions/quanAction';
 import {cartCRUD} from './../actions/cartAction';
+import {fetchDanhSachDonHangDevice} from './../actions/donHangAction';
 class NganhHang extends Component{
     constructor(props){
         super(props);
@@ -117,6 +118,7 @@ class NganhHang extends Component{
             dispatch(quanAction.getById(json_parsed.quan,json_parsed,()=>{
                 dispatch(fetchListDMSP());
                 dispatch(cartCRUD("0"));
+                dispatch(fetchDanhSachDonHangDevice(1,1000));
             },()=>{
                 console.log("err");
             }));
@@ -206,7 +208,10 @@ class NganhHang extends Component{
                     >
                         <Text style={[{color: colors.white, fontWeight: "bold",textAlign:"center"}]}> Quét QR </Text>
                     </TouchableOpacity>
-                    <TouchableOpacity
+                   
+                   
+                   {/*
+                       <TouchableOpacity
                         style={[commonStyles.btn, {marginBottom:20}]}
                         onPress={() => {
                             this.goSeedQR();
@@ -215,6 +220,7 @@ class NganhHang extends Component{
                     >
                         <Text style={[{color: colors.white, fontWeight: "bold",textAlign:"center"}]}> QR seed </Text>
                     </TouchableOpacity>
+                    */}
                 <Modal ref={"modal_qr"}>
                         <View style={{flex:1,}}>
                             <Header

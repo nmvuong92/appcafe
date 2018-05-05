@@ -32,7 +32,7 @@ class DonHang extends Component{
             error:null,
             refreshing:false,
             page:1,
-            page_size:10,
+            page_size:1000,
             show_header:params!=undefined&&params.show_header!=undefined,
             detail_nav:params!=undefined?params.detail_nav:"DonHang_CTDonHang_Screen",
             txtGopY:"",
@@ -145,8 +145,8 @@ class DonHang extends Component{
                         //leftIcon='angle-left'
                         //leftIconAction={()=>this.goBack()}
 
-                        // rightIcon='address-book'
-                        // rightIconAction={()=>this.goBack()}
+                        rightIcon='refresh'
+                        rightIconAction={()=>this.reLoad()}
 
                         // rightIcon2='heart'
                         // rightIconAction2={()=>this.goBack()}
@@ -157,7 +157,7 @@ class DonHang extends Component{
                         <Text>Đơn hàng</Text>
                     </View>
                     <View style={styles.cot3}>
-                        <Text>Điểm tích lũy</Text>
+                        <Text>Trạng thái</Text>
                     </View>    
                 </View>
                {
@@ -185,7 +185,6 @@ class DonHang extends Component{
                                         </View>
                                     
                                         <View style={styles.cot3}>
-                                            <Text>{item.TrangThaiGiaoHang.Ten}</Text>
                                             <Text>{item.TrangThaiThanhToan.Ten}</Text>
                                             {
                                                 item.TrangThaiThanhToan.Id==2?
@@ -196,7 +195,7 @@ class DonHang extends Component{
                                                 item.TrangThaiThanhToan.Id==1?
                                                 <Button
                                                     buttonStyle={{
-                                                        backgroundColor: item.SoLanGoiTinhTien>0?VCOLOR.green:VCOLOR.do_dam,
+                                                        backgroundColor:VCOLOR.green,
                                                         borderColor: "transparent",
                                                         borderWidth: 0,
                                                         borderRadius: 0,
@@ -204,19 +203,17 @@ class DonHang extends Component{
                                                     }}
                                                     containerViewStyle={{width: '100%', marginLeft: 0}}
                                                     fontSize={12}
-                                                    backgroundColor="red"
                                                     color="white"
-                                                    iconRight={{name: 'gratipay', type: 'font-awesome'}}
-                                                    title={'Gọi tính tiền ('+item.SoLanGoiTinhTien+")"}
+                                                    iconRight={{name: item.SoLanGoiTinhTien>0?'check':'gratipay', type: 'font-awesome'}}
+                                                    title={'Gọi tính tiền'}
                                                     onPress={()=>{
                                                         dispatch(postGoiTinhTien(item.Id,()=>{
-                                                            console.log("postGoiTinhTien OK");
+                                                            this.reLoad();
                                                         }));                                                        
                                                     }}
                                                 />
                                                 :null
                                             }
-
                                             <Button
                                                 buttonStyle={{
                                                     backgroundColor: VCOLOR.green,
@@ -273,10 +270,9 @@ class DonHang extends Component{
                                 <View style={{flex:1}}>
                                     <TextInput 
                                         style={{width:"100%"}}
-                                        autoFocus={true}
-                                        editable = {true}
+                                      
                                         multiline = {true}
-                                        numberOfLines = {4}
+                                        numberOfLines = {2}
                                         maxLength = {499}
                                         onChangeText={(text) => this.setState({txtGopY:text})}
                                         placeholder='Nhập góp ý/phản hồi'
@@ -296,19 +292,18 @@ class DonHang extends Component{
                                     icon={{name: 'send-o', type: 'font-awesome'}}
                                     title={'Gửi'}
                                     onPress={()=>{
-                                        if(this.state.txtGopY.length>10&&this.state.txtGopY.length<500){
+                                        if(this.state.txtGopY.length>=3&&this.state.txtGopY.length<500){
                                             dispatch(postGopY(this.state.GopYDonHangID,this.state.txtGopY,()=>{
-                                                console.log("postGopY OK");
+                                                this.refs.modal_gopy.close();
+                                                this.reLoad();
                                             }));  
                                         }else{
-                                            Toast.show("Nội dung góp ý/phản hồi từ 10-499 ký tự!", {position:Toast.positions.TOP});
+                                            Toast.show("Nội dung góp ý/phản hồi từ 3-499 ký tự!", {position:Toast.positions.TOP});
                                         }
                                     }}
                                 />
                         </View>
                 </Modal>
-
-          
                <View style = { styles.footerStyle }>
                         <TouchableOpacity 
                             activeOpacity = { 0.7 } 
@@ -372,12 +367,6 @@ class DonHang extends Component{
                             null
                         }
                    </View>
-
-   
-             
-
-
-
             </View>
         );
     };
@@ -473,7 +462,7 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     modal_gopy: {
-        height: 300,
-        width: 350
+        height: 180,
+        width: 200
     },
 });

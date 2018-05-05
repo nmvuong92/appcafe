@@ -10,12 +10,10 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 class DonHangBadgeIcon extends Component {
   render() {
-    const { donHangReducer,authReducer } = this.props;
-    //đếm số lượng sản phẩm trong giỏ hàng
-    let total= 0;
-    if(authReducer.user!=null&&donHangReducer.List!=null){
-        total=donHangReducer.Paging.TotalRecords;
-    }
+    const { donHangReducer } = this.props;
+    //đếm
+    let total= donHangReducer.SoLuongDonHangChuaThanhToan;
+   
     // below is an example notification icon absolutely positioned 
         return (
         <View style={{
@@ -25,7 +23,7 @@ class DonHangBadgeIcon extends Component {
             justifyContent: 'space-around',
             alignItems: 'center',
             position:'relative',}}>
-             <MaterialIcons color="black" size={28} name="playlist-add-check"/>
+            <MaterialIcons color="black" size={28} name="playlist-add-check"/>
         {/* <Image source={require('./../../assets/images/icons/shopping_cart_32.png')}/> */}
         {total > 0 ?
             <View style={{

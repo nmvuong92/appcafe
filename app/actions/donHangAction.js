@@ -27,20 +27,31 @@ export let fetchDanhSachDonHang = (user,page,pageSize)=> {
 }
 
 export let fetchDanhSachDonHangDevice = (page,pageSize)=> {
-    console.log("hihihi");
-    var _deviceName = DeviceInfo.getDeviceId();
-    console.log(_deviceName);
+   
     var _uniqueID=DeviceInfo.getUniqueID();
-    var _ModelNumber=DeviceInfo.getModel();
-    
-    let URL =urls.api_donhang+"/laydsdevice?uniqueID="+_uniqueID+"&page="+page+"&pageSize="+pageSize;
+    let URL =urls.api_donhang+"/laydsdevice?uniqueID="+_uniqueID+"&trangthaithanhtoanid=-1&page="+page+"&pageSize="+pageSize;
     console.log(URL);
     return dispatch => {
         dispatch(fetchFood(true));
         Util.get(URL, (response) => {
             dispatch(fetchFood(true));
             dispatch(receive(response));
-            console.log(response);
+        }, (error) => {
+            alert(error);
+            console.log(`Fetch food info error: ${error}`);
+        })
+    }
+}
+
+export let fetchDanhSachDonHangDeviceBS = (page,pageSize)=> {
+    var _uniqueID=DeviceInfo.getUniqueID();
+    let URL =urls.api_donhang+"/laydsdevice?uniqueID="+_uniqueID+"&trangthaithanhtoanid=1&page="+page+"&pageSize="+pageSize;
+    console.log(URL);
+    return dispatch => {
+        dispatch(fetchFoodBS(true));
+        Util.get(URL, (response) => {
+            dispatch(fetchFoodBS(true));
+            dispatch(receiveBS(response));
         }, (error) => {
             alert(error);
             console.log(`Fetch food info error: ${error}`);
@@ -56,9 +67,18 @@ let receive = (food)=> {
         type: types.DONHANG_RECEIVE,
         List: food.List,
         Paging: food.Paging,
+        SoLuongDonHangChuaThanhToan:food.Number1
     }
 }
-
+let fetchFoodBS = (isload)=> {
+    return { type:types.DONHANG_FETCHBS,isFetching:isload}
+}
+let receiveBS = (food)=> { 
+    return {
+        type: types.DONHANG_BS_RECEIVE,
+        List: food.List,
+    }
+}
 
 export let fetchDanhSachDonHangTichDiem = (user,page,pageSize)=> {
     let URL =urls.api_donhang+"/layds_tichdiem?userid="+user.UserId+"&token="+user.JWTToken+"&page="+page+"&pageSize="+pageSize;
