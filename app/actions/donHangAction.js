@@ -25,6 +25,29 @@ export let fetchDanhSachDonHang = (user,page,pageSize)=> {
         })
     }
 }
+
+export let fetchDanhSachDonHangDevice = (page,pageSize)=> {
+    console.log("hihihi");
+    var _deviceName = DeviceInfo.getDeviceId();
+    console.log(_deviceName);
+    var _uniqueID=DeviceInfo.getUniqueID();
+    var _ModelNumber=DeviceInfo.getModel();
+    
+    let URL =urls.api_donhang+"/laydsdevice?uniqueID="+_uniqueID+"&page="+page+"&pageSize="+pageSize;
+    console.log(URL);
+    return dispatch => {
+        dispatch(fetchFood(true));
+        Util.get(URL, (response) => {
+            dispatch(fetchFood(true));
+            dispatch(receive(response));
+            console.log(response);
+        }, (error) => {
+            alert(error);
+            console.log(`Fetch food info error: ${error}`);
+        })
+    }
+}
+
 let fetchFood = (isload)=> {
     return { type:types.DONHANG_FETCH,isFetching:isload}
 }
@@ -114,4 +137,67 @@ export let postThanhToanDatHang = (user,data,fnSuccess)=> {
 
 let fetchDatHang = (isload)=> {
     return { type:types.POST_DATHANG_FETCH,isFetching:isload}
+}
+
+
+
+export let postGoiTinhTien = (DonHangID,fnSuccess)=> {
+   
+    /*data.UserId=user.UserId;
+    data.Token = user.JWTToken;*/
+
+    let url = urls.api_donhang+"/goitinhtien";
+    var data={
+        DonHangID:DonHangID
+    };
+    console.log(data);
+    return (dispatch) => {
+       
+        Util.postJson(url, data,
+            (response) => {           
+                console.log(response);
+                if(response.r==true){
+                    //hien thi thong bao
+                    Toast.show(response.m, {position:Toast.positions.CENTER});
+                    fnSuccess();
+                }else{
+                    Toast.show(response.m, {position:Toast.positions.CENTER});
+                }
+            },
+            (error) => {
+                alert(error);
+                //dispatch(receiveDatHang(user));
+            });
+    }
+}
+
+export let postGopY = (DonHangID,NoiDung,fnSuccess)=> {
+   
+    /*data.UserId=user.UserId;
+    data.Token = user.JWTToken;*/
+
+    let url = urls.api_donhang+"/gopy";
+    var data={
+        DonHangID:DonHangID,
+        NoiDung:NoiDung,
+    };
+    console.log(data);
+    return (dispatch) => {
+       
+        Util.postJson(url, data,
+            (response) => {           
+                console.log(response);
+                if(response.r==true){
+                    //hien thi thong bao
+                    Toast.show(response.m, {position:Toast.positions.CENTER});
+                    fnSuccess();
+                }else{
+                    Toast.show(response.m, {position:Toast.positions.CENTER});
+                }
+            },
+            (error) => {
+                alert(error);
+                //dispatch(receiveDatHang(user));
+            });
+    }
 }

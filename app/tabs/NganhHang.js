@@ -18,7 +18,7 @@ import commonStyles,{colors} from './../common/commonStyles';
 import Image from 'react-native-image-progress';
 import ProgressBar from 'react-native-progress/CircleSnail';
 
-import {fetchSanPham} from './../actions/sanPhamAction';
+import {fetchSanPham,setDSSP} from './../actions/sanPhamAction';
 import Header from './../common/components/Header';
 import{NavigationActions} from 'react-navigation';
 import {VCOLOR} from './../common/constants';
@@ -42,6 +42,7 @@ import Camera from 'react-native-camera';
 import * as vUtils  from './../common/vUtils';
 import Toast from 'react-native-root-toast';
 import * as quanAction from './../actions/quanAction';
+import {cartCRUD} from './../actions/cartAction';
 class NganhHang extends Component{
     constructor(props){
         super(props);
@@ -90,13 +91,22 @@ class NganhHang extends Component{
        // dispatch({type:"goBack",dataBack:"123"});
         dispatch({type:"SanPham_Screen"});
         //lay dssp
-        dispatch(fetchSanPham(item,sanPhamReducer.tukhoa,1,this.state.pageSize));
+        dispatch(setDSSP(item,item.DSSP));
+        //dispatch(fetchSanPham(item,sanPhamReducer.tukhoa,1,this.state.pageSize));
     }
 
     goScanQR(){
         this.refs.modal_qr.open();
     }
-
+    goSeedQR(){
+            const {dispatch} =this.props;
+            dispatch(quanAction.getById(28,()=>{
+                dispatch(fetchListDMSP());
+                dispatch(cartCRUD("0"));
+            },()=>{
+                console.log("err");
+            }));
+    }
     
 
     onBarCodeRead = (e) => {
@@ -106,6 +116,7 @@ class NganhHang extends Component{
             const {dispatch} =this.props;
             dispatch(quanAction.getById(json_parsed.quan,json_parsed,()=>{
                 dispatch(fetchListDMSP());
+                dispatch(cartCRUD("0"));
             },()=>{
                 console.log("err");
             }));
@@ -194,6 +205,15 @@ class NganhHang extends Component{
                         underlayColor={colors.backGray}
                     >
                         <Text style={[{color: colors.white, fontWeight: "bold",textAlign:"center"}]}> Quét QR </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={[commonStyles.btn, {marginBottom:20}]}
+                        onPress={() => {
+                            this.goSeedQR();
+                        }}
+                        underlayColor={colors.backGray}
+                    >
+                        <Text style={[{color: colors.white, fontWeight: "bold",textAlign:"center"}]}> QR seed </Text>
                     </TouchableOpacity>
                 <Modal ref={"modal_qr"}>
                         <View style={{flex:1,}}>

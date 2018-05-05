@@ -27,6 +27,13 @@ export let fetchSanPham = (danhmuc=null,tukhoa="",page,pageSize)=> {
         })
     }
 }
+
+export let setDSSP = (danhmuc,DSSP)=> {
+    return dispatch => {
+       dispatch(setFilter(danhmuc,""));
+       dispatch(receiveFood(DSSP));
+    }
+}
 export let fetchSanPhamCT = (idsp)=> {
     if(__DEV__){
             console.log("-----------------fetchSanPhamCT----------------");
@@ -46,8 +53,7 @@ export let fetchSanPhamCT = (idsp)=> {
             if(__DEV__){
                 console.log(`Fetch food info error: ${error}`);
             }
-           
-            dispatch(receiveFoodCT(null))
+            dispatch(receiveFoodCT(null));
         })
     }
 }

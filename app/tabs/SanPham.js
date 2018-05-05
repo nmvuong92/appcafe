@@ -20,7 +20,7 @@ class SanPham extends Component{
     constructor(props){
         super(props);
         this.state={
-       
+
             appIsReady:false,
             showBtnTimKiem:false,
             data:[],
@@ -32,7 +32,7 @@ class SanPham extends Component{
             error:null,
             refreshing:false,
             page:1,
-            page_size:100
+            page_size:1000
         }
     }
 
@@ -42,12 +42,12 @@ class SanPham extends Component{
             tukhoa:sanPhamReducer.tukhoa
         });
         //lay dssp
-        dispatch(fetchSanPham(sanPhamReducer.danhmuc,sanPhamReducer.tukhoa,this.state.page,this.state.page_size));
+        //dispatch(fetchSanPham(sanPhamReducer.danhmuc,sanPhamReducer.tukhoa,this.state.page,this.state.page_size));
     }
-    
+
     //khi thay doi o tim kiem
     _onChangeSearchText = (searchText) => {
-       
+
         if (searchText) {
             this.setState({searchClearIcon: true,showBtnTimKiem:true})
         } else {
@@ -78,7 +78,7 @@ class SanPham extends Component{
         // dispatch();
         console.log(this.state.tukhoa);
         dispatch(fetchSanPham(sanPhamReducer.danhmuc,this.state.tukhoa,this.state.page,this.state.page_size));
-    
+
     }
     //hien thi chon danh muc san pham
     onPressSelectDM = () => {
@@ -97,7 +97,7 @@ class SanPham extends Component{
         return null;
     }
     //pull refresh
-    handleRefresh=()=>{  
+    handleRefresh=()=>{
        //scrolltop
        this.refs.FlatList.scrollToOffset({x: 0, y: 0, animated: true});
        const {sanPhamReducer,dispatch} =this.props;
@@ -109,7 +109,7 @@ class SanPham extends Component{
         },()=>{
             //lay dssp
             dispatch(fetchSanPham(sanPhamReducer.danhmuc,sanPhamReducer.tukhoa,this.state.page,this.state.page_size));
-            
+
         });
     }
     //
@@ -143,20 +143,19 @@ class SanPham extends Component{
        return (
         <View style={styles.container}>
             <Header
-            showBack={true}
-            // leftIcon='angle-left'
-            // leftIconAction={()=>this.goBack()}
+                showBack={true}
+                // leftIcon='angle-left'
+                // leftIconAction={()=>this.goBack()}
 
-            // rightIcon='address-book'
-            // rightIconAction={()=>this.goBack()}
+                // rightIcon='address-book'
+                // rightIconAction={()=>this.goBack()}
 
-            // rightIcon2='heart'
-            // rightIconAction2={()=>this.goBack()}
+                // rightIcon2='heart'
+                // rightIconAction2={()=>this.goBack()}
 
-            title={sanPhamReducer.danhmuc!=null?sanPhamReducer.danhmuc.TenDanhMuc:"-Tất cả danh mục sản phẩm-"}
-        />
-        <Text>Chưa nhập mã QR</Text>
-    </View>
+                title={sanPhamReducer.danhmuc!=null?sanPhamReducer.danhmuc.TenDanhMuc:"-Tất cả danh mục sản phẩm-"}/>
+            <Text>Chưa nhập mã QR</Text>
+        </View>
        );
     }
     _renderMain(){
@@ -174,9 +173,9 @@ class SanPham extends Component{
 
         return(
             <View style={styles.container}>
-           
+
             <View style={styles.container}>
-                
+
 
                   <Header
                     showBack={true}
@@ -192,7 +191,7 @@ class SanPham extends Component{
                     title={sanPhamReducer.danhmuc!=null?sanPhamReducer.danhmuc.TenDanhMuc:"-Tất cả danh mục sản phẩm-"}
                 />
 
-                
+
                 <View>
                         <View>
                             <SearchBar
@@ -207,18 +206,18 @@ class SanPham extends Component{
                                                 height: 0,
                                                 opacity: 0
                                             }}
-                                        
+
                                             icon={{ type: 'font-awesome', name: 'search' }}
-                                           
+
                                             onChangeText={this._onChangeSearchText}
                                             onClearText={()=>{
                                                 this.search.blur();
                                             }}
                                             value={this.state.tukhoa}
-                                            
+
                                             placeholder='Tìm kiếm...' />
                         </View>
-                    
+
                  </View>
                  <View style={{flex:1}}>
                         {
@@ -233,46 +232,41 @@ class SanPham extends Component{
                             data={sanPhamReducer.List}
                             renderItem={({item}) =>
                                 <TouchableOpacity key={item.ID} onPress={()=>{
-                                    this.onPressProductItem(item);
+                                    //this.onPressProductItem(item);
+                                    dispatch(cartCRUD("+",item,1));
                                 }} style={styles.productItem}>
-                                  
-
-                                    <Image 
-                                        source={{ uri: item.HinhAnh }} 
-                                        indicator={ProgressBar} 
+                                    <Image
+                                        source={{ uri: item.HinhAnh }}
+                                        indicator={ProgressBar}
                                         style={styles.itemImage}/>
                                         <Text style={vStyles.product_name}>{item.TenSanPham} {item.New?<Text style={{color:"red",fontSize:9,fontWeight:'bold'}}>NEW</Text>:null}</Text>
-                                        <Text style={vStyles.cat_name}>{item.TenDanhMuc}</Text>
-                                        <Text style={vStyles.price}>{formatVND(item.Gia)}</Text>
                                     
-                                        {item.KM?<CornerLabel
-                                            alignment={'right'}
-                                            cornerRadius={36}
-                                            style={{backgroundColor: 'green', }}
-                                            textStyle={{fontSize: 12, color: '#fff', }}>
-                                            KM
-                                        </CornerLabel>:null}
+                                        <Text style={vStyles.price}>{formatVND(item.Gia)}</Text>
 
+                                    {item.KM?<CornerLabel
+                                        alignment={'right'}
+                                        cornerRadius={36}
+                                        style={{backgroundColor: 'green', }}
+                                        textStyle={{fontSize: 12, color: '#fff', }}>
+                                        KM
+                                    </CornerLabel>:null}
                                     <Button
                                             buttonStyle={{
-                                                width: "100%",
                                                 borderColor: "transparent",
                                                 borderWidth: 0,
-                                                borderRadius: 10
+                                                borderRadius: 0,
+                                                height:25
                                             }}
-                                            
-                                            backgroundColor="red"
+                                            backgroundColor={this._checkInCart(item.ThucDonId)!=undefined?"green":"gray"}
                                             color="white"
                                             icon={{name: 'cart-plus', type: 'font-awesome'}}
-                                            title='Thêm'
+                                            title={'Thêm'+((this._checkInCart(item.ThucDonId)!=undefined)?"("+this._checkInCart(item.ThucDonId).SLSP+")":"")}
                                             onPress={()=>{
                                                 //dispatch(setNotificationCounter("+",1));
                                                 dispatch(cartCRUD("+",item,1));
-                                                Toast.show("Đã thêm vào giỏ hàng", {position:Toast.positions.TOP});
+                                                //Toast.show("Đã thêm vào giỏ hàng", {position:Toast.positions.TOP});
                                             }}
                                         />
-
-
                                         {item.Hot?<CornerLabel
                                             alignment={'left'}
                                             cornerRadius={36}
@@ -283,18 +277,18 @@ class SanPham extends Component{
                                 </TouchableOpacity>
                             }
                             keyExtractor={(item,index) => item.ID+""}
-                            refreshing={this.state.refreshing}
-                            onRefresh={this.handleRefresh}
+                            //refreshing={this.state.refreshing}
+                            //onRefresh={this.handleRefresh}
 
                             numColumns={2}
-                            //onEndReached={this.onEndReached} 
+                            //onEndReached={this.onEndReached}
                             //onEndReachedThreshold={0.5}
                             onMomentumScrollBegin={() => { this.onEndReachedCalledDuringMomentum = false; }}
                             contentContainerStyle={{paddingBottom:150}}
                         />
                          <View style = { styles.footerStyle }>
-                                <TouchableOpacity 
-                                    activeOpacity = { 0.7 } 
+                                <TouchableOpacity
+                                    activeOpacity = { 0.7 }
                                     style = { styles.TouchableOpacity_style }
                                     onPress = {()=>{
                                         this.setState({refreshing:true},()=>{
@@ -311,14 +305,14 @@ class SanPham extends Component{
                                         :
                                             null
                                     }
-                                </TouchableOpacity> 
-                                        <TouchableOpacity 
+                                </TouchableOpacity>
+                                        <TouchableOpacity
                                         disabled={this.state.page<=1}
-                                        activeOpacity = { 0.7 } 
+                                        activeOpacity = { 0.7 }
                                         style = { this.state.page<=1?styles.TouchableOpacity_style_disabled:styles.TouchableOpacity_style }
                                         onPress = { ()=>{
                                             this.handleLoadMore(-1);
-                                        }} 
+                                        }}
                                         >
                                         <Text style = { styles.TouchableOpacity_Inside_Text }>Trang trước</Text>
                                         {
@@ -328,17 +322,17 @@ class SanPham extends Component{
                                             :
                                                 null
                                         }
-                                    </TouchableOpacity> 
+                                    </TouchableOpacity>
                                 {
                                     Paging!=undefined?
-                                    <TouchableOpacity 
+                                    <TouchableOpacity
                                         disabled={this.state.page==Paging.TotalPages}
-                                        
-                                        activeOpacity = { 0.7 } 
+
+                                        activeOpacity = { 0.7 }
                                         style = { this.state.page==Paging.TotalPages?styles.TouchableOpacity_style_disabled:styles.TouchableOpacity_style }
                                         onPress = { ()=>{
                                             this.handleLoadMore(+1);
-                                        }} 
+                                        }}
                                         >
 
                                         <Text style = { styles.TouchableOpacity_Inside_Text }>Trang tiếp theo {this.state.page}/{Paging!=undefined?Paging.TotalPages:""} </Text>
@@ -347,22 +341,27 @@ class SanPham extends Component{
                                             ?
                                                 <ActivityIndicator color = "#fff" style = {{ marginLeft: 6 }} />
                                             :
-                                                null
+                                            null
                                         }
-
-                                    </TouchableOpacity> 
+                                    </TouchableOpacity>
                                     :
                                     null
                                 }
                                 </View>
                  </View>
-            
-               
+
+
                 </View>
-            
+
             </View>
 
         );
+    }
+    _checkInCart(idsp){
+        const {cartReducer} = this.props;
+        return cartReducer.cartItems.find(function (s) {
+            return s.ThucDonId == idsp;
+        });
     }
 }
 
@@ -370,7 +369,8 @@ const mapStateToProps = state => ({
     navReducer:state.navReducer,
     authReducer:state.authReducer,
     sanPhamReducer:state.sanPhamReducer,
-    quanReducer:state.quanReducer
+    quanReducer:state.quanReducer,
+    cartReducer:state.cartReducer,
 });
 export default connect(mapStateToProps)(SanPham);
 
@@ -380,7 +380,7 @@ const styles=StyleSheet.create({
     },
     productItem:{
         alignItems: 'center',
-       
+
         borderColor:VCOLOR.xam,
         borderWidth:1,
         margin: 2,
@@ -399,19 +399,19 @@ const styles=StyleSheet.create({
     },
     KM:{
         color:"blue",
-      
+
         marginRight:2,
         fontSize:10,
     },
     HOT:{
         color:"red",
-     
+
         marginRight:2,
         fontSize:10,
     },
     NEW:{
         color:"green",
-      
+
         marginRight:2,
         fontSize:10,
     },

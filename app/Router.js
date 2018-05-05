@@ -282,14 +282,14 @@ export const MainScreenNavigator = TabNavigator({
             tabBarIcon: <CartBadgeIcon/>,
         }
     }), //end ChiTietSanPham_GioHang_Screen
-    /*DonHangTab:StackNavigator({
+    DonHangTab:StackNavigator({
         DonHangScreen:{
             screen:DonHang,
             navigationOptions: {
                 showLabel:true,
                 showIcon:true,
                 header:null,
-                tabBarLabel:'Đơn hàng',
+                tabBarLabel:'Hóa đơn',
                 tabBarIcon: <DonHangBadgeIcon/>,
             },
         },
@@ -303,7 +303,7 @@ export const MainScreenNavigator = TabNavigator({
             tabBarLabel:'Đơn hàng',
             tabBarIcon: <DonHangBadgeIcon/>,
         }
-    }),*/ //end don hang tab
+    }), //end don hang tab
     TaiKhoanTab:StackNavigator({
         TaiKhoan_Screen:{
             screen:TaiKhoan,
@@ -332,6 +332,7 @@ export const MainScreenNavigator = TabNavigator({
 },{
    
     initialRouteName: 'NganhHang',
+    
     tabBarPosition:'bottom',
     //swipeEnabled:true,
     swipeEnabled:false,
@@ -357,8 +358,6 @@ export const MainScreenNavigator = TabNavigator({
         labelStyle:{
             fontSize:11
         },
-      
-
     },
    
     cardStyle:{

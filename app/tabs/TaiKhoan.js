@@ -36,6 +36,7 @@ import Modal from 'react-native-modalbox';
 import Qr from './pages/Qr';
 import * as save from './../common/Storage';
 import {logoutQuan} from './../actions/quanAction';
+import {cartCRUD} from './../actions/cartAction';
 var DeviceInfo = require('react-native-device-info');
 class TaiKhoan extends Component{
     constructor(props){
@@ -49,8 +50,6 @@ class TaiKhoan extends Component{
             UniqueID:"-",
             ModelNumber:"-",
         }
-      
-
         //setTimeout(() => {this.setState({isloading: false})}, 1000)
     }
    
@@ -389,6 +388,7 @@ class TaiKhoan extends Component{
         InteractionManager.runAfterInteractions(() => {
             const {dispatch} = this.props;
             dispatch(logoutQuan());
+            dispatch(cartCRUD("0"));
         });
     }
 }

@@ -31,7 +31,7 @@ import * as vUtils  from './../common/vUtils';
 import Modal from 'react-native-modalbox';
 import Camera from 'react-native-camera';
 
-import {postThanhToanDatHang} from './../actions/donHangAction';
+import {postThanhToanDatHang,fetchDanhSachDonHangDevice} from './../actions/donHangAction';
 class GioHang extends Component{
     constructor(props){
        
@@ -139,7 +139,7 @@ class GioHang extends Component{
             refreshing:sanPhamReducer.isFetching,
             seed:this.state.seed+1,
         },()=>{
-            
+            dispatch(fetchDanhSachDonHangDevice(1,10));
             //lay dssp
             dispatch(fetchSanPham(sanPhamReducer.danhmuc,sanPhamReducer.tukhoa));
         });
@@ -178,6 +178,7 @@ class GioHang extends Component{
         for(var i=0;i<cartReducer.cartItems.length;i++){
             cart.push({
                 SanPhamId:cartReducer.cartItems[i].ID,
+                ThucDonId:cartReducer.cartItems[i].ThucDonId,
                 SoLuong:cartReducer.cartItems[i].SLSP,
             });
         }
@@ -186,6 +187,9 @@ class GioHang extends Component{
             QuanId:quanReducer.Quan.Id,
             ChiTietDonHang:cart
         },()=>{
+            //lay ds don hang
+
+            //dong modal
             this.refs.modal_qr.close();
         }));
     }
@@ -200,7 +204,6 @@ class GioHang extends Component{
                     {text:"Thanh toán", onPress:()=>{this.postThanhToan(this.state.Ban)}},
                 ]
             );
-            
         }
         else{
             Toast.show("Vui lòng nhập bàn!", {position:Toast.positions.TOP});
@@ -283,7 +286,7 @@ class GioHang extends Component{
                                     </View>
                                 </TouchableOpacity>
                             }
-                            keyExtractor={(item,index) => item.ID+""}
+                            keyExtractor={(item,index) => item.ThucDonId+""}
                             refreshing={this.state.refreshing}
                             onRefresh={this.handleRefresh}  
 
@@ -304,10 +307,9 @@ class GioHang extends Component{
                             <Button
                                 buttonStyle={{
                                     backgroundColor: VCOLOR.do_dam,
-                                    width: "100%",
                                     borderColor: "transparent",
                                     borderWidth: 0,
-                                    borderRadius: 10,                                    
+                                    borderRadius: 0,                                    
                                 }}
                                 backgroundColor="red"
                                 color="white"
@@ -439,15 +441,14 @@ class GioHang extends Component{
                                  <Button
                                     buttonStyle={{
                                         backgroundColor: VCOLOR.do_dam,
-                                        width: "100%",
                                         borderColor: "transparent",
                                         borderWidth: 0,
-                                        borderRadius: 10,                                    
+                                        borderRadius: 0,                                    
                                     }}
                                     backgroundColor="red"
                                     color="white"
                                     icon={{name: 'opencart', type: 'font-awesome'}}
-                                    title={'TẠO ĐƠN HÀNG'}
+                                    title={'Đặt hàng'}
                                     onPress={()=>{
                                         this.hoiThanhtoan();
                                     }}
