@@ -110,8 +110,8 @@ android {
         applicationId "com.vuondao.qcafe"
         minSdkVersion 16
         targetSdkVersion 22
-        versionCode 6
-        versionName "6.0"
+        versionCode 7
+        versionName "7.0"
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }
