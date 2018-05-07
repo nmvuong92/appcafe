@@ -210,7 +210,7 @@ class NganhHang extends Component{
                     </TouchableOpacity>
                    
                    
-                   {/*
+                   
                        <TouchableOpacity
                         style={[commonStyles.btn, {marginBottom:20}]}
                         onPress={() => {
@@ -220,7 +220,7 @@ class NganhHang extends Component{
                     >
                         <Text style={[{color: colors.white, fontWeight: "bold",textAlign:"center"}]}> QR seed </Text>
                     </TouchableOpacity>
-                    */}
+                   
                 <Modal ref={"modal_qr"}>
                         <View style={{flex:1,}}>
                             <Header
