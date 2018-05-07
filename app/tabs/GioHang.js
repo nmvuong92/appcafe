@@ -30,8 +30,8 @@ import Header from'./../common/components/Header';
 import * as vUtils  from './../common/vUtils';
 import Modal from 'react-native-modalbox';
 import Camera from 'react-native-camera';
-
-import {postThanhToanDatHang} from './../actions/donHangAction';
+import LoadingActivityIndicator from './../common/components/LoadingActivityIndicator';
+import {postThanhToanDatHang,fetchDanhSachDonHangDevice,fetchDanhSachDonHangDeviceBS} from './../actions/donHangAction';
 class GioHang extends Component{
     constructor(props){
        
@@ -67,6 +67,8 @@ class GioHang extends Component{
             chonbantype:1, //1: chon ban, 2: q2r
             askQR:false,
             Ban:"",//nhập bàn
+
+            swipeToClose: true,
         }
        
     }
@@ -139,7 +141,7 @@ class GioHang extends Component{
             refreshing:sanPhamReducer.isFetching,
             seed:this.state.seed+1,
         },()=>{
-            
+            dispatch(fetchDanhSachDonHangDevice(1,1000));
             //lay dssp
             dispatch(fetchSanPham(sanPhamReducer.danhmuc,sanPhamReducer.tukhoa));
         });
@@ -178,6 +180,7 @@ class GioHang extends Component{
         for(var i=0;i<cartReducer.cartItems.length;i++){
             cart.push({
                 SanPhamId:cartReducer.cartItems[i].ID,
+                ThucDonId:cartReducer.cartItems[i].ThucDonId,
                 SoLuong:cartReducer.cartItems[i].SLSP,
             });
         }
@@ -186,6 +189,9 @@ class GioHang extends Component{
             QuanId:quanReducer.Quan.Id,
             ChiTietDonHang:cart
         },()=>{
+            //lay ds don hang
+            dispatch(fetchDanhSachDonHangDevice(1,1000));
+            //dong modal
             this.refs.modal_qr.close();
         }));
     }
@@ -200,7 +206,6 @@ class GioHang extends Component{
                     {text:"Thanh toán", onPress:()=>{this.postThanhToan(this.state.Ban)}},
                 ]
             );
-            
         }
         else{
             Toast.show("Vui lòng nhập bàn!", {position:Toast.positions.TOP});
@@ -222,6 +227,8 @@ class GioHang extends Component{
         const {authReducer,donHangReducer,quanReducer} =this.props;
         let isLoggedIn = authReducer.user!=null;
         let slsp=cartReducer.cartItems.length;
+        let isFetchingPickBoSung=donHangReducer.isFetchingPickBoSung;
+        let ListPickBoSung=donHangReducer.ListPickBoSung;
         return (
      
             sanPhamReducer.isFetching?<Loading/>:
@@ -283,7 +290,7 @@ class GioHang extends Component{
                                     </View>
                                 </TouchableOpacity>
                             }
-                            keyExtractor={(item,index) => item.ID+""}
+                            keyExtractor={(item,index) => item.ThucDonId+""}
                             refreshing={this.state.refreshing}
                             onRefresh={this.handleRefresh}  
 
@@ -294,25 +301,57 @@ class GioHang extends Component{
                         />
                  </View>
                             
-               
-                 <View style={styles.footer}>
-                        <View style={{flex:2,alignItems:"center"}}>
+                 <View style={styles.footer1}>
+                        <View style={{flex:1,alignItems:"center"}}>
                             <Text>Tổng tiền:</Text>
                             <Text style={{fontSize:20,fontWeight:"bold",color:VCOLOR.do_dam}}>{vUtils.formatVND(tong_tien_gio_hang)}</Text>
                         </View>
-                        <View style={{flex:3,width:"100%",padding:0}}>
+                  </View>
+                 <View style={styles.footer}>
+                       {
+                            /*
+                                <View style={{flex:1,alignItems:"center"}}>
+                                    <Button
+                                        buttonStyle={{
+                                            backgroundColor: VCOLOR.do_dam,
+                                            borderColor: "transparent",
+                                            borderWidth: 0,
+                                            borderRadius: 0,                                    
+                                        }}
+                                        backgroundColor="red"
+                                        color="white"
+                                        icon={{name: 'cart-plus', type: 'font-awesome'}}
+                                        title={'Bổ sung'}
+                                        onPress={()=>{
+                                            if(quanReducer.Quan==null){
+                                                Toast.show("Chưa đăng nhập quán bằng QR!", {position:Toast.positions.CENTER});
+                                                return;
+                                            }
+                                            if(cartReducer.cartItems.length==0){
+                                                Toast.show("Vui lòng thêm sản phẩm!", {position:Toast.positions.CENTER});
+                                                return;
+                                            }
+                                            dispatch(fetchDanhSachDonHangDeviceBS(1,1000));
+                                            this.refs.modal_bosung.open();
+                                        }}
+                                    />
+                                </View>
+                            */
+                        
+                        }
+                      
+                        <View style={{flex:1,width:"100%",padding:0}}>
                             <Button
                                 buttonStyle={{
                                     backgroundColor: VCOLOR.do_dam,
-                                    width: "100%",
                                     borderColor: "transparent",
                                     borderWidth: 0,
-                                    borderRadius: 10,                                    
+                                    borderRadius: 0,                                    
                                 }}
                                 backgroundColor="red"
                                 color="white"
                                 icon={{name: 'opencart', type: 'font-awesome'}}
-                                title={'Chọn bàn'}
+                                title={'Đặt bàn'}
                                 onPress={()=>{
                                     if(quanReducer.Quan==null){
                                         Toast.show("Chưa đăng nhập quán bằng QR!", {position:Toast.positions.CENTER});
@@ -328,6 +367,8 @@ class GioHang extends Component{
                                     this.goThanhToan();
                                 }}
                             />
+
+                            
                         </View>
                   </View>
          
@@ -408,7 +449,87 @@ class GioHang extends Component{
                             :null
                         }
                   </Modal>
-             
+                <Modal
+                
+                ref={"modal_bosung"}
+                swipeToClose={this.state.swipeToClose}
+                onClosed={this.onClose}
+                onOpened={this.onOpen}
+                onClosingState={this.onClosingState}>
+                    <Header
+                        leftIcon='angle-left'
+                        leftIconAction={()=>{
+                            this.refs.modal_bosung.close();
+                        }}
+                        title={("Bổ sung món vào đơn hàng")}
+                    />
+                     {
+                        isFetchingPickBoSung?<LoadingActivityIndicator loading={isFetchingPickBoSung}/>:
+                        <FlatList
+                                    ref="FlatList"
+                                    data={ListPickBoSung}
+                                    renderItem={({item}) =>
+                                        <TouchableOpacity key={item.Id} onPress={()=>{
+                                            this.onPressProductItem(item);
+                                        }} style={styles.productItem}>
+                                            <View style={item.Id%2==0?styles.item:styles.item2} >
+                                                <View style={styles.cot1}>
+                                                    <Text style={{fontWeight:"bold"}}>#{item.MaDonHang}</Text>
+                                                    <Text>{item.NgayDatHang}</Text>
+                                                    <Text>{vUtils.formatVND(item.TongTienHang)}</Text>
+                                                    <Text>{item.CTDonHangs.length} sản phẩm</Text>
+                                                </View>
+                                            
+                                                <View style={styles.cot3}>
+                                                    <Text>{item.TrangThaiThanhToan.Ten}</Text>
+                                                    {
+                                                        item.TrangThaiThanhToan.Id==2?
+                                                        <FontAwesome color={VCOLOR.green} size={28} name="check"/>
+                                                        :null
+                                                    }
+                                                    <Button
+                                                        buttonStyle={{
+                                                            backgroundColor: VCOLOR.do_dam,
+                                                            borderColor: "transparent",
+                                                            borderWidth: 0,
+                                                            borderRadius: 0,
+                                                            height:25, 
+                                                            marginTop:5,                 
+                                                        }}
+                                                        containerViewStyle={{width: '100%', marginLeft: 0}}
+                                                        fontSize={12}
+                                                        backgroundColor="red"
+                                                        color="white"
+                                                        iconRight={{name: 'check', type: 'font-awesome'}}
+                                                        title={'CHỌN'}
+                                                        onPress={()=>{
+                                                            Alert.alert(
+                                                                "Xác nhận bổ sung món vào đơn hàng chọn?",
+                                                                "",
+                                                                [
+                                                                    {text:"Hủy bỏ", onPress:()=>{}},
+                                                                    {text:"Đồng  ý", onPress:()=>{
+
+                                                                    }},
+                                                                ]
+                                                            );      
+                                                        }}
+                                                    />
+                                                </View>
+                                            </View>
+                                        </TouchableOpacity>
+                                    }
+                                    keyExtractor={(item,index) => item.Id+""}
+                                    refreshing={this.state.refreshing}
+                                    onRefresh={this.handleRefresh}
+                                    //onEndReached={this.onEndReached} 
+                                    //onEndReachedThreshold={0.5}
+                                    onMomentumScrollBegin={() => { this.onEndReachedCalledDuringMomentum = false; }}
+                                    contentContainerStyle={{paddingBottom:150}}
+                                
+                                />
+                    }
+                </Modal>       
                   
                 <Modal
                     style={[styles.modal, styles.modal_qr]} position={"center"} 
@@ -427,7 +548,6 @@ class GioHang extends Component{
                                 <View style={{height:40}}>
                                     <TextInput 
                                         style={styles.vInput2}
-                                        autoFocus={true}
                                         keyboardType='numeric'
                                         onChangeText={(text) => this.setState({Ban:text})}
                                         placeholder='Nhập số bàn'
@@ -435,19 +555,17 @@ class GioHang extends Component{
                                         maxLength={10}  //setting limit of input
                                     />
                                 </View>
-                             
-                                 <Button
+                                <Button
                                     buttonStyle={{
                                         backgroundColor: VCOLOR.do_dam,
-                                        width: "100%",
                                         borderColor: "transparent",
                                         borderWidth: 0,
-                                        borderRadius: 10,                                    
+                                        borderRadius: 0,                                    
                                     }}
                                     backgroundColor="red"
                                     color="white"
                                     icon={{name: 'opencart', type: 'font-awesome'}}
-                                    title={'TẠO ĐƠN HÀNG'}
+                                    title={'Đặt hàng'}
                                     onPress={()=>{
                                         this.hoiThanhtoan();
                                     }}
@@ -546,6 +664,18 @@ const styles=StyleSheet.create({
             justifyContent: 'center',
             alignItems: 'center',
         },
+        footer1:{
+            flexDirection:"row",
+            position:'absolute',
+            bottom:50,
+            left:0,
+            width:"100%",
+            backgroundColor:VCOLOR.xam,
+            alignContent:"center",
+            alignItems: "center",
+            justifyContent:"center",
+            paddingTop:3,
+        },
         footer:{
             flexDirection:"row",
             position:'absolute',
@@ -563,7 +693,7 @@ const styles=StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center'
       },
-    
+     
       modal2: {
         height: 230,
         backgroundColor: "#3B5998"

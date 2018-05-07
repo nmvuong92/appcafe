@@ -5,7 +5,7 @@ const kStorageQR = 'kStorageQR';
 const kStorageQuan= 'kStorageQuan';
 const kStorageAppCartCookieId = 'kStorageAppCartCookieId';
 
-
+const kStorageDonHang= 'kStorageDonHang';
 
 
 /*QR*/
@@ -45,6 +45,9 @@ export const setQuan = (quan) => {
     AsyncStorage.setItem(kStorageQuan, JSON.stringify(quan));
 };
 /*END: QR*/
+
+
+
 
 
 /*USER*/

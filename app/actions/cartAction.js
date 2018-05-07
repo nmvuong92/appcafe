@@ -48,7 +48,7 @@ export let cartCRUD = (type,product,quantity)=> { //loai, san pham, soluong
                                 //if exists
                                 var check_exists=false;
                                 for(var i=0;i<current_cart.length;i++){
-                                    if(current_cart[i].ID==product.ID){
+                                    if(current_cart[i].ThucDonId==product.ThucDonId){
                                          //nếu tồn tại thì chỉ cập nhật SLSP
                                         check_exists=true;
                                         current_cart[i].SLSP+=quantity;
@@ -77,7 +77,7 @@ export let cartCRUD = (type,product,quantity)=> { //loai, san pham, soluong
                             var current_cart = JSON.parse(value);
                             //if exists
                             for(var i=0;i<current_cart.length;i++){
-                                if(current_cart[i].ID==product.ID){
+                                if(current_cart[i].ThucDonId==product.ThucDonId){
                                     //remove
                                     current_cart[i].SLSP-=1;
                                     //sau khi tru ==0 thi xoa luon
@@ -102,7 +102,7 @@ export let cartCRUD = (type,product,quantity)=> { //loai, san pham, soluong
                             var current_cart = JSON.parse(value);
                             //if exists
                             for(var i=0;i<current_cart.length;i++){
-                                if(current_cart[i].ID==product.ID){
+                                if(current_cart[i].ThucDonId==product.ThucDonId){
                                     current_cart[i].SLSP=quantity;
                                     break;
                                 }
@@ -123,7 +123,7 @@ export let cartCRUD = (type,product,quantity)=> { //loai, san pham, soluong
                             var current_cart = JSON.parse(value);
                             //if exists
                             for(var i=0;i<current_cart.length;i++){
-                                if(current_cart[i].ID==product.ID){
+                                if(current_cart[i].ThucDonId==product.ThucDonId){
                                     current_cart.splice(i, 1);
                                     break;
                                 }

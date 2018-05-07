@@ -2,7 +2,7 @@ import React,{Component} from 'react';
 import {View,StyleSheet,Dimensions, Platform } from 'react-native';
 import {VCOLOR} from './constants';
 
-export const formatVND = (x,default0="Liên hệ") => {
+export const formatVND = (x,default0="0 ₫") => {
     if(x==null||x==0){
         return default0;
     }
