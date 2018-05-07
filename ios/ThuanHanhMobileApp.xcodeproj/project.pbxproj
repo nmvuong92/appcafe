@@ -5,6 +5,7 @@
 	};
 	objectVersion = 46;
 	objects = {
+
 /* Begin PBXBuildFile section */
 		00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302AC1ABCB8CE00DB3ED1 /* libRCTActionSheet.a */; };
 		00C302E71ABCBA2D00DB3ED1 /* libRCTGeolocation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302BA1ABCB90400DB3ED1 /* libRCTGeolocation.a */; };
@@ -37,6 +38,7 @@
 		2DCD954D1E0B4F2C00145EB5 /* ThuanHanhMobileAppTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* ThuanHanhMobileAppTests.m */; };
 		5E9157361DD0AC6A00FF2AA8 /* libRCTAnimation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E9157331DD0AC6500FF2AA8 /* libRCTAnimation.a */; };
 		7F5D5F8A207DDD6800BDDE41 /* libRNDeviceInfo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7F925EE3207DC88D00B1FFBD /* libRNDeviceInfo.a */; };
+		7F8CBC8320A0012100EDFE39 /* libRCTOneSignal.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7F8CBC82209FFDCF00EDFE39 /* libRCTOneSignal.a */; };
 		7FAB4B93205F56830057EE85 /* libART.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7FAB4B90205F56750057EE85 /* libART.a */; };
 		7FB85277206E08AC009ED54A /* libRNCamera.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7FB85272206E07D4009ED54A /* libRNCamera.a */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
@@ -50,7 +52,6 @@
 		D162BB20F5E7480BB73175C7 /* EvilIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 52B7C6B3D8F945899CA80FF9 /* EvilIcons.ttf */; };
 		E2FABCF534584852B444CA66 /* MaterialCommunityIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 523267801F464137AFA47B35 /* MaterialCommunityIcons.ttf */; };
 		FEDE10A8F6AF4F1E93A73D3F /* Feather.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 141F382D1C7C4736904257FA /* Feather.ttf */; };
-		4ADCB530C2C446F99DC4D5A2 /* libRCTOneSignal.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C7B6F05FCEEC4B1C8446C51D /* libRCTOneSignal.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -257,6 +258,13 @@
 			remoteGlobalIDString = 134814201AA4EA6300B7C361;
 			remoteInfo = RCTLinking;
 		};
+		7F8CBC81209FFDCF00EDFE39 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2E0B44B6105648108D207251 /* RCTOneSignal.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 3245CDED1BFEE35C00EABF68;
+			remoteInfo = RCTOneSignal;
+		};
 		7F925EE2207DC88D00B1FFBD /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 3B763EC5CA4C4C61A98EC225 /* RNDeviceInfo.xcodeproj */;
@@ -397,6 +405,7 @@
 		2D02E47B1E0B4A5D006451C7 /* ThuanHanhMobileApp-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ThuanHanhMobileApp-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D02E4901E0B4A5D006451C7 /* ThuanHanhMobileApp-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "ThuanHanhMobileApp-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D16E6891FA4F8E400B85C8A /* libReact.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libReact.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		2E0B44B6105648108D207251 /* RCTOneSignal.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RCTOneSignal.xcodeproj; path = "../node_modules/react-native-onesignal/ios/RCTOneSignal.xcodeproj"; sourceTree = "<group>"; };
 		3B763EC5CA4C4C61A98EC225 /* RNDeviceInfo.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNDeviceInfo.xcodeproj; path = "../node_modules/react-native-device-info/ios/RNDeviceInfo.xcodeproj"; sourceTree = "<group>"; };
 		45941AB7F63F453282A6B7F4 /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = SimpleLineIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/SimpleLineIcons.ttf"; sourceTree = "<group>"; };
 		4AC71BE92F6F4FF2AFE99E05 /* Ionicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Ionicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Ionicons.ttf"; sourceTree = "<group>"; };
@@ -414,8 +423,6 @@
 		ADBDB91F1DFEBF0600ED6528 /* RCTBlob.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTBlob.xcodeproj; path = "../node_modules/react-native/Libraries/Blob/RCTBlob.xcodeproj"; sourceTree = "<group>"; };
 		E4A0D6AA29694AE9BB2E4F08 /* Zocial.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Zocial.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Zocial.ttf"; sourceTree = "<group>"; };
 		E918E747F84042B0B09F6E97 /* Entypo.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Entypo.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Entypo.ttf"; sourceTree = "<group>"; };
-		2E0B44B6105648108D207251 /* RCTOneSignal.xcodeproj */ = {isa = PBXFileReference; name = "RCTOneSignal.xcodeproj"; path = "../node_modules/react-native-onesignal/ios/RCTOneSignal.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
-		C7B6F05FCEEC4B1C8446C51D /* libRCTOneSignal.a */ = {isa = PBXFileReference; name = "libRCTOneSignal.a"; path = "libRCTOneSignal.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -431,6 +438,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7F8CBC8320A0012100EDFE39 /* libRCTOneSignal.a in Frameworks */,
 				7F5D5F8A207DDD6800BDDE41 /* libRNDeviceInfo.a in Frameworks */,
 				7FB85277206E08AC009ED54A /* libRNCamera.a in Frameworks */,
 				7FAB4B93205F56830057EE85 /* libART.a in Frameworks */,
@@ -447,7 +455,6 @@
 				832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */,
 				00C302EA1ABCBA2D00DB3ED1 /* libRCTVibration.a in Frameworks */,
 				139FDEF61B0652A700C62182 /* libRCTWebSocket.a in Frameworks */,
-				4ADCB530C2C446F99DC4D5A2 /* libRCTOneSignal.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -615,6 +622,14 @@
 			children = (
 				78C398B91ACF4ADC00677621 /* libRCTLinking.a */,
 				3DAD3E881DF850E9000B6D8A /* libRCTLinking-tvOS.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		7F8CBC7E209FFDCF00EDFE39 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				7F8CBC82209FFDCF00EDFE39 /* libRCTOneSignal.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -840,6 +855,12 @@
 						DevelopmentTeam = ZR6AJPBTN7;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+							com.apple.Push = {
+								enabled = 1;
+							};
 							com.apple.VPNLite = {
 								enabled = 0;
 							};
@@ -901,6 +922,10 @@
 				{
 					ProductGroup = 00C302D41ABCB9D200DB3ED1 /* Products */;
 					ProjectRef = 00C302D31ABCB9D200DB3ED1 /* RCTNetwork.xcodeproj */;
+				},
+				{
+					ProductGroup = 7F8CBC7E209FFDCF00EDFE39 /* Products */;
+					ProjectRef = 2E0B44B6105648108D207251 /* RCTOneSignal.xcodeproj */;
 				},
 				{
 					ProductGroup = 139105B71AF99BAD00B5F7CC /* Products */;
@@ -1133,6 +1158,13 @@
 			fileType = archive.ar;
 			path = libRCTLinking.a;
 			remoteRef = 78C398B81ACF4ADC00677621 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		7F8CBC82209FFDCF00EDFE39 /* libRCTOneSignal.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRCTOneSignal.a;
+			remoteRef = 7F8CBC81209FFDCF00EDFE39 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		7F925EE3207DC88D00B1FFBD /* libRNDeviceInfo.a */ = {
@@ -1405,7 +1437,7 @@
 					"$(SRCROOT)..\node_modules\neact-native-restartiosRCTRestart/**",
 					"$(SRCROOT)..\node_modules\neact-native-i18nios",
 					"$(SRCROOT)/../node_modules/react-native-device-info/ios/RNDeviceInfo",
-					"$(SRCROOT)\..\node_modules\react-native-onesignal\ios/**",
+					"$(SRCROOT)..\node_modules\neact-native-onesignalios/**",
 				);
 				INFOPLIST_FILE = ThuanHanhMobileAppTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
@@ -1442,7 +1474,7 @@
 					"$(SRCROOT)..\node_modules\neact-native-restartiosRCTRestart/**",
 					"$(SRCROOT)..\node_modules\neact-native-i18nios",
 					"$(SRCROOT)/../node_modules/react-native-device-info/ios/RNDeviceInfo",
-					"$(SRCROOT)\..\node_modules\react-native-onesignal\ios/**",
+					"$(SRCROOT)..\node_modules\neact-native-onesignalios/**",
 				);
 				INFOPLIST_FILE = ThuanHanhMobileAppTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
@@ -1469,6 +1501,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = ThuanHanhMobileApp/ThuanHanhMobileApp.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -1476,13 +1509,26 @@
 				DEVELOPMENT_TEAM = ZR6AJPBTN7;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(SRCROOT)..\node_modules\neact-native-i18nios",
-					"$(SRCROOT)..\node_modules\neact-native-restartiosRCTRestart/**",
-					"$(SRCROOT)..\node_modules\neact-native-vector-iconsRNVectorIconsManager",
-					"$(SRCROOT)..\node_modules\neact-native-restartiosRCTRestart/**",
-					"$(SRCROOT)..\node_modules\neact-native-i18nios",
+					"$(SRCROOT)..",
+					ode_modules,
+					"eact-native-i18nios",
+					"$(SRCROOT)..",
+					ode_modules,
+					"eact-native-restartiosRCTRestart/**",
+					"$(SRCROOT)..",
+					ode_modules,
+					"eact-native-vector-iconsRNVectorIconsManager",
+					"$(SRCROOT)..",
+					ode_modules,
+					"$(SRCROOT)/../node_modules/react-native-onesignal/ios/**",
+					"eact-native-restartiosRCTRestart/**",
+					"$(SRCROOT)..",
+					ode_modules,
+					"eact-native-i18nios",
 					"$(SRCROOT)/../node_modules/react-native-device-info/ios/RNDeviceInfo",
-					"$(SRCROOT)\..\node_modules\react-native-onesignal\ios/**",
+					"$(SRCROOT)..",
+					ode_modules,
+					"eact-native-onesignalios/**",
 				);
 				INFOPLIST_FILE = ThuanHanhMobileApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1502,19 +1548,33 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = ThuanHanhMobileApp/ThuanHanhMobileApp.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = ZR6AJPBTN7;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(SRCROOT)..\node_modules\neact-native-i18nios",
-					"$(SRCROOT)..\node_modules\neact-native-restartiosRCTRestart/**",
-					"$(SRCROOT)..\node_modules\neact-native-vector-iconsRNVectorIconsManager",
-					"$(SRCROOT)..\node_modules\neact-native-restartiosRCTRestart/**",
-					"$(SRCROOT)..\node_modules\neact-native-i18nios",
+					"$(SRCROOT)..",
+					ode_modules,
+					"eact-native-i18nios",
+					"$(SRCROOT)..",
+					ode_modules,
+					"eact-native-restartiosRCTRestart/**",
+					"$(SRCROOT)..",
+					ode_modules,
+					"eact-native-vector-iconsRNVectorIconsManager",
+					"$(SRCROOT)..",
+					ode_modules,
+					"$(SRCROOT)/../node_modules/react-native-onesignal/ios/**",
+					"eact-native-restartiosRCTRestart/**",
+					"$(SRCROOT)..",
+					ode_modules,
+					"eact-native-i18nios",
 					"$(SRCROOT)/../node_modules/react-native-device-info/ios/RNDeviceInfo",
-					"$(SRCROOT)\..\node_modules\react-native-onesignal\ios/**",
+					"$(SRCROOT)..",
+					ode_modules,
+					"eact-native-onesignalios/**",
 				);
 				INFOPLIST_FILE = ThuanHanhMobileApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1551,7 +1611,7 @@
 					"$(SRCROOT)..\node_modules\neact-native-restartiosRCTRestart/**",
 					"$(SRCROOT)..\node_modules\neact-native-i18nios",
 					"$(SRCROOT)/../node_modules/react-native-device-info/ios/RNDeviceInfo",
-					"$(SRCROOT)\..\node_modules\react-native-onesignal\ios/**",
+					"$(SRCROOT)..\node_modules\neact-native-onesignalios/**",
 				);
 				INFOPLIST_FILE = "ThuanHanhMobileApp-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1597,7 +1657,7 @@
 					"$(SRCROOT)..\node_modules\neact-native-restartiosRCTRestart/**",
 					"$(SRCROOT)..\node_modules\neact-native-i18nios",
 					"$(SRCROOT)/../node_modules/react-native-device-info/ios/RNDeviceInfo",
-					"$(SRCROOT)\..\node_modules\react-native-onesignal\ios/**",
+					"$(SRCROOT)..\node_modules\neact-native-onesignalios/**",
 				);
 				INFOPLIST_FILE = "ThuanHanhMobileApp-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

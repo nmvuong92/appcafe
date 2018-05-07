@@ -15,7 +15,7 @@
 #import <React/RCTDevLoadingView.h>
 #endif
 @implementation AppDelegate
-
+@synthesize oneSignal = _oneSignal;
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
   NSURL *jsCodeLocation;
@@ -44,6 +44,8 @@
   [self.window makeKeyAndVisible];
   
   
+  self.oneSignal = [[RCTOneSignal alloc] initWithLaunchOptions:launchOptions
+                                                         appId:@"2b904502-050e-4bb8-a44f-c0b673f425fe"];
 
 
   
