@@ -4,6 +4,8 @@ import android.app.Application;
 
 import com.facebook.react.ReactApplication;
 import org.reactnative.camera.RNCameraPackage;
+
+import com.geektime.rnonesignalandroid.ReactNativeOneSignalPackage;
 import com.learnium.RNDeviceInfo.RNDeviceInfo;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.facebook.react.ReactNativeHost;
@@ -28,7 +30,9 @@ public class MainApplication extends Application implements ReactApplication {
             new RNCameraPackage(),
             new RNDeviceInfo(),
             //new ReactNativePushNotificationPackage(), // <---- Add the Package
-            new VectorIconsPackage()
+            new VectorIconsPackage(),
+            new ReactNativeOneSignalPackage()
+
       );
     }
 

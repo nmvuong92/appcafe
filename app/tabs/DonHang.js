@@ -238,7 +238,6 @@ class DonHang extends Component{
                             //onEndReachedThreshold={0.5}
                             onMomentumScrollBegin={() => { this.onEndReachedCalledDuringMomentum = false; }}
                             contentContainerStyle={{paddingBottom:150}}
-                           
                         />
                }
                 
