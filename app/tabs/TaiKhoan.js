@@ -11,7 +11,8 @@ import {
     TouchableHighlight,
     InteractionManager,
     ImageBackground,
-    FlatList
+    FlatList,
+    Platform
 } from 'react-native';
 import {Avatar,Card,Button,Divider} from 'react-native-elements';
 import Loading from './../common/components/Loading';
@@ -49,6 +50,8 @@ class TaiKhoan extends Component{
             DeviceName:"-",
             UniqueID:"-",
             ModelNumber:"-",
+            Version:"-",
+            BuildNumber:"-"
         }
         //setTimeout(() => {this.setState({isloading: false})}, 1000)
     }
@@ -80,10 +83,14 @@ class TaiKhoan extends Component{
        var _deviceName = DeviceInfo.getDeviceId();
        var _uniqueID=DeviceInfo.getUniqueID();
        var _ModelNumber=DeviceInfo.getModel();
+       var _Version=DeviceInfo.getVersion();
+       var _BuildNumber=DeviceInfo.getBuildNumber();
        this.setState({
            DeviceName:_deviceName,
            UniqueID:_uniqueID,
-           ModelNumber:_ModelNumber
+           ModelNumber:_ModelNumber,
+           Version:_Version,
+           BuildNumber:_BuildNumber
        });
     }
 
@@ -181,6 +188,7 @@ class TaiKhoan extends Component{
                                     source={{uri:Quan.ImageThumbnail}}
                             />     
                         </TouchableOpacity>
+
                         <View style={styles.info_item}>
                             <Text style={styles.text1}>Tên quán:</Text>
                             <Text style={styles.text2}>{Quan.TenQuan}</Text>
@@ -194,6 +202,15 @@ class TaiKhoan extends Component{
                         <View style={styles.info_item}>
                             <Text style={styles.text1}>Địa chỉ:</Text>
                             <Text style={styles.text2}>{Quan.DiaChi}</Text>
+                        </View>              
+                    </View> 
+                    :null
+                }
+              
+                <View style={styles.info}>
+                        <View style={styles.info_item}>
+                            <Text style={styles.text1}>Phiên bản ứng dụng:</Text>
+                            <Text style={styles.text2}>{Platform.OS === 'ios' ? '3.0' : '7.0'}</Text>
                         </View>
                         <View style={styles.info_item}>
                             <Text style={styles.text1}>Tên thiết bị:</Text>
@@ -206,9 +223,13 @@ class TaiKhoan extends Component{
                         <View style={styles.info_item}>
                             <Text style={styles.text1}>Unique ID:</Text>
                             <Text style={styles.text2}>{this.state.UniqueID}</Text>
-                        </View>
-                     
-                        
+                        </View>  
+                </View> 
+                   
+               
+                {
+                    Quan!=null?
+                    <View style={styles.info}>
                          <TouchableOpacity
                             style={[commonStyles.btn, {marginBottom:20}]}
                             onPress={() => {
@@ -216,17 +237,11 @@ class TaiKhoan extends Component{
                             }}
                             underlayColor={colors.backGray}
                         >
-                            <Text style={[{color: colors.white, fontWeight: "bold",textAlign:"center"}]}> Thoát QR </Text>
+                            <Text style={[{color: colors.white, fontWeight: "bold",textAlign:"center"}]}> Rời quán </Text>
                         </TouchableOpacity>               
                     </View> 
-
-                    
                     :null
                 }
-                  
-                 
-                
-
                 {
                     isLoggedIn?
                     <View>
@@ -392,10 +407,10 @@ class TaiKhoan extends Component{
         });
     }
 }
-//khong can chia se nen connect rong
+//khong can chia se nen connect rong    
 //khi ma exprt connect ==> co 1 bien dispatch
 export default connect((state)=>{
-    return {authReducer,navReducer,articleReducer,quanReducer} = state;
+    return {authReducer,navReducer,articleReducer,quanReducer,sanPhamReducer} = state;
 })(TaiKhoan);
 
 

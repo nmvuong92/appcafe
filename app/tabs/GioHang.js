@@ -1,5 +1,5 @@
 import React,{Component} from 'react';
-import {View,Text,TouchableOpacity,StyleSheet,FlatList,TextInput,Modal as ReactNativeModal,SafeAreaView,Alert} from 'react-native';
+import {View,Text,TouchableOpacity,StyleSheet,FlatList,TextInput,Modal as ReactNativeModal,SafeAreaView,Alert, Animated, Keyboard } from 'react-native';
 import GioHangPage from './pages/GioHangPage';
 import DSSP from './pages/DSSP';
 import { SearchBar,Badge } from 'react-native-elements';
@@ -32,6 +32,8 @@ import Modal from 'react-native-modalbox';
 import Camera from 'react-native-camera';
 import LoadingActivityIndicator from './../common/components/LoadingActivityIndicator';
 import {postThanhToanDatHang,fetchDanhSachDonHangDevice,fetchDanhSachDonHangDeviceBS} from './../actions/donHangAction';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+
 class GioHang extends Component{
     constructor(props){
        
@@ -64,14 +66,20 @@ class GioHang extends Component{
             slspEdit:0,
 
             qrcode: null,
-            chonbantype:1, //1: chon ban, 2: q2r
+            HinhThucMuaHangId:-1, //1: TẠI QUÁN, 2: MANG ĐI, 3: GIAO HÀNG TẬN NƠI
+            labelMuaHang:"Hình thức mua hàng",
             askQR:false,
             Ban:"",//nhập bàn
 
             swipeToClose: true,
+            txtSDT:"",
+            txtDiaChi:"",
+            txtYeuCauKhac:"",
+            height_modal_qr:1,
         }
-       
+        
     }
+   
    
     componentDidMount(){
         const {sanPhamReducer,cartReducer,dispatch} =this.props;
@@ -81,6 +89,10 @@ class GioHang extends Component{
     }
     goThanhToan(){
         //const {dispatch} =this.props;
+        this.setState({
+            HinhThucMuaHangId:-1, //chưa chọn bàn
+            height_modal_qr:1,//
+        });
         this.refs.modal_qr.open();
         //dispatch({type:'tichDiem_Wrap'});
         /*dispatch({
@@ -173,7 +185,7 @@ class GioHang extends Component{
         this.refs.modal3.open();
     }
 
-    postThanhToan = (Ban)=>{
+    postThanhToan = ()=>{
         const {dispatch,authReducer,quanReducer}  = this.props;
        
         var cart = [];
@@ -184,32 +196,76 @@ class GioHang extends Component{
                 SoLuong:cartReducer.cartItems[i].SLSP,
             });
         }
-        dispatch(postThanhToanDatHang(authReducer.user,{
-            Ban:Ban,
-            QuanId:quanReducer.Quan.Id,
-            ChiTietDonHang:cart
-        },()=>{
-            //lay ds don hang
-            dispatch(fetchDanhSachDonHangDevice(1,1000));
-            //dong modal
-            this.refs.modal_qr.close();
-        }));
+        var donhang={};
+        if(this.state.HinhThucMuaHangId==1){
+            if (!vUtils.isInt(this.state.Ban)){
+                Toast.show("Vui lòng nhập số bàn!", {position:Toast.positions.TOP});
+                return;
+            }
+            donhang={
+                HinhThucMuaHangId:this.state.HinhThucMuaHangId,
+                Ban:this.state.Ban,
+                QuanId:quanReducer.Quan.Id,
+                DiaChiGiaoHang:"",
+                SDT:"",
+                YeuCauKhac:this.state.txtYeuCauKhac,
+                ChiTietDonHang:cart
+            };
+        }else if(this.state.HinhThucMuaHangId==2){
+            donhang={
+                HinhThucMuaHangId:this.state.HinhThucMuaHangId,
+                Ban:0,
+                QuanId:quanReducer.Quan.Id,
+                DiaChiGiaoHang:"",
+                SDT:"",
+                YeuCauKhac:this.state.txtYeuCauKhac,
+                ChiTietDonHang:cart
+            };
+        }else if(this.state.HinhThucMuaHangId==3){
+            if(vUtils.IsNullOrEmpty(this.state.txtDiaChi)||vUtils.IsNullOrEmpty(this.state.txtSDT)){
+                Toast.show("Vui lòng nhập đầy đủ số điện thoại và địa chỉ giao hàng!", {position:Toast.positions.TOP});
+                return;
+            }            
+            donhang={
+                HinhThucMuaHangId:this.state.HinhThucMuaHangId,
+                Ban:0,
+                QuanId:quanReducer.Quan.Id,
+                DiaChiGiaoHang:this.state.txtDiaChi,
+                SDT:this.state.txtSDT,
+                YeuCauKhac:this.state.txtYeuCauKhac,
+                ChiTietDonHang:cart
+            };
+        }else{
+            Toast.show("Đặt hàng không thành công!", {position:Toast.positions.TOP});
+            return;
+        }
+
+        Alert.alert(
+            "Xác nhận đặt hàng?",
+            "",
+            [
+                {text:"Hủy bỏ", onPress:()=>{}},
+                {
+                    text:"Đặt hàng", onPress:()=>{
+
+                    dispatch(postThanhToanDatHang(authReducer.user,donhang,()=>{
+                        //lay ds don hang
+                        dispatch(fetchDanhSachDonHangDevice(1,1000));
+                        //dong modal
+                        this.refs.modal_qr.close();
+                    }));
+                }},
+            ]
+        );
+       
     }
     hoiThanhtoan(){
-        
-        if (vUtils.isInt(this.state.Ban)){
-            Alert.alert(
-                "Thanh toán (bàn: "+this.state.Ban+")?",
-                "",
-                [
-                    {text:"Hủy bỏ", onPress:()=>{}},
-                    {text:"Thanh toán", onPress:()=>{this.postThanhToan(this.state.Ban)}},
-                ]
-            );
+        //validation
+        if(this.state.HinhThucMuaHangId==-1){
+            Toast.show("Chưa chọn hình thức mua hàng!", {position:Toast.positions.TOP});
+            return;
         }
-        else{
-            Toast.show("Vui lòng nhập bàn!", {position:Toast.positions.TOP});
-        }
+        this.postThanhToan();
     }
     //
     render(){
@@ -234,7 +290,7 @@ class GioHang extends Component{
             sanPhamReducer.isFetching?<Loading/>:
             <View style={styles.container}>
                 <Header
-                    showBack={true}
+                    //showBack={true}
                     //leftIcon='angle-left'
                     //leftIconAction={()=>this.goBack()}
                    
@@ -532,45 +588,186 @@ class GioHang extends Component{
                 </Modal>       
                   
                 <Modal
-                    style={[styles.modal, styles.modal_qr]} position={"center"} 
+                    style={[styles.modal, this.state.height_modal_qr==1?styles.modal_qr:styles.modal_qr2]} position={"center"} 
                     ref={"modal_qr"}>
-                        <View style={{flex:1,}}>
-                            {/* <Header
-                                leftIcon='angle-left'
-                                leftIconAction={()=>{
-                                    this.refs.modal_qr.close();
-                                }}
-                                title={(this.state.chonbantype==1?"Chọn bàn":"Quét QR bàn")}
-                            /> */}
-                                <View style={{alignContent:"center",alignItems:"center",height:40}}>
-                                    <Text>Nhập số bàn</Text>
-                                </View>
-                                <View style={{height:40}}>
+                        <KeyboardAwareScrollView style={{flex:1,width:"100%",padding:5}}>
+                            { 
+                                <Header
+                                    leftIcon='angle-left'
+                                    leftIconAction={()=>{
+                                        //có chọn hình thức mà back
+                                        if(this.state.HinhThucMuaHangId>=1){
+                                            this.setState({
+                                                HinhThucMuaHangId:-1
+                                            });
+                                        }else{
+                                             //thoát
+                                             this.refs.modal_qr.close();
+                                        }
+                                    }}
+                                    title={this.state.labelMuaHang}
+                                /> 
+                            }
+                                {
+                                    this.state.HinhThucMuaHangId==1?
+                                    <Text style={styles.vTitle}>Chọn bàn</Text>:    
+                                    this.state.HinhThucMuaHangId==2?
+                                    <Text style={styles.vTitle}></Text>:
+                                    this.state.HinhThucMuaHangId==3?
+                                    <Text style={styles.vTitle}>Nhập thông tin địa chỉ giao hàng</Text>:null
+                                }
+                               
+                                <View style={{flex:1}}>
+                                { 
+                                    //GIAO HÀNG TẬN NƠI
+                                    this.state.HinhThucMuaHangId==3?
+                                    <View>
                                     <TextInput 
                                         style={styles.vInput2}
                                         keyboardType='numeric'
-                                        onChangeText={(text) => this.setState({Ban:text})}
-                                        placeholder='Nhập số bàn'
-                                        value={this.state.Ban}
-                                        maxLength={10}  //setting limit of input
+                                        maxLength = {15}
+                                        onChangeText={(text) => this.setState({txtSDT:text})}
+                                        placeholder='Số điện thoại (*)'
+                                        value={this.state.txtSDT}                                      
                                     />
+                                    <TextInput 
+                                        style={styles.vInput2}
+                                        multiline = {true}
+                                        numberOfLines = {2}
+                                        maxLength = {499}
+                                        onChangeText={(text) => this.setState({txtDiaChi:text})}
+                                        placeholder='Địa chỉ giao hàng (*)'
+                                        value={this.state.txtDiaChi}                                      
+                                    />
+                                   
+                                    </View>:null
+                                }
+                                    
                                 </View>
-                                <Button
-                                    buttonStyle={{
-                                        backgroundColor: VCOLOR.do_dam,
-                                        borderColor: "transparent",
-                                        borderWidth: 0,
-                                        borderRadius: 0,                                    
-                                    }}
-                                    backgroundColor="red"
-                                    color="white"
-                                    icon={{name: 'opencart', type: 'font-awesome'}}
-                                    title={'Đặt hàng'}
-                                    onPress={()=>{
-                                        this.hoiThanhtoan();
-                                    }}
-                                />
-                        </View>
+
+                                {
+                                    this.state.HinhThucMuaHangId==-1?
+                                    <View>
+                                    <Button
+                                        buttonStyle={{
+                                            backgroundColor: VCOLOR.do_dam,
+                                            borderColor: "transparent",
+                                            borderWidth: 0,
+                                            borderRadius: 0,    
+                                            marginBottom:5,  
+                                            flex:1,           
+                                            height: 40,                     
+                                        }}
+                                        backgroundColor="red"
+                                        color="white"
+                                        icon={{name: 'coffee', type: 'font-awesome'}}
+                                        title={'Tại quán'}
+                                        onPress={()=>{
+                                            this.setState({
+                                                HinhThucMuaHangId:1,
+                                                labelMuaHang:"Tại quán",
+                                                height_modal_qr:2,
+                                            });
+                                        }}
+                                    />
+                                    <Button
+                                        buttonStyle={{
+                                            backgroundColor: VCOLOR.do_dam,
+                                            borderColor: "transparent",
+                                            borderWidth: 0,
+                                            borderRadius: 0,    
+                                            flex:1,      
+                                            marginBottom:5,
+                                            height: 40,                     
+                                        }}
+                                        backgroundColor="red"
+                                        color="white"
+                                        icon={{name: 'rocket', type: 'font-awesome'}}
+                                        title={'Mang đi'}
+                                        onPress={()=>{
+                                            this.setState({
+                                                HinhThucMuaHangId:2,
+                                                labelMuaHang:"Mang đi",
+                                                height_modal_qr:2,
+                                            });
+                                        }}
+                                    />
+                                    <Button
+                                        buttonStyle={{
+                                            backgroundColor: VCOLOR.do_dam,
+                                            borderColor: "transparent",
+                                            borderWidth: 0,
+                                            borderRadius: 0,    
+                                            marginBottom:5,
+                                            flex:1,      
+                                            height: 40,                     
+                                        }}
+                                        backgroundColor="red"
+                                        color="white"
+                                        icon={{name: 'bullseye', type: 'font-awesome'}}
+                                        title={'Giao hàng tận nơi'}
+                                        onPress={()=>{
+                                            this.setState({
+                                                HinhThucMuaHangId:3,
+                                                labelMuaHang:"Giao hàng tận nơi",
+                                                height_modal_qr:2,
+                                            });
+                                        }}
+                                    />
+                                    </View>:null
+                                }
+
+                                
+                                
+                                        {
+                                            //TẠI QUÁN
+                                            this.state.HinhThucMuaHangId==1?
+                                            
+                                                <TextInput 
+                                                    style={styles.vInput2}
+                                                    keyboardType='numeric'
+                                                    onChangeText={(text) => this.setState({Ban:text})}
+                                                    placeholder='Nhập số bàn (*)'
+                                                    value={this.state.Ban}
+                                                    maxLength={5}  //setting limit of input
+                                                />
+                                            :null
+                                        }
+                                  {
+                                    this.state.HinhThucMuaHangId!=-1?
+                                    <View>
+                                    <TextInput 
+                                        style={styles.vInput2}
+                                        multiline = {true}
+                                        numberOfLines = {2}
+                                        maxLength = {499}
+                                        onChangeText={(text) => this.setState({txtYeuCauKhac:text})}
+                                        placeholder='Yêu cầu khác'
+                                        value={this.state.txtYeuCauKhac}                                      
+                                    />
+                                    <Button
+                                        buttonStyle={{
+                                            backgroundColor: VCOLOR.do_dam,
+                                            borderColor: "transparent",
+                                            borderWidth: 0,
+                                            borderRadius: 0,    
+                                            marginBottom:5,
+                                            flex:1,      
+                                            height: 40,                     
+                                        }}
+                                        backgroundColor="red"
+                                        color="white"
+                                        icon={{name: 'check', type: 'font-awesome'}}
+                                        title={'Đặt'}
+                                        onPress={()=>{
+                                            this.hoiThanhtoan();
+                                        }}
+                                    />
+                                    </View>:null
+                                  }
+                                
+                   
+                        </KeyboardAwareScrollView>
                 </Modal>          
                     
             </View>
@@ -633,19 +830,33 @@ const styles=StyleSheet.create({
             flex:1,
             position:"relative",
         },
+        vInputRow:{
+            flexDirection:"row",
+            flex:1,
+        },
+        vTitle:{
+            alignSelf:"center",
+            fontWeight:"bold",
+            fontSize:16
+        },
         vInput:{
             height: 40,
             paddingLeft: 10,
-            flex: 1,
+            flex: 2,
             fontSize: 16,
             borderBottomWidth:1,
             borderBottomColor: "gray",
         },
         vInput2:{
+           
+            width:"100%",
+            marginBottom:5,
             height: 40,
-            paddingLeft: 10,
+            paddingLeft: 5,
             flex: 1,
             fontSize: 16,
+            borderWidth:1,
+            borderColor:"gray"
         },
         productItem:{
             borderWidth:1,
@@ -704,8 +915,12 @@ const styles=StyleSheet.create({
         width: 150
       },
       modal_qr: {
-        height: 160,
-        width: 220
+        height: 200,
+        width: 350,
+      },
+      modal_qr2: {
+        height: 300,
+        width: 350,
       },
       modal4: {
         height: 300

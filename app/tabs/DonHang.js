@@ -153,11 +153,11 @@ class DonHang extends Component{
                         title={"Danh sách đơn đặt hàng"}
                     />
                 <View style={styles.header}>
-                    <View style={styles.cot1}>
-                        <Text>Đơn hàng</Text>
+                    <View style={[styles.cot1,{padding:5}]}>
+                        <Text style={{color:"white"}}>Đơn hàng</Text>
                     </View>
-                    <View style={styles.cot3}>
-                        <Text>Trạng thái</Text>
+                    <View style={[styles.cot3,{padding:5}]}>
+                        <Text style={{color:"white"}}>Trạng thái</Text>
                     </View>    
                 </View>
                {
@@ -195,7 +195,7 @@ class DonHang extends Component{
                                                 item.TrangThaiThanhToan.Id==1?
                                                 <Button
                                                     buttonStyle={{
-                                                        backgroundColor:VCOLOR.green,
+                                                        backgroundColor:VCOLOR.do_dam,
                                                         borderColor: "transparent",
                                                         borderWidth: 0,
                                                         borderRadius: 0,
@@ -216,7 +216,7 @@ class DonHang extends Component{
                                             }
                                             <Button
                                                 buttonStyle={{
-                                                    backgroundColor: VCOLOR.green,
+                                                    backgroundColor: VCOLOR.do_dam,
                                                     borderColor: "transparent",
                                                     borderWidth: 0,
                                                     borderRadius: 0,
@@ -388,23 +388,26 @@ const styles = StyleSheet.create({
     },
     item:{
         width:'100%',
-        borderWidth:0.5,
-        borderColor:"#ffffff",
+        borderTopWidth:1,
+        borderColor:"red",
         flexDirection:"row",
+        padding:3,
     },
     item2:{
         width:'100%',
-        borderWidth:0.5,
-        borderColor:"#ffffff",
+        borderTopWidth:1,
+        borderColor:"red",
         flexDirection:"row",
-        backgroundColor:"#e5e5e5"
+        backgroundColor:"#e5e5e5",
+        padding:3,
     },
     header:{
         width:'100%',
         borderWidth:0.5,
         borderColor:"#ffffff",
         flexDirection:"row",
-        backgroundColor:"#00c6e5",
+        backgroundColor:VCOLOR.do_dam,
+        
     },
     cot1:{
         borderWidth:0.5,

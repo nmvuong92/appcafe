@@ -390,7 +390,7 @@ const styles=StyleSheet.create({
     },
     itemImage:{
         width: "95%",
-        height: 100,
+        height: 125,
         justifyContent: 'center',
         alignItems: 'center',
     },

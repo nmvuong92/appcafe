@@ -46,7 +46,7 @@ import OneSignal from 'react-native-onesignal'; // Import package from node modu
 const opt_hide_tabbar={
     //tabBarVisible:false,
     header:null,
-   // swipeEnabled:false
+    swipeEnabled:true
 }
 
 
@@ -336,15 +336,14 @@ export const MainScreenNavigator = TabNavigator({
     initialRouteName: 'NganhHang',
     
     tabBarPosition:'bottom',
-    //swipeEnabled:true,
-    swipeEnabled:false,
+    swipeEnabled:true,
+    //swipeEnabled:false,
     showIcon:true,
     showLabel:true,
     tabBarOptions:{
         style:{
             backgroundColor:"white",
         },
-        
         activeTintColor: 'red',
         //activeBackgroundColor :'yellow',  //Doesn't work
         inactiveTintColor:"gray",
@@ -450,8 +449,6 @@ class MainScreenNavigatorState extends Component{
                 'change',
                 this._handleConnectivityChange
             );
-
-
             BackHandler.removeEventListener('hardwareBackPress', this.onBackPress.bind(this));
            
             console.log("---------componentWillUnmount");

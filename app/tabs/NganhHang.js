@@ -4,7 +4,7 @@ import {
     TouchableOpacity,
     StyleSheet,
     ScrollView,
-    
+    TextInput,
     FlatList,
     InteractionManager,
     Animated,
@@ -56,6 +56,7 @@ class NganhHang extends Component{
           page:1,
           pageSize:100,
           QRQuan:null,
+          txtIDQuan:"",
         };
     }
 
@@ -99,9 +100,12 @@ class NganhHang extends Component{
     goScanQR(){
         this.refs.modal_qr.open();
     }
-    goSeedQR(){
+    
+    goSeedQR(idquan){
             const {dispatch} =this.props;
-            dispatch(quanAction.getById(28,()=>{
+            var id_quan=idquan;
+            var json_quan={quan:idquan};
+            dispatch(quanAction.getById(id_quan,json_quan,()=>{
                 dispatch(fetchListDMSP());
                 dispatch(cartCRUD("0"));
             },()=>{
@@ -196,30 +200,46 @@ class NganhHang extends Component{
                     // rightIcon2='heart'
                     // rightIconAction2={()=>this.goBack()}
 
-                    title="Quét mã QR quán"
+                    title="Đăng nhập"
                 />
 
-                     <TouchableOpacity
-                        style={[commonStyles.btn, {marginBottom:20}]}
-                        onPress={() => {
-                            this.goScanQR();
-                        }}
-                        underlayColor={colors.backGray}
-                    >
-                        <Text style={[{color: colors.white, fontWeight: "bold",textAlign:"center"}]}> Quét QR </Text>
-                    </TouchableOpacity>
                    
+                        <View style={styles.vInputRow}>
+                            <TextInput 
+                                style={styles.vInput}
+                                keyboardType='numeric'
+                                onChangeText={(text)=>this.onChangedIDQuan(text)}
+                                placeholder='Nhập số ID quán'   
+                                value={isNaN(this.state.txtIDQuan)?"":this.state.txtIDQuan+""}
+                                maxLength={5}  //setting limit of input
+                            />
+
+                            <TouchableOpacity
+                                style={[styles.vBtn,{backgroundColor:"red"}]}
+                                onPress={() => {
+                                    if(vUtils.isInt(this.state.txtIDQuan)){
+                                        this.goSeedQR(this.state.txtIDQuan);
+                                    }else{
+                                        Toast.show("ID quán không hợp lệ!", {position:Toast.positions.CENTER});
+                                    }
+                                }}
+                                underlayColor={colors.backGray}
+                            >
+                                <Text style={[{color: colors.white, fontWeight: "bold",textAlign:"center"}]}> Vào quán </Text>
+                            </TouchableOpacity>
+
+                            <TouchableOpacity
+                                style={[styles.vBtn]}
+                                onPress={() => {
+                                    this.goScanQR();
+                                }}
+                                underlayColor={colors.backGray}
+                            >
+                            <Text style={[{color: colors.white,textAlign:"center"}]}> Quét QR </Text>
+                        </TouchableOpacity>
+                        </View>
                    
-                   
-                       <TouchableOpacity
-                        style={[commonStyles.btn, {marginBottom:20}]}
-                        onPress={() => {
-                            this.goSeedQR();
-                        }}
-                        underlayColor={colors.backGray}
-                    >
-                        <Text style={[{color: colors.white, fontWeight: "bold",textAlign:"center"}]}> QR seed </Text>
-                    </TouchableOpacity>
+                     
                    
                 <Modal ref={"modal_qr"}>
                         <View style={{flex:1,}}>
@@ -255,6 +275,21 @@ class NganhHang extends Component{
             </View>
         );
     }
+
+    onChangedIDQuan(text){
+        let newText = '';
+        let numbers = '0123456789';
+        for (var i=0; i < text.length; i++) {
+            if(numbers.indexOf(text[i]) > -1 ) {
+                newText = newText + text[i];
+            }
+        }
+        if(!isNaN(newText)&&parseInt(newText)>0){
+            this.setState({ txtIDQuan: parseInt(newText) });
+        }else{
+            this.setState({ txtIDQuan:"" });
+        }
+    }
 }
 
 const mapStateToProps = state => ({
@@ -283,9 +318,26 @@ const styles=StyleSheet.create({
     },
     itemImage:{
         width: "95%",
-        height: 100,
+        height: 125,
         justifyContent: 'center',
         alignItems: 'center',
+    },
+    vInputRow:{
+        flexDirection:"row"
+    },
+    vInput:{
+        flex:2,
+        borderColor: 'gray', borderWidth: 1,
+        height:40
+    },
+    vBtn:{
+        flex:1,
+        borderWidth: 1,
+        height: 40,
+        justifyContent: "center",
+        borderColor: colors.blue,
+        backgroundColor: colors.blue,
+        borderRadius: 0,
     }
 });
 

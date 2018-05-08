@@ -8,7 +8,9 @@ export const formatVND = (x,default0="0 ₫") => {
     }
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")+" ₫";
 }
-
+export const IsNullOrEmpty=(value)=>{
+    return (!value || value == undefined || value == "" || value.length == 0);
+}
 export const defaultString = (str,defaultStr="...") => {
     if(str==null || str == undefined || str.length==0){
         return defaultStr;
