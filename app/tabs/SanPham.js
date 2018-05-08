@@ -270,15 +270,22 @@ class SanPham extends Component{
                                             title={'Thêm'+((this._checkInCart(item.ThucDonId)!=undefined)?item.SoLuongGia>0?"(*)":"("+this._checkInCart(item.ThucDonId).SLSP+")":"")}
                                             onPress={()=>{                                         
                                                 var _newBangGiaCT=[];
+                                                var getcartfirst=this._checkInCart2(item.ThucDonId,0);
                                                 _newBangGiaCT.push({
                                                     Id:0,
                                                     Ten:"Giá niêm yết",
                                                     Price:item.Gia,
-                                                    SLSP:1,
+                                                    SLSP:getcartfirst!=undefined?getcartfirst.SLSP:1,
                                                 });
-                                                
+                                               
                                                 for(var i=0;i<item.BangGiaCT.length;i++){
                                                     item.BangGiaCT[i].SLSP=0;
+                                                  
+                                                    var getcart=this._checkInCart2(item.ThucDonId,item.BangGiaCT[i].Id);
+                                                    if(getcart!=undefined){
+                                                         item.BangGiaCT[i].SLSP=getcart.SLSP;
+                                                    }
+
                                                     _newBangGiaCT.push(item.BangGiaCT[i]);
                                                 }
                                               
@@ -424,7 +431,7 @@ class SanPham extends Component{
                                                         });
                                                     }}
                                                     />
-                                                    <Badge containerStyle={{ backgroundColor: 'violet'}}>
+                                                    <Badge containerStyle={{ backgroundColor: item.SLSP>0?'violet':VCOLOR.lightGray}}>
                                                         <Text>{item.SLSP}</Text>
                                                     </Badge>
                                                      <Icon.Button 
