@@ -41,7 +41,7 @@ import {getUser,getQuan,getQR} from './common/Storage';
 import {initialSyncSetUser} from './actions/authAction';
 import {fetchDanhSachDonHang} from './actions/donHangAction';
 import {setSyncQuan} from './actions/quanAction';
-import OneSignal from 'react-native-onesignal'; // Import package from node modules
+//import OneSignal from 'react-native-onesignal'; // Import package from node modules
 
 const opt_hide_tabbar={
     //tabBarVisible:false,
@@ -424,9 +424,9 @@ class MainScreenNavigatorState extends Component{
 
         }
         componentWillMount() {
-            OneSignal.addEventListener('received', this.onReceived);
+            /*OneSignal.addEventListener('received', this.onReceived);
             OneSignal.addEventListener('opened', this.onOpened);
-            OneSignal.addEventListener('ids', this.onIds);
+            OneSignal.addEventListener('ids', this.onIds);*/
         }
     
      
@@ -434,16 +434,16 @@ class MainScreenNavigatorState extends Component{
             console.log("Notification received: ", notification);
         }
     
-        onOpened(openResult) {
+        /*onOpened(openResult) {
             console.log('Message: ', openResult.notification.payload.body);
             console.log('Data: ', openResult.notification.payload.additionalData);
             console.log('isActive: ', openResult.notification.isAppInFocus);
             console.log('openResult: ', openResult);
-        }
+        }*/
     
-        onIds(device) {
+        /*onIds(device) {
             console.log('Device info: ', device);
-        }
+        }*/
         componentWillUnmount() {
             NetInfo.isConnected.removeEventListener(
                 'change',
@@ -456,9 +456,9 @@ class MainScreenNavigatorState extends Component{
             AppState.removeEventListener('connectionChange', this._handleAppStateChange);
 
 
-            OneSignal.removeEventListener('received', this.onReceived);
+           /* OneSignal.removeEventListener('received', this.onReceived);
             OneSignal.removeEventListener('opened', this.onOpened);
-            OneSignal.removeEventListener('ids', this.onIds);
+            OneSignal.removeEventListener('ids', this.onIds);*/
         }
         _handleConnectivityChange = (isConnected) => {
             console.log("isConnected: "+isConnected);

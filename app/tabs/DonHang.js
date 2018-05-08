@@ -194,6 +194,7 @@ class DonHang extends Component{
                                             {
                                                 item.TrangThaiThanhToan.Id==1?
                                                 <Button
+                                                    disabled={item.HinhThucMuaHangId!=1}
                                                     buttonStyle={{
                                                         backgroundColor:VCOLOR.do_dam,
                                                         borderColor: "transparent",

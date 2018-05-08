@@ -2,7 +2,7 @@ import React,{Component} from 'react';
 import {View,Text,TouchableOpacity,StyleSheet,FlatList,ImageBackground} from 'react-native';
 import GioHangPage from './pages/GioHangPage';
 import DSSP from './pages/DSSP';
-import { SearchBar,Button } from 'react-native-elements';
+import { SearchBar,Button,ButtonGroup } from 'react-native-elements';
 import {VCOLOR} from './../common/constants';
 import {connect} from 'react-redux';
 import {fetchSanPham} from './../actions/sanPhamAction';
@@ -16,6 +16,10 @@ import Header from './../common/components/Header';
 import {setNotificationCounter,cartCRUD} from './../actions/cartAction';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Toast from 'react-native-root-toast';
+import Modal from 'react-native-modalbox';
+import * as vUtils  from './../common/vUtils';
+import {Badge } from 'react-native-elements';
+import Icon from 'react-native-vector-icons/Ionicons';
 class SanPham extends Component{
     constructor(props){
         super(props);
@@ -32,7 +36,10 @@ class SanPham extends Component{
             error:null,
             refreshing:false,
             page:1,
-            page_size:1000
+            page_size:1000,
+
+            ProductSelected:null,
+            BangGiaCT:[]
         }
     }
 
@@ -233,13 +240,13 @@ class SanPham extends Component{
                             renderItem={({item}) =>
                                 <TouchableOpacity key={item.ID} onPress={()=>{
                                     //this.onPressProductItem(item);
-                                    dispatch(cartCRUD("+",item,1));
+                                    //dispatch(cartCRUD("+",item,1));
                                 }} style={styles.productItem}>
                                     <Image
                                         source={{ uri: item.HinhAnh }}
                                         indicator={ProgressBar}
                                         style={styles.itemImage}/>
-                                        <Text style={vStyles.product_name}>{item.TenSanPham} {item.New?<Text style={{color:"red",fontSize:9,fontWeight:'bold'}}>NEW</Text>:null}</Text>
+                                        <Text style={vStyles.product_name}>{item.ThucDonId} | {item.TenSanPham} {item.New?<Text style={{color:"red",fontSize:9,fontWeight:'bold'}}>NEW</Text>:null}</Text>
                                     
                                         <Text style={vStyles.price}>{formatVND(item.Gia)}</Text>
 
@@ -260,10 +267,29 @@ class SanPham extends Component{
                                             backgroundColor={this._checkInCart(item.ThucDonId)!=undefined?"green":"gray"}
                                             color="white"
                                             icon={{name: 'cart-plus', type: 'font-awesome'}}
-                                            title={'Thêm'+((this._checkInCart(item.ThucDonId)!=undefined)?"("+this._checkInCart(item.ThucDonId).SLSP+")":"")}
-                                            onPress={()=>{
-                                                //dispatch(setNotificationCounter("+",1));
-                                                dispatch(cartCRUD("+",item,1));
+                                            title={'Thêm'+((this._checkInCart(item.ThucDonId)!=undefined)?item.SoLuongGia>0?"(*)":"("+this._checkInCart(item.ThucDonId).SLSP+")":"")}
+                                            onPress={()=>{                                         
+                                                var _newBangGiaCT=[];
+                                                _newBangGiaCT.push({
+                                                    Id:0,
+                                                    Ten:"Giá niêm yết",
+                                                    Price:item.Gia,
+                                                    SLSP:1,
+                                                });
+                                                
+                                                for(var i=0;i<item.BangGiaCT.length;i++){
+                                                    item.BangGiaCT[i].SLSP=0;
+                                                    _newBangGiaCT.push(item.BangGiaCT[i]);
+                                                }
+                                              
+                                                this.setState({
+                                                    ProductSelected:item,
+                                                    BangGiaCT:_newBangGiaCT,
+                                                     
+                                                },()=>{
+                                                        console.log(this.state.BangGiaCT);
+                                                        this.refs.modal_add_product.open();
+                                                });
                                                 //Toast.show("Đã thêm vào giỏ hàng", {position:Toast.positions.TOP});
                                             }}
                                         />
@@ -276,7 +302,7 @@ class SanPham extends Component{
                                         </CornerLabel>:null}
                                 </TouchableOpacity>
                             }
-                            keyExtractor={(item,index) => item.ID+""}
+                            keyExtractor={(item,index) => index}
                             //refreshing={this.state.refreshing}
                             //onRefresh={this.handleRefresh}
 
@@ -323,36 +349,171 @@ class SanPham extends Component{
                                                 null
                                         }
                                     </TouchableOpacity>
-                                {
-                                    Paging!=undefined?
-                                    <TouchableOpacity
-                                        disabled={this.state.page==Paging.TotalPages}
+                                    {
+                                        Paging!=undefined?
+                                        <TouchableOpacity
+                                            disabled={this.state.page==Paging.TotalPages}
 
-                                        activeOpacity = { 0.7 }
-                                        style = { this.state.page==Paging.TotalPages?styles.TouchableOpacity_style_disabled:styles.TouchableOpacity_style }
-                                        onPress = { ()=>{
-                                            this.handleLoadMore(+1);
-                                        }}
-                                        >
+                                            activeOpacity = { 0.7 }
+                                            style = { this.state.page==Paging.TotalPages?styles.TouchableOpacity_style_disabled:styles.TouchableOpacity_style }
+                                            onPress = { ()=>{
+                                                this.handleLoadMore(+1);
+                                            }}
+                                            >
 
-                                        <Text style = { styles.TouchableOpacity_Inside_Text }>Trang tiếp theo {this.state.page}/{Paging!=undefined?Paging.TotalPages:""} </Text>
-                                        {
-                                            ( this.state.fetching_Status )
-                                            ?
-                                                <ActivityIndicator color = "#fff" style = {{ marginLeft: 6 }} />
-                                            :
-                                            null
-                                        }
-                                    </TouchableOpacity>
-                                    :
-                                    null
-                                }
+                                            <Text style = { styles.TouchableOpacity_Inside_Text }>Trang tiếp theo {this.state.page}/{Paging!=undefined?Paging.TotalPages:""} </Text>
+                                            {
+                                                ( this.state.fetching_Status )
+                                                ?
+                                                    <ActivityIndicator color = "#fff" style = {{ marginLeft: 6 }} />
+                                                :
+                                                null
+                                            }
+                                        </TouchableOpacity>
+                                        :
+                                        null
+                                    }
                                 </View>
                  </View>
 
 
                 </View>
 
+                
+                <Modal style={[styles.modal,styles.modal_qr]} position={"center"} ref={"modal_add_product"} swipeToClose={false}>
+                {this.state.ProductSelected!=null?
+                        <View style={{flex:1,}}>
+                        {
+                            this.state.ProductSelected!=null?
+                            <Text style={{alignSelf:"center",fontWeight:"bold",fontSize:16}}>{this.state.ProductSelected.TenSanPham}{this.state.ProductSelected.SoLuongGia>0?" ("+(this.state.ProductSelected.SoLuongGia+1)+" giá)":""}</Text>
+                            :null
+                        }
+                        <FlatList
+                                data={this.state.BangGiaCT}
+                                renderItem={({item}) =>
+                                        <View key={item.GiaId}  style={styles2.containerStyle}>
+                                                <View style={styles2.textStyle}>
+                                                    <Text style={{ color: '#2e2f30' }}>{item.Ten}</Text>
+                                                    <View style={styles2.priceStyle}>
+                                                    <Text style={{ color: '#2e2f30', fontSize: 12 }}>{vUtils.formatVND(item.Price)}</Text>
+                                                    {
+                                                        item.SLSP>1?
+                                                        <Text style={{ color:VCOLOR.blue, fontSize: 12 }}>{vUtils.formatVND(item.Price*item.SLSP)}</Text>
+                                                        :null
+                                                    }
+                                                    </View>
+                                                </View>
+
+                                                <View style={styles2.counterStyle}>
+                                                    <Icon.Button 
+                                                    name="ios-remove" 
+                                                    size={30} 
+                                                    color='#fff' 
+                                                    backgroundColor='#fff' 
+                                                    style={{ borderRadius: 15, backgroundColor: '#bbb', height: 30, width: 30 }} 
+                                                    iconStyle={{ marginRight: 0 }}
+                                                    onPress={()=>{
+                                                        var _BangGiaCT = this.state.BangGiaCT;
+                                                        for(var i=0;i<_BangGiaCT.length;i++){
+                                                            if(_BangGiaCT[i].Id==item.Id){
+                                                                _BangGiaCT[i].SLSP--;
+                                                            }
+                                                        }
+                                                        this.setState({
+                                                            BangGiaCT:_BangGiaCT,
+                                                        });
+                                                    }}
+                                                    />
+                                                    <Badge containerStyle={{ backgroundColor: 'violet'}}>
+                                                        <Text>{item.SLSP}</Text>
+                                                    </Badge>
+                                                     <Icon.Button 
+                                                        name="ios-add" 
+                                                        size={30} 
+                                                        color='#fff' 
+                                                        backgroundColor='#fff' 
+                                                        style={{ borderRadius: 15, backgroundColor: '#bbb', height: 30, width: 30 }} 
+                                                        iconStyle={{ marginRight: 0 }}
+                                                        onPress={()=>{
+                                                            var _BangGiaCT = this.state.BangGiaCT;
+                                                            for(var i=0;i<_BangGiaCT.length;i++){
+                                                                if(_BangGiaCT[i].Id==item.Id){
+                                                                    _BangGiaCT[i].SLSP++;
+                                                                }
+                                                            }
+                                                            this.setState({
+                                                                BangGiaCT:_BangGiaCT,
+                                                            });
+                                                        }}/>
+                                                </View>
+                                        </View>
+                                }
+                                keyExtractor={(item,index) => index+""+item.GiaId}
+                                //refreshing={this.state.refreshing}
+                                //onRefresh={this.handleRefresh}  
+
+                                //onEndReached={this.onEndReached} 
+                                //onEndReachedThreshold={0.5}
+                                //onMomentumScrollBegin={() => { this.onEndReachedCalledDuringMomentum = false; }}
+                                contentContainerStyle={{paddingBottom:150}}
+                            />
+                                <View style={styles.footer}>                              
+                                <Button
+                                    buttonStyle={{
+                                        backgroundColor: VCOLOR.green,
+                                        borderColor: "transparent",
+                                        borderWidth: 0,
+                                        borderRadius: 0,                                    
+                                    }}
+                                    color="white"
+                                    icon={{name: 'chevron-left', type: 'font-awesome'}}
+                                    title={'Trở về'}
+                                    onPress={()=>{
+                                        this.refs.modal_add_product.close();
+                                    }}
+                                />
+                                <Button
+                                    buttonStyle={{
+                                        backgroundColor: VCOLOR.do_dam,
+                                        borderColor: "transparent",
+                                        borderWidth: 0,
+                                        borderRadius: 0,                                    
+                                    }}
+                                    backgroundColor="red"
+                                    color="white"
+                                    icon={{name: 'cart-plus', type: 'font-awesome'}}
+                                    title={'Thêm vào giỏ hàng'}
+                                    onPress={()=>{
+                                        //dispatch(cartCRUD("+",item,1));
+                                        if(this.state.ProductSelected!=null){                                             
+                                            var root_bg=this.state.BangGiaCT;
+                                            var list_add = [];
+                                            for(var i=0;i<root_bg.length;i++){
+                                                if(root_bg[i].SLSP>0){
+                                                    var item_add_cart= {...this.state.ProductSelected};//JSON.parse(JSON.stringify(this.state.ProductSelected));
+                                                    item_add_cart.GiaId=root_bg[i].Id;
+                                                    item_add_cart.Gia=root_bg[i].Price;
+                                                    item_add_cart.SLSP=root_bg[i].SLSP;
+                                                    item_add_cart.BangGiaCT=undefined;
+                                                    item_add_cart.TenSanPham=item_add_cart.TenSanPham+" ("+root_bg[i].Ten+")";
+                                                    list_add.push(item_add_cart);
+                                                }
+                                            }
+                                            
+                                            if(list_add.length>0){
+                                                  dispatch(cartCRUD("++",list_add,0))
+                                                  this.refs.modal_add_product.close();
+                                            }
+                                            this.refs.modal_add_product.close();
+                                        }else{
+                                            Toast.show("Lỗi, vui lòng thử lại!", {position:Toast.positions.TOP});
+                                        }
+                                    }}
+                                />
+                                </View>
+                            </View>:null
+                        }
+                </Modal>                    
             </View>
 
         );
@@ -361,6 +522,12 @@ class SanPham extends Component{
         const {cartReducer} = this.props;
         return cartReducer.cartItems.find(function (s) {
             return s.ThucDonId == idsp;
+        });
+    }
+      _checkInCart2(_thucdonid,_giaid){
+        const {cartReducer} = this.props;
+        return cartReducer.cartItems.find(function (s) {
+            return s.ThucDonId == _thucdonid&&s.GiaId==_giaid;
         });
     }
 }
@@ -415,6 +582,33 @@ const styles=StyleSheet.create({
         marginRight:2,
         fontSize:10,
     },
+    footer1:{
+        flexDirection:"row",
+        position:'absolute',
+        bottom:50,
+        left:0,
+        width:"100%",
+        backgroundColor:VCOLOR.xam,
+        alignContent:"center",
+        alignItems: "center",
+        justifyContent:"center",
+        paddingTop:3,
+    },
+    footer:{
+        flexDirection:"row",
+        position:'absolute',
+        bottom:0,
+        left:0,
+        right:0,
+        width:"100%",
+        backgroundColor:VCOLOR.xam,
+        alignContent:"center",
+        alignItems: "center",
+        justifyContent:"center",
+        paddingTop:3,
+    },
+
+
     footerStyle:
     {
       padding: 7,
@@ -451,3 +645,46 @@ const styles=StyleSheet.create({
       fontSize: 12
     },
 });
+
+
+
+const styles2 = StyleSheet.create({
+    containerStyle: {
+      flexDirection: 'row',
+      flex: 1,
+      borderBottomWidth: 1,
+      borderColor: '#e2e2e2',
+      padding: 10,
+      paddingLeft: 15,
+      backgroundColor: '#fff'
+    },
+    lastItemStyle: {
+      flexDirection: 'row',
+      flex: 1,
+      padding: 10,
+      paddingLeft: 15,
+      backgroundColor: '#fff'
+    },
+    imageStyle: {
+      width: 50, 
+      height: 50, 
+      marginRight: 20
+    },
+    textStyle: {
+      flex: 2,
+      justifyContent: 'center'
+    },
+    priceStyle: {
+      backgroundColor: '#ddd',
+      width: '80%',
+      alignItems: 'center',
+      marginTop: 3,
+      borderRadius: 3
+    },
+    counterStyle: {
+      flex: 1,
+      flexDirection: 'row',
+      justifyContent: 'space-around',
+      alignItems: 'center'
+    }
+  });

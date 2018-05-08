@@ -194,8 +194,10 @@ class GioHang extends Component{
                 SanPhamId:cartReducer.cartItems[i].ID,
                 ThucDonId:cartReducer.cartItems[i].ThucDonId,
                 SoLuong:cartReducer.cartItems[i].SLSP,
+                GiaId:cartReducer.cartItems[i].GiaId,
             });
         }
+
         var donhang={};
         if(this.state.HinhThucMuaHangId==1){
             if (!vUtils.isInt(this.state.Ban)){
@@ -315,7 +317,7 @@ class GioHang extends Component{
                                     //this._goCTSP(item);
                                     this.showEditSLSP(item);
                                 }}>
-                                    <View key={item.ID} style={styles2.containerStyle}>
+                                    <View key={item.ThucDonId+""+item.GiaId} style={styles2.containerStyle}>
                                         <Image 
                                             source={{ uri: item.HinhAnh }} 
                                             indicator={ProgressBar} 
@@ -330,7 +332,6 @@ class GioHang extends Component{
                                                     <Text style={{ color:VCOLOR.blue, fontSize: 12 }}>{vUtils.formatVND(item.Gia*item.SLSP)}</Text>
                                                     :null
                                                 }
-                                               
                                                 </View>
                                             </View>
 
@@ -346,7 +347,7 @@ class GioHang extends Component{
                                     </View>
                                 </TouchableOpacity>
                             }
-                            keyExtractor={(item,index) => item.ThucDonId+""}
+                            keyExtractor={(item, index) => item.ThucDonId+""+item.GiaId}
                             refreshing={this.state.refreshing}
                             onRefresh={this.handleRefresh}  
 
@@ -407,7 +408,7 @@ class GioHang extends Component{
                                 backgroundColor="red"
                                 color="white"
                                 icon={{name: 'opencart', type: 'font-awesome'}}
-                                title={'Đặt bàn'}
+                                title={'Đặt hàng'}
                                 onPress={()=>{
                                     if(quanReducer.Quan==null){
                                         Toast.show("Chưa đăng nhập quán bằng QR!", {position:Toast.positions.CENTER});

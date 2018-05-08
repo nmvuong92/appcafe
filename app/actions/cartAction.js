@@ -48,14 +48,14 @@ export let cartCRUD = (type,product,quantity)=> { //loai, san pham, soluong
                                 //if exists
                                 var check_exists=false;
                                 for(var i=0;i<current_cart.length;i++){
-                                    if(current_cart[i].ThucDonId==product.ThucDonId){
+                                    if(current_cart[i].ThucDonId==product.ThucDonId&&
+                                        current_cart[i].GiaId==product.GiaId){
                                          //nếu tồn tại thì chỉ cập nhật SLSP
                                         check_exists=true;
                                         current_cart[i].SLSP+=quantity;
                                         break;
                                     }
                                 }
-                               
                                 //nếu chưa tồn tại thì thêm mới 
                                 if(!check_exists){
                                     current_cart.push(product);
@@ -63,6 +63,43 @@ export let cartCRUD = (type,product,quantity)=> { //loai, san pham, soluong
                         } else{
                             //add
                             current_cart.push(product);
+                        }
+                     
+                        AsyncStorage.setItem('cart', JSON.stringify(current_cart));
+                        dispatch({type:types.CART_ADD,newCartItems:current_cart});
+                    });
+                break;
+            case "++": //array
+                AsyncStorage.getItem('cart')
+                .then(function (value) {                      
+                        var current_cart = [];
+                        if(value!=null){
+                                var current_cart = JSON.parse(value);
+                             
+                                for(var z=0;z<product.length;z++){
+                                    var pItem = product[z];
+                                    var check_exists=false;
+                                    //if exists
+                                    for(var i=0;i<current_cart.length;i++){
+                                        if(current_cart[i].ThucDonId==pItem.ThucDonId&&
+                                            current_cart[i].GiaId==pItem.GiaId){
+                                            //nếu tồn tại thì chỉ cập nhật SLSP
+                                            check_exists=true;
+                                            current_cart[i].SLSP+=pItem.SLSP;
+                                            break;
+                                        }
+                                    }
+                                    //nếu chưa tồn tại thì thêm mới 
+                                    if(!check_exists){
+                                        current_cart.push(pItem);
+                                    }  
+                                }                    
+                        } else{
+                            //add
+                            for(var i=0;i<product.length;i++){
+                                product.BangGiaCT=undefined;
+                                current_cart.push(product[i]);
+                            }
                         }
                      
                         AsyncStorage.setItem('cart', JSON.stringify(current_cart));
@@ -77,7 +114,8 @@ export let cartCRUD = (type,product,quantity)=> { //loai, san pham, soluong
                             var current_cart = JSON.parse(value);
                             //if exists
                             for(var i=0;i<current_cart.length;i++){
-                                if(current_cart[i].ThucDonId==product.ThucDonId){
+                                if(current_cart[i].ThucDonId==product.ThucDonId&&
+                                    current_cart[i].GiaId==product.GiaId){
                                     //remove
                                     current_cart[i].SLSP-=1;
                                     //sau khi tru ==0 thi xoa luon
@@ -102,7 +140,8 @@ export let cartCRUD = (type,product,quantity)=> { //loai, san pham, soluong
                             var current_cart = JSON.parse(value);
                             //if exists
                             for(var i=0;i<current_cart.length;i++){
-                                if(current_cart[i].ThucDonId==product.ThucDonId){
+                                if(current_cart[i].ThucDonId==product.ThucDonId&&
+                                    current_cart[i].GiaId==product.GiaId){
                                     current_cart[i].SLSP=quantity;
                                     break;
                                 }
@@ -123,7 +162,8 @@ export let cartCRUD = (type,product,quantity)=> { //loai, san pham, soluong
                             var current_cart = JSON.parse(value);
                             //if exists
                             for(var i=0;i<current_cart.length;i++){
-                                if(current_cart[i].ThucDonId==product.ThucDonId){
+                                if(current_cart[i].ThucDonId==product.ThucDonId&&
+                                    current_cart[i].GiaId==product.GiaId){
                                     current_cart.splice(i, 1);
                                     break;
                                 }
