@@ -85,7 +85,7 @@ export let cartCRUD = (type,product,quantity)=> { //loai, san pham, soluong
                                             current_cart[i].GiaId==pItem.GiaId){
                                             //nếu tồn tại thì chỉ cập nhật SLSP
                                             check_exists=true;
-                                            current_cart[i].SLSP+=pItem.SLSP;
+                                            current_cart[i].SLSP=pItem.SLSP;
                                             break;
                                         }
                                     }

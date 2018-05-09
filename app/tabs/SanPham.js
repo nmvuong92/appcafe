@@ -246,7 +246,7 @@ class SanPham extends Component{
                                         source={{ uri: item.HinhAnh }}
                                         indicator={ProgressBar}
                                         style={styles.itemImage}/>
-                                        <Text style={vStyles.product_name}>{item.ThucDonId} | {item.TenSanPham} {item.New?<Text style={{color:"red",fontSize:9,fontWeight:'bold'}}>NEW</Text>:null}</Text>
+                                        <Text style={vStyles.product_name}>{item.TenSanPham} {item.New?<Text style={{color:"red",fontSize:9,fontWeight:'bold'}}>NEW</Text>:null}</Text>
                                     
                                         <Text style={vStyles.price}>{formatVND(item.Gia)}</Text>
 
@@ -275,7 +275,7 @@ class SanPham extends Component{
                                                     Id:0,
                                                     Ten:"Giá niêm yết",
                                                     Price:item.Gia,
-                                                    SLSP:getcartfirst!=undefined?getcartfirst.SLSP:1,
+                                                    SLSP:getcartfirst!=undefined?getcartfirst.SLSP:0,
                                                 });
                                                
                                                 for(var i=0;i<item.BangGiaCT.length;i++){
@@ -390,6 +390,13 @@ class SanPham extends Component{
                 <Modal style={[styles.modal,styles.modal_qr]} position={"center"} ref={"modal_add_product"} swipeToClose={false}>
                 {this.state.ProductSelected!=null?
                         <View style={{flex:1,}}>
+                          <Header
+                                    //leftIcon='angle-left'
+                                    //leftIconAction={()=>{
+                                      
+                                    //}}
+                                    title={"Thêm sản phẩm vào giỏ hàng"}
+                                /> 
                         {
                             this.state.ProductSelected!=null?
                             <Text style={{alignSelf:"center",fontWeight:"bold",fontSize:16}}>{this.state.ProductSelected.TenSanPham}{this.state.ProductSelected.SoLuongGia>0?" ("+(this.state.ProductSelected.SoLuongGia+1)+" giá)":""}</Text>

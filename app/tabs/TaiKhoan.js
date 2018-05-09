@@ -209,8 +209,8 @@ class TaiKhoan extends Component{
               
                 <View style={styles.info}>
                         <View style={styles.info_item}>
-                            <Text style={styles.text1}>Phiên bản ứng dụng:</Text>
-                            <Text style={styles.text2}>{Platform.OS === 'ios' ? '3.0' : '7.0'}</Text>
+                            <Text style={styles.text1}>qcafe:</Text>
+                            <Text style={styles.text2}>phiên bản {Platform.OS === 'ios' ? '3.0' : '7.0'}</Text>
                         </View>
                         <View style={styles.info_item}>
                             <Text style={styles.text1}>Tên thiết bị:</Text>
@@ -220,10 +220,15 @@ class TaiKhoan extends Component{
                             <Text style={styles.text1}>Model Number:</Text>
                             <Text style={styles.text2}>{this.state.ModelNumber}</Text>
                         </View>
-                        <View style={styles.info_item}>
-                            <Text style={styles.text1}>Unique ID:</Text>
-                            <Text style={styles.text2}>{this.state.UniqueID}</Text>
-                        </View>  
+                        {
+                            /*
+                             <View style={styles.info_item}>
+                                <Text style={styles.text1}>Unique ID:</Text>
+                                <Text style={styles.text2}>{this.state.UniqueID}</Text>
+                            </View> 
+                            */
+                        }
+                        
                 </View> 
                    
                
@@ -243,7 +248,7 @@ class TaiKhoan extends Component{
                     :null
                 }
                 {
-                    isLoggedIn?
+                    false?
                     <View>
                         <View style={styles.info}>
                             <View style={styles.info_item}>
@@ -291,56 +296,7 @@ class TaiKhoan extends Component{
                 }
 
                
-            {
-                !isLoggedIn?
-                <View style={styles.container}>
-                <HeadPadding/>
-                {/* <TouchableOpacity
-                    style={[commonStyles.btn, {marginBottom:20}]}
-                    onPress={() => {
-                        this.refs.modal_register.open();
-                       // dispatch({type:'RegisterScreen'});
-                    }}
-                    underlayColor={colors.backGray}
-                >
-                    <Text style={[{color: colors.white, fontWeight: "bold",textAlign:"center"}]}> Đăng ký </Text>
-                </TouchableOpacity> */}
-
-                {/* <TouchableOpacity
-                    style={[commonStyles.btn, {marginBottom:20}]}
-                    onPress={() => {
-                        this.refs.modal_login.open();
-                       // this.setState({modalVisible: !this.state.modalVisible});
-                        //dispatch({type:'LoginScreen'});
-                    }}
-                    underlayColor={colors.backGray}
-                >
-                    <Text style={[{color: colors.white, fontWeight: "bold",textAlign:"center"}]}> Đăng nhập </Text>
-                </TouchableOpacity> */}
-            </View>
-            :null
-            }
-
-            {/* {
-                    List!=null?
-                    List.map((item,index)=>{
-                        return (
-                        <TouchableOpacity style={styles.li}  activeOpacity={0.75} key={item.Id} onPress={()=>{
-                            this.onPressProductItem(item);
-                        }}>
-                            <Image
-                                source={{uri:item.ImageThumbnail}}
-                                style={{width: 30, height: 30, marginLeft: 20}}
-                            />
-                            <Text style={{marginLeft: 10}}>
-                                {item.Title}
-                            </Text>
-                        </TouchableOpacity>
-                        )
-                    })
-                    :null
-             } */}
-
+            
 
             </ScrollView>
 

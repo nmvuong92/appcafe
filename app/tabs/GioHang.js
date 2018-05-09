@@ -287,6 +287,7 @@ class GioHang extends Component{
         let slsp=cartReducer.cartItems.length;
         let isFetchingPickBoSung=donHangReducer.isFetchingPickBoSung;
         let ListPickBoSung=donHangReducer.ListPickBoSung;
+        let {isFetching} = donHangReducer;
         return (
      
             sanPhamReducer.isFetching?<Loading/>:
@@ -399,6 +400,7 @@ class GioHang extends Component{
                       
                         <View style={{flex:1,width:"100%",padding:0}}>
                             <Button
+                                
                                 buttonStyle={{
                                     backgroundColor: VCOLOR.do_dam,
                                     borderColor: "transparent",
@@ -591,8 +593,6 @@ class GioHang extends Component{
                 <Modal
                     style={[styles.modal, this.state.height_modal_qr==1?styles.modal_qr:styles.modal_qr2]} position={"center"} 
                     ref={"modal_qr"}>
-                        <KeyboardAwareScrollView style={{flex:1,width:"100%",padding:5}}>
-                            { 
                                 <Header
                                     leftIcon='angle-left'
                                     leftIconAction={()=>{
@@ -607,8 +607,10 @@ class GioHang extends Component{
                                         }
                                     }}
                                     title={this.state.labelMuaHang}
+                                    noPadding={true}
                                 /> 
-                            }
+                        <KeyboardAwareScrollView style={{flex:1,width:"100%",}} contentContainerStyle={{justifyContent: 'flex-end',padding:5}}>
+                            
                                 {
                                     this.state.HinhThucMuaHangId==1?
                                     <Text style={styles.vTitle}>Chọn bàn</Text>:    
@@ -747,6 +749,7 @@ class GioHang extends Component{
                                         value={this.state.txtYeuCauKhac}                                      
                                     />
                                     <Button
+                                        disabled={isFetching}
                                         buttonStyle={{
                                             backgroundColor: VCOLOR.do_dam,
                                             borderColor: "transparent",

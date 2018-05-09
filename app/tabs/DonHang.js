@@ -206,7 +206,7 @@ class DonHang extends Component{
                                                     fontSize={12}
                                                     color="white"
                                                     iconRight={{name: item.SoLanGoiTinhTien>0?'check':'gratipay', type: 'font-awesome'}}
-                                                    title={'Gọi tính tiền'}
+                                                    title={'Gọi tính tiền '}
                                                     onPress={()=>{
                                                         dispatch(postGoiTinhTien(item.Id,()=>{
                                                             this.reLoad();

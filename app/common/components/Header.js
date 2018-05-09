@@ -130,7 +130,7 @@ class Header extends Component {
 
 
         return (
-            <View style={styles.navigationBarContainer}>
+            <View style={this.props.noPadding!=undefined?styles.navigationBarContainer2:styles.navigationBarContainer}>
                 {NavigationBar}
             </View>
         )
@@ -150,6 +150,15 @@ const styles = StyleSheet.create({
         borderBottomWidth: 0.5,
         backgroundColor: 'white',
         marginTop: isIphoneX()?40:Platform.OS==="ios"?20:0
+    },
+    navigationBarContainer2: {
+        flexDirection: 'row',
+        height: 44,
+        alignItems: 'center',
+        borderBottomColor: '#ccc',
+        borderBottomWidth: 0.5,
+        backgroundColor: 'white',
+        marginTop: 0
     },
     titleWrap: {
         flex:1,
