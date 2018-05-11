@@ -267,8 +267,12 @@ class SanPham extends Component{
                                             backgroundColor={this._checkInCart(item.ThucDonId)!=undefined?"green":"gray"}
                                             color="white"
                                             icon={{name: 'cart-plus', type: 'font-awesome'}}
-                                            title={'Thêm'+((this._checkInCart(item.ThucDonId)!=undefined)?item.SoLuongGia>0?"(*)":"("+this._checkInCart(item.ThucDonId).SLSP+")":"")}
-                                            onPress={()=>{                                         
+                                            title={(item.SoLuongGia==0?'Thêm':item.SoLuongGia+1+' giá')+((this._checkInCart(item.ThucDonId)!=undefined)?item.SoLuongGia>0?"(*)":"("+this._checkInCart(item.ThucDonId).SLSP+")":"")}
+                                            onPress={()=>{       
+                                                if(item.SoLuongGia==0){
+                                                    dispatch(cartCRUD("+",item,1));
+                                                    return;
+                                                }                                  
                                                 var _newBangGiaCT=[];
                                                 var getcartfirst=this._checkInCart2(item.ThucDonId,0);
                                                 _newBangGiaCT.push({
@@ -280,12 +284,10 @@ class SanPham extends Component{
                                                
                                                 for(var i=0;i<item.BangGiaCT.length;i++){
                                                     item.BangGiaCT[i].SLSP=0;
-                                                  
                                                     var getcart=this._checkInCart2(item.ThucDonId,item.BangGiaCT[i].Id);
                                                     if(getcart!=undefined){
                                                          item.BangGiaCT[i].SLSP=getcart.SLSP;
                                                     }
-
                                                     _newBangGiaCT.push(item.BangGiaCT[i]);
                                                 }
                                               
@@ -391,10 +393,10 @@ class SanPham extends Component{
                 {this.state.ProductSelected!=null?
                         <View style={{flex:1,}}>
                           <Header
-                                    //leftIcon='angle-left'
-                                    //leftIconAction={()=>{
-                                      
-                                    //}}
+                                    leftIcon='angle-left'
+                                    leftIconAction={()=>{
+                                        this.refs.modal_add_product.close();
+                                    }}
                                     title={"Thêm sản phẩm vào giỏ hàng"}
                                 /> 
                         {

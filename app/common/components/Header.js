@@ -130,7 +130,7 @@ class Header extends Component {
 
 
         return (
-            <View style={this.props.noPadding!=undefined?styles.navigationBarContainer2:styles.navigationBarContainer}>
+            <View style={this.props.noPadding!=undefined&&this.props.noPadding==true?styles.navigationBarContainer2:styles.navigationBarContainer}>
                 {NavigationBar}
             </View>
         )

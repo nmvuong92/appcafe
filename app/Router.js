@@ -182,6 +182,31 @@ export const MainScreenNavigator = TabNavigator({
             tabBarIcon:  <FontAwesome color="black" size={28} name="home"/>,
         }
     }), //end home stack* */
+    TaiKhoanTab:StackNavigator({
+        TaiKhoan_Screen:{
+            screen:TaiKhoan,
+            navigationOptions: {
+                showLabel:true,
+                showIcon:true,
+                //tabBarLabel:'Tài khoản',
+
+                //
+                header:null,
+                tabBarLabel: 'Quán',
+                tabBarIcon:  <FontAwesome color="black" size={28} name="user"/>
+            }
+        },
+        CTArticle_Screen:{
+            screen:CTArticle,
+            navigationOptions:opt_hide_tabbar
+        },
+    },{
+        navigationOptions:{
+            initialRouteName:"TaiKhoan_Screen",
+            tabBarLabel: 'Quán',
+            tabBarIcon:  <FontAwesome color="black" size={28} name="user"/>
+        }
+    }),
     NganhHang:StackNavigator({
         SanPham:{
             screen:NganhHang,
@@ -306,34 +331,10 @@ export const MainScreenNavigator = TabNavigator({
             tabBarIcon: <DonHangBadgeIcon/>,
         }
     }), //end don hang tab
-    TaiKhoanTab:StackNavigator({
-        TaiKhoan_Screen:{
-            screen:TaiKhoan,
-            navigationOptions: {
-                showLabel:true,
-                showIcon:true,
-                //tabBarLabel:'Tài khoản',
-
-                //
-                header:null,
-                tabBarLabel: 'Quán',
-                tabBarIcon:  <FontAwesome color="black" size={28} name="user"/>
-            }
-        },
-        CTArticle_Screen:{
-            screen:CTArticle,
-            navigationOptions:opt_hide_tabbar
-        },
-    },{
-        navigationOptions:{
-            initialRouteName:"TaiKhoan_Screen",
-            tabBarLabel: 'Quán',
-            tabBarIcon:  <FontAwesome color="black" size={28} name="user"/>
-        }
-    })
+    
 },{
    
-    initialRouteName: 'NganhHang',
+    initialRouteName: 'TaiKhoanTab',
     
     tabBarPosition:'bottom',
     swipeEnabled:true,

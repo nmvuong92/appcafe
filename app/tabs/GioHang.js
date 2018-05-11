@@ -1,5 +1,5 @@
 import React,{Component} from 'react';
-import {View,Text,TouchableOpacity,StyleSheet,FlatList,TextInput,Modal as ReactNativeModal,SafeAreaView,Alert, Animated, Keyboard } from 'react-native';
+import {View,Text,TouchableOpacity,StyleSheet,FlatList,TextInput,Modal as ReactNativeModal,SafeAreaView,Alert, Animated, Keyboard,KeyboardAvoidingView ,Dimensions} from 'react-native';
 import GioHangPage from './pages/GioHangPage';
 import DSSP from './pages/DSSP';
 import { SearchBar,Badge } from 'react-native-elements';
@@ -76,6 +76,9 @@ class GioHang extends Component{
             txtDiaChi:"",
             txtYeuCauKhac:"",
             height_modal_qr:1,
+
+            txtTienKhachDua:"",
+            txtTienThoiLai:0
         }
         
     }
@@ -204,9 +207,14 @@ class GioHang extends Component{
                 Toast.show("Vui lòng nhập số bàn!", {position:Toast.positions.TOP});
                 return;
             }
+            if (!vUtils.isInt(this.state.txtTienKhachDua)){
+                Toast.show("Vui lòng nhập số tiền bạn sẽ trả để nhân viên thối lại!", {position:Toast.positions.TOP});
+                return;
+            }
             donhang={
                 HinhThucMuaHangId:this.state.HinhThucMuaHangId,
                 Ban:this.state.Ban,
+                TienKhachDua:this.state.txtTienKhachDua,
                 QuanId:quanReducer.Quan.Id,
                 DiaChiGiaoHang:"",
                 SDT:"",
@@ -217,6 +225,7 @@ class GioHang extends Component{
             donhang={
                 HinhThucMuaHangId:this.state.HinhThucMuaHangId,
                 Ban:0,
+                TienKhachDua:this.state.txtTienKhachDua,
                 QuanId:quanReducer.Quan.Id,
                 DiaChiGiaoHang:"",
                 SDT:"",
@@ -231,6 +240,7 @@ class GioHang extends Component{
             donhang={
                 HinhThucMuaHangId:this.state.HinhThucMuaHangId,
                 Ban:0,
+                TienKhachDua:this.state.txtTienKhachDua,
                 QuanId:quanReducer.Quan.Id,
                 DiaChiGiaoHang:this.state.txtDiaChi,
                 SDT:this.state.txtSDT,
@@ -366,41 +376,8 @@ class GioHang extends Component{
                         </View>
                   </View>
                  <View style={styles.footer}>
-                       {
-                            /*
-                                <View style={{flex:1,alignItems:"center"}}>
-                                    <Button
-                                        buttonStyle={{
-                                            backgroundColor: VCOLOR.do_dam,
-                                            borderColor: "transparent",
-                                            borderWidth: 0,
-                                            borderRadius: 0,                                    
-                                        }}
-                                        backgroundColor="red"
-                                        color="white"
-                                        icon={{name: 'cart-plus', type: 'font-awesome'}}
-                                        title={'Bổ sung'}
-                                        onPress={()=>{
-                                            if(quanReducer.Quan==null){
-                                                Toast.show("Chưa đăng nhập quán bằng QR!", {position:Toast.positions.CENTER});
-                                                return;
-                                            }
-                                            if(cartReducer.cartItems.length==0){
-                                                Toast.show("Vui lòng thêm sản phẩm!", {position:Toast.positions.CENTER});
-                                                return;
-                                            }
-                                            dispatch(fetchDanhSachDonHangDeviceBS(1,1000));
-                                            this.refs.modal_bosung.open();
-                                        }}
-                                    />
-                                </View>
-                            */
-                        
-                        }
-                      
                         <View style={{flex:1,width:"100%",padding:0}}>
                             <Button
-                                
                                 buttonStyle={{
                                     backgroundColor: VCOLOR.do_dam,
                                     borderColor: "transparent",
@@ -426,8 +403,6 @@ class GioHang extends Component{
                                     this.goThanhToan();
                                 }}
                             />
-
-                            
                         </View>
                   </View>
          
@@ -488,9 +463,6 @@ class GioHang extends Component{
                                         }}/>
                                     </View>
                                     <View style={{flexDirection:"row",justifyContent:"space-between"}}>
-                                            <Ionicons.Button name="md-arrow-round-back" backgroundColor={VCOLOR.xam} borderRadius={0} onPress={()=>{
-                                                    this.refs.modal3.close();
-                                            }}/>
                                             <MaterialIcons.Button color={VCOLOR.red} name="delete-forever" backgroundColor={VCOLOR.xam} borderRadius={0} onPress={()=>{
                                                     dispatch(cartCRUD("x",this.state.itemEdit,1));
                                                     this.refs.modal3.close();
@@ -585,20 +557,24 @@ class GioHang extends Component{
                                     //onEndReachedThreshold={0.5}
                                     onMomentumScrollBegin={() => { this.onEndReachedCalledDuringMomentum = false; }}
                                     contentContainerStyle={{paddingBottom:150}}
-                                
                                 />
                     }
                 </Modal>       
-                  
+              
                 <Modal
-                    style={[styles.modal, this.state.height_modal_qr==1?styles.modal_qr:styles.modal_qr2]} position={"center"} 
+                    backdrop={false}
+                    position={"top"} 
+                    swipeToClose={false}
+                    keyboardTopOffset={0}
                     ref={"modal_qr"}>
+                      <KeyboardAwareScrollView>
                                 <Header
                                     leftIcon='angle-left'
                                     leftIconAction={()=>{
                                         //có chọn hình thức mà back
                                         if(this.state.HinhThucMuaHangId>=1){
                                             this.setState({
+                                                height_modal_qr:1,
                                                 HinhThucMuaHangId:-1
                                             });
                                         }else{
@@ -607,10 +583,8 @@ class GioHang extends Component{
                                         }
                                     }}
                                     title={this.state.labelMuaHang}
-                                    noPadding={true}
+                                    //noPadding={this.state.height_modal_qr==1}
                                 /> 
-                        <KeyboardAwareScrollView style={{flex:1,width:"100%",}} contentContainerStyle={{justifyContent: 'flex-end',padding:5}}>
-                            
                                 {
                                     this.state.HinhThucMuaHangId==1?
                                     <Text style={styles.vTitle}>Chọn bàn</Text>:    
@@ -619,46 +593,17 @@ class GioHang extends Component{
                                     this.state.HinhThucMuaHangId==3?
                                     <Text style={styles.vTitle}>Nhập thông tin địa chỉ giao hàng</Text>:null
                                 }
-                               
-                                <View style={{flex:1}}>
-                                { 
-                                    //GIAO HÀNG TẬN NƠI
-                                    this.state.HinhThucMuaHangId==3?
-                                    <View>
-                                    <TextInput 
-                                        style={styles.vInput2}
-                                        keyboardType='numeric'
-                                        maxLength = {15}
-                                        onChangeText={(text) => this.setState({txtSDT:text})}
-                                        placeholder='Số điện thoại (*)'
-                                        value={this.state.txtSDT}                                      
-                                    />
-                                    <TextInput 
-                                        style={styles.vInput2}
-                                        multiline = {true}
-                                        numberOfLines = {2}
-                                        maxLength = {499}
-                                        onChangeText={(text) => this.setState({txtDiaChi:text})}
-                                        placeholder='Địa chỉ giao hàng (*)'
-                                        value={this.state.txtDiaChi}                                      
-                                    />
-                                   
-                                    </View>:null
-                                }
-                                    
-                                </View>
 
-                                {
+                                  {
                                     this.state.HinhThucMuaHangId==-1?
-                                    <View>
+                                    <View style={{width:"100%",padding:5}}>
                                     <Button
                                         buttonStyle={{
                                             backgroundColor: VCOLOR.do_dam,
                                             borderColor: "transparent",
                                             borderWidth: 0,
                                             borderRadius: 0,    
-                                            marginBottom:5,  
-                                            flex:1,           
+                                            marginBottom:5, 
                                             height: 40,                     
                                         }}
                                         backgroundColor="red"
@@ -678,8 +623,7 @@ class GioHang extends Component{
                                             backgroundColor: VCOLOR.do_dam,
                                             borderColor: "transparent",
                                             borderWidth: 0,
-                                            borderRadius: 0,    
-                                            flex:1,      
+                                            borderRadius: 0,  
                                             marginBottom:5,
                                             height: 40,                     
                                         }}
@@ -702,7 +646,6 @@ class GioHang extends Component{
                                             borderWidth: 0,
                                             borderRadius: 0,    
                                             marginBottom:5,
-                                            flex:1,      
                                             height: 40,                     
                                         }}
                                         backgroundColor="red"
@@ -719,13 +662,41 @@ class GioHang extends Component{
                                     />
                                     </View>:null
                                 }
+                               
+                         
+                                { 
+                                    //GIAO HÀNG TẬN NƠI
+                                    this.state.HinhThucMuaHangId==3?
+                                    <View style={{width:"100%",padding:5}}>
+                                    <TextInput 
+                                        style={styles.vInput2}
+                                        keyboardType='numeric'
+                                        maxLength = {15}
+                                        onChangeText={(text) => this.setState({txtSDT:text})}
+                                        placeholder='Số điện thoại (*)'
+                                        value={this.state.txtSDT}                                      
+                                    />
+                                    <TextInput 
+                                        style={styles.vInput2}
+                                        multiline = {true}
+                                        numberOfLines = {2}
+                                        maxLength = {499}
+                                        onChangeText={(text) => this.setState({txtDiaChi:text})}
+                                        placeholder='Địa chỉ giao hàng (*)'
+                                        value={this.state.txtDiaChi}                                      
+                                    />
+                                    </View>:null
+                                }
+                        
+
+                              
 
                                 
                                 
                                         {
                                             //TẠI QUÁN
                                             this.state.HinhThucMuaHangId==1?
-                                            
+                                            <View style={{width:"100%",padding:5}}>
                                                 <TextInput 
                                                     style={styles.vInput2}
                                                     keyboardType='numeric'
@@ -734,11 +705,11 @@ class GioHang extends Component{
                                                     value={this.state.Ban}
                                                     maxLength={5}  //setting limit of input
                                                 />
-                                            :null
+                                            </View>:null
                                         }
                                   {
                                     this.state.HinhThucMuaHangId!=-1?
-                                    <View>
+                                    <View style={{width:"100%",padding:5}}>
                                     <TextInput 
                                         style={styles.vInput2}
                                         multiline = {true}
@@ -748,6 +719,37 @@ class GioHang extends Component{
                                         placeholder='Yêu cầu khác'
                                         value={this.state.txtYeuCauKhac}                                      
                                     />
+                                    <View style={{flex:1,alignItems:"center"}}>
+                                        <Text>Tổng tiền:</Text>
+                                        <Text style={{fontSize:20,fontWeight:"bold",color:VCOLOR.do_dam}}>{vUtils.formatVND(tong_tien_gio_hang)}</Text>
+                                    </View>
+                                    <View style={{flex:1,alignItems:"center"}}>
+                                        <Text>Tiền khách đưa:</Text>
+                                        <TextInput 
+                                            style={styles.vInput2}
+                                            keyboardType='numeric'
+                                            onChangeText={(tienkhachdua) => {
+                                                this.setState({txtTienKhachDua:tienkhachdua});
+                                                if(vUtils.isInt(tienkhachdua)&&tienkhachdua>=tong_tien_gio_hang){
+                                                    var tienthoi = tienkhachdua-tong_tien_gio_hang;
+                                                    this.setState({txtTienThoiLai:tienthoi});
+                                                }else{
+                                                    this.setState({txtTienThoiLai:""})
+                                                }
+                                            }}
+                                            placeholder='Tiền khách đưa (*)'
+                                            value={this.state.txtTienKhachDua}
+                                            maxLength={7}  //setting limit of input
+                                        />
+                                        <Text>Tiền quán thối lại:</Text>
+                                        <Text style={{fontSize:20,fontWeight:"bold",color:VCOLOR.do_dam}}>{vUtils.formatVND(this.state.txtTienThoiLai)}</Text>
+                                      
+                                    </View>
+                                    </View>
+                                    :null
+                                  }
+                                {
+                                      this.state.HinhThucMuaHangId!=-1?
                                     <Button
                                         disabled={isFetching}
                                         buttonStyle={{
@@ -756,7 +758,6 @@ class GioHang extends Component{
                                             borderWidth: 0,
                                             borderRadius: 0,    
                                             marginBottom:5,
-                                            flex:1,      
                                             height: 40,                     
                                         }}
                                         backgroundColor="red"
@@ -766,14 +767,11 @@ class GioHang extends Component{
                                         onPress={()=>{
                                             this.hoiThanhtoan();
                                         }}
-                                    />
-                                    </View>:null
-                                  }
-                                
-                   
-                        </KeyboardAwareScrollView>
+                                    />:null
+                                }
+                   </KeyboardAwareScrollView>
                 </Modal>          
-                    
+               
             </View>
         );
     };
@@ -857,7 +855,7 @@ const styles=StyleSheet.create({
             marginBottom:5,
             height: 40,
             paddingLeft: 5,
-            flex: 1,
+            
             fontSize: 16,
             borderWidth:1,
             borderColor:"gray"
@@ -916,15 +914,14 @@ const styles=StyleSheet.create({
     
       modal3: {
         height: 180,
-        width: 150
+        width: 180
       },
       modal_qr: {
         height: 200,
         width: 350,
       },
       modal_qr2: {
-        height: 300,
-        width: 350,
+       
       },
       modal4: {
         height: 300
@@ -1056,5 +1053,21 @@ const styles2 = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center'
+    }
+  });
+
+  const stylesKB = StyleSheet.create({
+    container: {
+      position: 'absolute',
+      bottom: 0,
+      left: 0,
+      flex: 1,
+      width: Dimensions.get('window').width,
+      height: Dimensions.get('window').height,
+    },
+    modalContainer: {
+      height: Dimensions.get('window').height * .3,
+      width: Dimensions.get('window').width,
+      backgroundColor: 'red'
     }
   });

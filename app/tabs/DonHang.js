@@ -182,15 +182,18 @@ class DonHang extends Component{
                                             <Text>{item.NgayDatHang}</Text>
                                             <Text>{formatVND(item.TongTienHang)}</Text>
                                             <Text>{item.CTDonHangs.length} sản phẩm</Text>
-                                        </View>
-                                    
-                                        <View style={styles.cot3}>
+
                                             <Text>{item.TrangThaiThanhToan.Ten}</Text>
                                             {
                                                 item.TrangThaiThanhToan.Id==2?
                                                 <FontAwesome color={VCOLOR.green} size={28} name="check"/>
                                                 :null
                                             }
+                                             <Text>{item.HinhThucMuaHang.Ten}</Text>
+                                        </View>
+                                    
+                                        <View style={styles.cot3}>
+                                         
                                             {
                                                 item.TrangThaiThanhToan.Id==1?
                                                 <Button
@@ -200,7 +203,7 @@ class DonHang extends Component{
                                                         borderColor: "transparent",
                                                         borderWidth: 0,
                                                         borderRadius: 0,
-                                                        height:25,                  
+                                                        height:50,         
                                                     }}
                                                     containerViewStyle={{width: '100%', marginLeft: 0}}
                                                     fontSize={12}
@@ -221,7 +224,7 @@ class DonHang extends Component{
                                                     borderColor: "transparent",
                                                     borderWidth: 0,
                                                     borderRadius: 0,
-                                                    height:25, 
+                                                    height:50,      
                                                     marginTop:5,                 
                                                 }}
                                                 containerViewStyle={{width: '100%', marginLeft: 0}}

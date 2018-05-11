@@ -38,7 +38,7 @@ import Modal from 'react-native-modalbox';
 
 import {getQR,setQR,getQuan} from './../common/Storage';
 import { Button } from 'react-native-elements'
-import Camera from 'react-native-camera';
+
 import * as vUtils  from './../common/vUtils';
 import Toast from 'react-native-root-toast';
 import * as quanAction from './../actions/quanAction';
@@ -96,43 +96,6 @@ class NganhHang extends Component{
         dispatch(setDSSP(item,item.DSSP));
         //dispatch(fetchSanPham(item,sanPhamReducer.tukhoa,1,this.state.pageSize));
     }
-
-    goScanQR(){
-        this.refs.modal_qr.open();
-    }
-    
-    goSeedQR(idquan){
-            const {dispatch} =this.props;
-            var id_quan=idquan;
-            var json_quan={quan:idquan};
-            dispatch(quanAction.getById(id_quan,json_quan,()=>{
-                dispatch(fetchListDMSP());
-                dispatch(cartCRUD("0"));
-            },()=>{
-                console.log("err");
-            }));
-    }
-    
-
-    onBarCodeRead = (e) => {
-        var json_parsed=vUtils.isValidJson(e.data);
-        this.refs.modal_qr.close();
-        if(json_parsed!=false){
-            const {dispatch} =this.props;
-            dispatch(quanAction.getById(json_parsed.quan,json_parsed,()=>{
-                dispatch(fetchListDMSP());
-                dispatch(cartCRUD("0"));
-                dispatch(fetchDanhSachDonHangDevice(1,1000));
-            },()=>{
-                console.log("err");
-            }));
-        }
-        else{
-            Toast.show("Mã QR không hợp lệ!", {position:Toast.positions.CENTER});
-        }
-    }
-
-
     refresh(){
         const {dispatch} =this.props;
        
@@ -203,93 +166,13 @@ class NganhHang extends Component{
                     title="Đăng nhập"
                 />
 
-                   
-                        <View style={styles.vInputRow}>
-                            <TextInput 
-                                style={styles.vInput}
-                                keyboardType='numeric'
-                                onChangeText={(text)=>this.onChangedIDQuan(text)}
-                                placeholder='Nhập số ID quán'   
-                                value={isNaN(this.state.txtIDQuan)?"":this.state.txtIDQuan+""}
-                                maxLength={5}  //setting limit of input
-                            />
-
-                            <TouchableOpacity
-                                style={[styles.vBtn,{backgroundColor:"red"}]}
-                                onPress={() => {
-                                    if(vUtils.isInt(this.state.txtIDQuan)){
-                                        this.goSeedQR(this.state.txtIDQuan);
-                                    }else{
-                                        Toast.show("ID quán không hợp lệ!", {position:Toast.positions.CENTER});
-                                    }
-                                }}
-                                underlayColor={colors.backGray}
-                            >
-                                <Text style={[{color: colors.white, fontWeight: "bold",textAlign:"center"}]}> Vào quán </Text>
-                            </TouchableOpacity>
-
-                            <TouchableOpacity
-                                style={[styles.vBtn]}
-                                onPress={() => {
-                                    this.goScanQR();
-                                }}
-                                underlayColor={colors.backGray}
-                            >
-                            <Text style={[{color: colors.white,textAlign:"center"}]}> Quét QR </Text>
-                        </TouchableOpacity>
-                        </View>
-                   
-                     
-                   
-                <Modal ref={"modal_qr"}>
-                        <View style={{flex:1,}}>
-                            <Header
-                                leftIcon='angle-left'
-                                leftIconAction={()=>{
-                                    this.refs.modal_qr.close();
-                                }}
-                                title={"Quét QR"}
-                            />
-                            <Camera
-                                style={stylesc.preview}
-                                onBarCodeRead={this.onBarCodeRead}
-                                ref={cam => this.camera = cam}
-                                aspect={Camera.constants.Aspect.fill}
-                                >
-                                {
-                                    this.state.qrcode!=null?
-                                    <TouchableOpacity  disabled={donHangReducer.isFetching} style={{backgroundColor:"white",padding:10}} onPress={()=>{
-                                            this.postThanhToan();
-                                    }}>
-                                        <Text style={{fontWeight:"bold"}}>{donHangReducer.isFetching?"Đang gửi thông tin thanh toán...":"Thanh toán ngay"}</Text>
-                                        <Text>Shop: {this.state.qrcode.shop}</Text>
-                                        <Text>Bàn: {this.state.qrcode.ban}</Text>
-                                        <Text>Đ/c: {this.state.qrcode.diachi}</Text>
-                                    </TouchableOpacity>
-                                    :
-                                null
-                                }
-                            </Camera>
-                        </View>
-                </Modal> 
+                <Text>...</Text>  
+                       
             </View>
         );
     }
 
-    onChangedIDQuan(text){
-        let newText = '';
-        let numbers = '0123456789';
-        for (var i=0; i < text.length; i++) {
-            if(numbers.indexOf(text[i]) > -1 ) {
-                newText = newText + text[i];
-            }
-        }
-        if(!isNaN(newText)&&parseInt(newText)>0){
-            this.setState({ txtIDQuan: parseInt(newText) });
-        }else{
-            this.setState({ txtIDQuan:"" });
-        }
-    }
+
 }
 
 const mapStateToProps = state => ({
