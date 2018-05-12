@@ -32,7 +32,7 @@ import Modal from 'react-native-modalbox';
 import Camera from 'react-native-camera';
 import LoadingActivityIndicator from './../common/components/LoadingActivityIndicator';
 import {postThanhToanDatHang,fetchDanhSachDonHangDevice,fetchDanhSachDonHangDeviceBS} from './../actions/donHangAction';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 class GioHang extends Component{
     constructor(props){
@@ -207,14 +207,10 @@ class GioHang extends Component{
                 Toast.show("Vui lòng nhập số bàn!", {position:Toast.positions.TOP});
                 return;
             }
-            if (!vUtils.isInt(this.state.txtTienKhachDua)){
-                Toast.show("Vui lòng nhập số tiền bạn sẽ trả để nhân viên thối lại!", {position:Toast.positions.TOP});
-                return;
-            }
+          
             donhang={
                 HinhThucMuaHangId:this.state.HinhThucMuaHangId,
                 Ban:this.state.Ban,
-                TienKhachDua:this.state.txtTienKhachDua,
                 QuanId:quanReducer.Quan.Id,
                 DiaChiGiaoHang:"",
                 SDT:"",
@@ -225,7 +221,6 @@ class GioHang extends Component{
             donhang={
                 HinhThucMuaHangId:this.state.HinhThucMuaHangId,
                 Ban:0,
-                TienKhachDua:this.state.txtTienKhachDua,
                 QuanId:quanReducer.Quan.Id,
                 DiaChiGiaoHang:"",
                 SDT:"",
@@ -240,7 +235,6 @@ class GioHang extends Component{
             donhang={
                 HinhThucMuaHangId:this.state.HinhThucMuaHangId,
                 Ban:0,
-                TienKhachDua:this.state.txtTienKhachDua,
                 QuanId:quanReducer.Quan.Id,
                 DiaChiGiaoHang:this.state.txtDiaChi,
                 SDT:this.state.txtSDT,
@@ -719,32 +713,6 @@ class GioHang extends Component{
                                         placeholder='Yêu cầu khác'
                                         value={this.state.txtYeuCauKhac}                                      
                                     />
-                                    <View style={{flex:1,alignItems:"center"}}>
-                                        <Text>Tổng tiền:</Text>
-                                        <Text style={{fontSize:20,fontWeight:"bold",color:VCOLOR.do_dam}}>{vUtils.formatVND(tong_tien_gio_hang)}</Text>
-                                    </View>
-                                    <View style={{flex:1,alignItems:"center"}}>
-                                        <Text>Tiền khách đưa:</Text>
-                                        <TextInput 
-                                            style={styles.vInput2}
-                                            keyboardType='numeric'
-                                            onChangeText={(tienkhachdua) => {
-                                                this.setState({txtTienKhachDua:tienkhachdua});
-                                                if(vUtils.isInt(tienkhachdua)&&tienkhachdua>=tong_tien_gio_hang){
-                                                    var tienthoi = tienkhachdua-tong_tien_gio_hang;
-                                                    this.setState({txtTienThoiLai:tienthoi});
-                                                }else{
-                                                    this.setState({txtTienThoiLai:""})
-                                                }
-                                            }}
-                                            placeholder='Tiền khách đưa (*)'
-                                            value={this.state.txtTienKhachDua}
-                                            maxLength={7}  //setting limit of input
-                                        />
-                                        <Text>Tiền quán thối lại:</Text>
-                                        <Text style={{fontSize:20,fontWeight:"bold",color:VCOLOR.do_dam}}>{vUtils.formatVND(this.state.txtTienThoiLai)}</Text>
-                                      
-                                    </View>
                                     </View>
                                     :null
                                   }
@@ -772,6 +740,7 @@ class GioHang extends Component{
                    </KeyboardAwareScrollView>
                 </Modal>          
                
+                
             </View>
         );
     };
@@ -853,7 +822,7 @@ const styles=StyleSheet.create({
            
             width:"100%",
             marginBottom:5,
-            height: 40,
+            height: 50,
             paddingLeft: 5,
             
             fontSize: 16,

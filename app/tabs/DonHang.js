@@ -17,6 +17,8 @@ import { VCOLOR } from '../common/constants';
 import { Button, ButtonGroup} from 'react-native-elements';
 import Modal from 'react-native-modalbox';
 import Toast from 'react-native-root-toast';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import * as vUtils  from './../common/vUtils';
 class DonHang extends Component{
     constructor(props){
         super(props); 
@@ -37,6 +39,11 @@ class DonHang extends Component{
             detail_nav:params!=undefined?params.detail_nav:"DonHang_CTDonHang_Screen",
             txtGopY:"",
             GopYDonHangID:-1,
+
+            txtTienKhachDua:"",
+            txtTienThoiLai:0,
+            DonHangSelected:null,
+            
         }
     }
     static navigationOptions = ({ navigation }) => {
@@ -99,7 +106,7 @@ class DonHang extends Component{
          const {dispatch}  = this.props;
          console.log("------------onPressProductItem------------");
          console.log(item);
-        
+         
          dispatch({type:this.state.detail_nav,DonHang:item});
     }
 
@@ -178,61 +185,71 @@ class DonHang extends Component{
                                 }} style={styles.productItem}>
                                     <View style={item.Id%2==0?styles.item:styles.item2} >
                                         <View style={styles.cot1}>
-                                            <Text style={{fontWeight:"bold"}}>#{item.MaDonHang}</Text>
-                                            <Text>{item.NgayDatHang}</Text>
-                                            <Text>{formatVND(item.TongTienHang)}</Text>
-                                            <Text>{item.CTDonHangs.length} sản phẩm</Text>
-
-                                            <Text>{item.TrangThaiThanhToan.Ten}</Text>
+                                            <Text style={{fontWeight:"bold"}}>#{item.MaDonHang}-{item.NgayDatHang}</Text>
+                                            <View style={{  borderRadius:10,borderWidth: 1,borderColor: VCOLOR.do_dam, paddingLeft:5, }}>
                                             {
-                                                item.TrangThaiThanhToan.Id==2?
-                                                <FontAwesome color={VCOLOR.green} size={28} name="check"/>
+                                                item.CTDonHangs.map((item,index)=>{
+                                                    return(
+                                                        <Text key={item.Id+""}>{index+1}. {item.SanPham.TenSanPham} ({item.SoLuong+" cái"})</Text>
+                                                    );
+                                                })
+                                            }
+                                            </View>
+                                            <Text>-Tổng tiền: {formatVND(item.TongTienHang)}</Text>
+                                            <Text>-Thanh toán: {item.TrangThaiThanhToan.Ten}</Text>
+                                            <Text>-Hình thức mua hàng: {item.HinhThucMuaHang.Ten}</Text>
+                                            {
+                                                item.HinhThucMuaHangId==1?
+                                                <Text>-Bàn:  {item.Ban}</Text>
                                                 :null
                                             }
-                                             <Text>{item.HinhThucMuaHang.Ten}</Text>
                                         </View>
                                     
                                         <View style={styles.cot3}>
                                          
-                                            {
-                                                item.TrangThaiThanhToan.Id==1?
-                                                <Button
-                                                    disabled={item.HinhThucMuaHangId!=1}
-                                                    buttonStyle={{
-                                                        backgroundColor:VCOLOR.do_dam,
-                                                        borderColor: "transparent",
-                                                        borderWidth: 0,
-                                                        borderRadius: 0,
-                                                        height:50,         
-                                                    }}
-                                                    containerViewStyle={{width: '100%', marginLeft: 0}}
-                                                    fontSize={12}
-                                                    color="white"
-                                                    iconRight={{name: item.SoLanGoiTinhTien>0?'check':'gratipay', type: 'font-awesome'}}
-                                                    title={'Gọi tính tiền '}
-                                                    onPress={()=>{
-                                                        dispatch(postGoiTinhTien(item.Id,()=>{
+                                        
+                                            <Button
+                                                disabled={item.SoLanGoiTinhTien>0||item.TrangThaiThanhToanId==2}
+                                                disabledTextStyle={{color:"black"}}
+                                                buttonStyle={{
+                                                    backgroundColor:VCOLOR.do_dam,
+                                                    borderColor: "transparent",
+                                                    borderWidth: 0,
+                                                    borderRadius: 0,
+                                                    height:55,         
+                                                }}
+                                                containerViewStyle={{width: '100%', marginLeft: 0}}
+                                                fontSize={12}
+                                                color="white"
+                                                iconRight={{name: item.SoLanGoiTinhTien>0?'check':'volume-control-phone', type: 'font-awesome'}}
+                                                title={item.TrangThaiThanhToanId==2?'Đã tính tiền':item.SoLanGoiTinhTien>0?'Đã gọi tính tiền':'Gọi tính tiền '}
+                                                onPress={()=>{
+                                                    this.setState({
+                                                        DonHangSelected:item,
+                                                    },()=>{
+                                                        this.refs.modal_goitinhtien.open();
+                                                        /*dispatch(postGoiTinhTien(item.Id,()=>{
                                                             this.reLoad();
-                                                        }));                                                        
-                                                    }}
-                                                />
-                                                :null
-                                            }
+                                                        }));  */
+                                                    });                                          
+                                                }}
+                                            />
+                                            
                                             <Button
                                                 buttonStyle={{
                                                     backgroundColor: VCOLOR.do_dam,
                                                     borderColor: "transparent",
                                                     borderWidth: 0,
                                                     borderRadius: 0,
-                                                    height:50,      
+                                                    height:55,      
                                                     marginTop:5,                 
                                                 }}
                                                 containerViewStyle={{width: '100%', marginLeft: 0}}
                                                 fontSize={12}
                                                 backgroundColor="red"
                                                 color="white"
-                                                iconRight={{name: 'comment-o', type: 'font-awesome'}}
-                                                title={'Góp ý/phản hồi'}
+                                                iconRight={{name: 'comment', type: 'font-awesome'}}
+                                                title={'Góp ý'}
                                                 onPress={()=>{
                                                     this.setState({
                                                         txtGopY:"",
@@ -259,7 +276,7 @@ class DonHang extends Component{
                 <Modal
                     style={[styles.modal, styles.modal_gopy]} position={"center"} 
                     ref={"modal_gopy"}>
-                        <View style={{flex:1,}}>
+                        <View style={{flex:1,width:"100%"}}>
                             {/* <Header
                                 leftIcon='angle-left'
                                 leftIconAction={()=>{
@@ -270,10 +287,10 @@ class DonHang extends Component{
                                 <View style={{alignContent:"center",alignItems:"center",height:40}}>
                                     <Text>Nhập góp ý</Text>
                                 </View>
-                                <View style={{flex:1}}>
+                              
                                     <TextInput 
-                                        style={{width:"100%"}}
-                                      
+                                        style={{width:"100%",flex:1,}}
+                                       
                                         multiline = {true}
                                         numberOfLines = {2}
                                         maxLength = {499}
@@ -281,7 +298,7 @@ class DonHang extends Component{
                                         placeholder='Nhập góp ý/phản hồi'
                                         value={this.state.txtGopY}                                      
                                     />
-                                </View>
+                             
                              
                                  <Button
                                     buttonStyle={{
@@ -307,6 +324,87 @@ class DonHang extends Component{
                                 />
                         </View>
                 </Modal>
+
+                <Modal
+                    backdrop={false}
+                    position={"top"} 
+                    swipeToClose={false}
+                    keyboardTopOffset={0}
+                    ref={"modal_goitinhtien"}>
+                       {
+                           this.state.DonHangSelected!=null?
+                            <KeyboardAwareScrollView>
+                                <Header
+                                    leftIcon='angle-left'
+                                    leftIconAction={()=>{
+                                        this.refs.modal_goitinhtien.close();
+                                    }}
+                                    title="Gọi tính tiền"
+                                    //noPadding={this.state.height_modal_qr==1}
+                                /> 
+                                    <Text style={styles.vTitle}></Text>
+                                    <View style={{width:"100%",padding:5}}>
+                                    <View style={{flex:1,alignItems:"center"}}>
+                                        <Text>Tổng tiền:</Text>
+                                        <Text style={{fontSize:20,fontWeight:"bold",color:VCOLOR.do_dam}}>{vUtils.formatVND(this.state.DonHangSelected.TongTienHang)}</Text>
+                                    </View>
+                                    <View style={{flex:1,alignItems:"center"}}>
+                                        <Text>Tiền khách đưa:</Text>
+                                        <TextInput 
+                                            style={styles.vInput2}
+                                            keyboardType='numeric'
+                                            onChangeText={(tienkhachdua) => {
+                                                this.setState({txtTienKhachDua:tienkhachdua});
+                                                if(vUtils.isInt(tienkhachdua)&&tienkhachdua>=this.state.DonHangSelected.TongTienHang){
+                                                    var tienthoi = tienkhachdua-this.state.DonHangSelected.TongTienHang;
+                                                    this.setState({txtTienThoiLai:tienthoi});
+                                                }else{
+                                                    this.setState({txtTienThoiLai:""})
+                                                }
+                                            }}
+                                            placeholder='Tiền khách đưa (*)'
+                                            value={this.state.txtTienKhachDua}
+                                            maxLength={7}  //setting limit of input
+                                        />
+                                        <Text>Tiền quán thối lại:</Text>
+                                        <Text style={{fontSize:20,fontWeight:"bold",color:VCOLOR.do_dam}}>{vUtils.formatVND(this.state.txtTienThoiLai)}</Text>
+                                    </View>
+                                    </View>
+                             
+                              
+                                    <Button
+                                        disabled={isFetching}
+                                        buttonStyle={{
+                                            backgroundColor: VCOLOR.do_dam,
+                                            borderColor: "transparent",
+                                            borderWidth: 0,
+                                            borderRadius: 0,    
+                                            marginBottom:5,
+                                            height: 40,                     
+                                        }}
+                                        backgroundColor="red"
+                                        color="white"
+                                        icon={{name: 'check', type: 'font-awesome'}}
+                                        title={'Gửi'}
+                                        onPress={()=>{
+                                            if (!vUtils.isInt(this.state.txtTienKhachDua)){
+                                                Toast.show("Vui lòng nhập số tiền bạn sẽ trả để nhân viên thối lại!", {position:Toast.positions.TOP});
+                                                return;
+                                            }
+                                            dispatch(postGoiTinhTien({
+                                                DonHangID:this.state.DonHangSelected.Id,
+                                                TienKhachDua:this.state.txtTienKhachDua,
+                                            },()=>{
+                                                this.reLoad();
+                                            })); 
+                                        }}
+                                    />
+                            </KeyboardAwareScrollView>
+                           :null
+                       }   
+                </Modal>
+
+
                <View style = { styles.footerStyle }>
                         <TouchableOpacity 
                             activeOpacity = { 0.7 } 
@@ -469,6 +567,31 @@ const styles = StyleSheet.create({
     },
     modal_gopy: {
         height: 180,
-        width: 200
+        width: 200,
+        padding:0,
+    },
+    vTitle:{
+        alignSelf:"center",
+        fontWeight:"bold",
+        fontSize:16
+    },
+    vInput:{
+        height: 40,
+        paddingLeft: 10,
+        flex: 2,
+        fontSize: 16,
+        borderBottomWidth:1,
+        borderBottomColor: "gray",
+    },
+    vInput2:{
+       
+        width:"100%",
+        marginBottom:5,
+        height: 40,
+        paddingLeft: 5,
+        
+        fontSize: 16,
+        borderWidth:1,
+        borderColor:"gray"
     },
 });

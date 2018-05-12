@@ -42,7 +42,7 @@ import {initialSyncSetUser} from './actions/authAction';
 import {fetchDanhSachDonHang} from './actions/donHangAction';
 import {setSyncQuan} from './actions/quanAction';
 import OneSignal from 'react-native-onesignal'; // Import package from node modules
-
+var DeviceInfo = require('react-native-device-info');
 const opt_hide_tabbar={
     //tabBarVisible:false,
     header:null,
@@ -388,7 +388,12 @@ class MainScreenNavigatorState extends Component{
         //Handling the Hardware Back Button in Android
         componentDidMount() {
             console.log("---------componentDidMount");
+            
             //setup first setting
+
+            // Sending single tag
+            var _uniqueID=DeviceInfo.getUniqueID();
+            OneSignal.sendTag("user_id", _uniqueID);
 
             /*const {dispatch,navReducer} = this.props;
             dispatch({type:'KhuyenMaiScreen'});*/
@@ -399,7 +404,7 @@ class MainScreenNavigatorState extends Component{
             getUser().then((user)=>{
                 dispatch(initialSyncSetUser(user))
                 if(user!=null){
-                    dispatch(fetchDanhSachDonHang(user,1,10));
+                    dispatch(fetchDanhSachDonHang(user,1,1000));
                 }
             });
             getQuan().then((quan)=>{
@@ -425,6 +430,7 @@ class MainScreenNavigatorState extends Component{
 
         }
         componentWillMount() {
+        
             OneSignal.addEventListener('received', this.onReceived);
             OneSignal.addEventListener('opened', this.onOpened);
             OneSignal.addEventListener('ids', this.onIds);
@@ -440,10 +446,13 @@ class MainScreenNavigatorState extends Component{
             console.log('Data: ', openResult.notification.payload.additionalData);
             console.log('isActive: ', openResult.notification.isAppInFocus);
             console.log('openResult: ', openResult);
+
+   
         }
     
         onIds(device) {
-            console.log('Device info: ', device);
+             console.log("device.userId: "+device.userId);
+             console.log("device.pushToken: "+device.pushToken);
         }
         componentWillUnmount() {
             NetInfo.isConnected.removeEventListener(

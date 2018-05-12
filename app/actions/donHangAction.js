@@ -161,15 +161,12 @@ let fetchDatHang = (isload)=> {
 
 
 
-export let postGoiTinhTien = (DonHangID,fnSuccess)=> {
+export let postGoiTinhTien = (data,fnSuccess)=> {
    
     /*data.UserId=user.UserId;
     data.Token = user.JWTToken;*/
 
-    let url = urls.api_donhang+"/goitinhtien";
-    var data={
-        DonHangID:DonHangID
-    };
+    let url = urls.api_donhang+"/goitinhtien";  
     console.log(data);
     return (dispatch) => {
        
