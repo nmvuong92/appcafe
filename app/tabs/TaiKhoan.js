@@ -257,8 +257,8 @@ class TaiKhoan extends Component{
                 }
                 <View style={styles.info}>
                         <View style={styles.info_item}>
-                            <Text style={styles.text1}>qcafe:</Text>
-                            <Text style={styles.text2}>phiên bản {Platform.OS === 'ios' ? '2.2' : '8.0'}</Text>
+                            <Text style={styles.text1}>App qcafe:</Text>
+                            <Text style={styles.text2}>phiên bản {Platform.OS === 'ios' ? '2.3' : '8.1'}</Text>
                         </View>
                         <View style={styles.info_item}>
                             <Text style={styles.text1}>Tên thiết bị:</Text>
