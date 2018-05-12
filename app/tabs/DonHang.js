@@ -395,6 +395,7 @@ class DonHang extends Component{
                                                 DonHangID:this.state.DonHangSelected.Id,
                                                 TienKhachDua:this.state.txtTienKhachDua,
                                             },()=>{
+                                                this.refs.modal_goitinhtien.close();
                                                 this.reLoad();
                                             })); 
                                         }}
